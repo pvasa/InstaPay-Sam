@@ -28,6 +28,10 @@ public class VendorsActivity extends AppCompatActivity {
                 }
             });
         }
+
+        RVFrag recyclerViewFrag = new RVFrag();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content, recyclerViewFrag).addToBackStack(null).commit();
     }
 
     @Override
