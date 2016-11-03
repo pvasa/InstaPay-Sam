@@ -4,41 +4,40 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
 
 @SuppressWarnings("Duplicates")
 class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
-    private String[] mDataset;
+    private List<Vendor> dataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        ImageView imageView;
-        TextView textViewName,
-                textViewDesc,
-                textViewPrice;
-        Button order;
-        boolean visible;
+        TextView tvCompanyName,
+                tvCompanyAddr,
+                tvPhone;
         ViewHolder(View v) {
             super(v);
-            visible = false;
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                 }
             });
+            tvCompanyName = (TextView) v.findViewById(R.id.tvCompanyName);
+            tvCompanyAddr = (TextView) v.findViewById(R.id.tvCompanyAddr);
+            tvPhone = (TextView) v.findViewById(R.id.tvPhone);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    RVAdapter(String[] myDataset) {
-        mDataset = myDataset;
+    RVAdapter(List<Vendor> dataset) {
+        this.dataset = dataset;
     }
 
     // Create new views (invoked by the layout manager)
@@ -56,11 +55,14 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        holder.tvCompanyName.setText(dataset.get(position).company_name);
+        holder.tvCompanyAddr.setText(dataset.get(position).company_addr);
+        holder.tvPhone.setText(dataset.get(position).phone);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return dataset.size();
     }
 }

@@ -18,6 +18,11 @@ public class VendorsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*View view;
+        if ((view = findViewById(R.id.toolbar_layout)) != null) {
+            ((CollapsingToolbarLayout) view).setTitle(getString(R.string.collapsing_toolbar_title));
+        }*/
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +37,7 @@ public class VendorsActivity extends AppCompatActivity {
         RVFrag recyclerViewFrag = new RVFrag();
         getFragmentManager().beginTransaction()
                 .replace(R.id.content, recyclerViewFrag).addToBackStack(null).commit();
+
     }
 
     @Override
