@@ -23,15 +23,15 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
                 tvPhone;
         ViewHolder(View v) {
             super(v);
+            tvCompanyName = (TextView) v.findViewById(R.id.tvCompanyName);
+            tvCompanyAddr = (TextView) v.findViewById(R.id.tvCompanyAddr);
+            tvPhone = (TextView) v.findViewById(R.id.tvPhone);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                 }
             });
-            tvCompanyName = (TextView) v.findViewById(R.id.tvCompanyName);
-            tvCompanyAddr = (TextView) v.findViewById(R.id.tvCompanyAddr);
-            tvPhone = (TextView) v.findViewById(R.id.tvPhone);
         }
     }
 
