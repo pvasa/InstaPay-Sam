@@ -18,16 +18,18 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import matrians.instapaysam.Schemas.Vendor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+
+/**
+ Team Matrians
+ **/
 
 @SuppressWarnings("WeakerAccess")
 public class RVFrag extends Fragment {
 
-    final String BASE_URL = "https://instapay-animus.rhcloud.com/";
     private final int PERMISSION_INTERNET = 1;
 
     private RecyclerView recyclerView;
@@ -67,15 +69,8 @@ public class RVFrag extends Fragment {
     }
 
     void loadVendors() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        InstaPayEndpointInterface instaPayService =
-                retrofit.create(InstaPayEndpointInterface.class);
-
-        Call<List<Vendor>> call = instaPayService.getVendors();
+        Call<List<Vendor>> call = Server.connect().getVendors();
         call.enqueue(new Callback<List<Vendor>>() {
             @Override
             public void onResponse(Call<List<Vendor>> call, Response<List<Vendor>> response) {

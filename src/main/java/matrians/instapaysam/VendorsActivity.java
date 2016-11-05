@@ -1,12 +1,11 @@
 package matrians.instapaysam;
 
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,12 +18,18 @@ import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.camera.SCamera;
 import com.samsung.android.sdk.camera.SCameraManager;
 
+/**
+ Team Matrians
+ **/
+
 public class VendorsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vendors);
+
+        setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,16 +49,23 @@ public class VendorsActivity extends AppCompatActivity {
             });
         }
 
-        /*RVFrag recyclerViewFrag = new RVFrag();
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content, recyclerViewFrag).addToBackStack(null).commit();
-*/
-        if (ContextCompat.checkSelfPermission(this,
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.contains(getString(R.string.login_id)) &&
+                preferences.getInt(getString(R.string.login_status), 0) == 1) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.content, new RVFrag()).commit();
+        }
+        else {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.content, new HomeFrag()).commit();
+        }
+
+        /*if (ContextCompat.checkSelfPermission(this,
                 "com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY")
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{"com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY"}, 2);
-        } else loadCamera();
+        } else loadCamera();*/
     }
 
     @Override
@@ -99,8 +111,18 @@ public class VendorsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                break;
+            case R.id.action_logout:
+                SharedPreferences.Editor editor =
+                        PreferenceManager.getDefaultSharedPreferences(this).edit();
+                editor.remove(getString(R.string.login_id));
+                editor.remove(getString(R.string.login_status));
+                editor.apply();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.content, new HomeFrag()).commit();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
