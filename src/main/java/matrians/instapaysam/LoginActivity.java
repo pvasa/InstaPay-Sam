@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import matrians.instapaysam.Schemas.User;
 import retrofit2.Call;
@@ -41,8 +42,49 @@ public class LoginActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        final TextInputEditText email = (TextInputEditText) findViewById(R.id.login_id);
+        final TextInputEditText login_id = (TextInputEditText) findViewById(R.id.login_id);
+        if (login_id != null)
+            login_id.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
+                    if (!hasFocus) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
+                    }
+                }
+            });
+
         final TextInputEditText password = (TextInputEditText) findViewById(R.id.password);
+        if (password != null)
+            password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
+                    if (!hasFocus) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
+                    }
+                }
+            });
 
         View view;
         if ((view = findViewById(R.id.toolbar_layout)) != null) {
@@ -55,16 +97,32 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(final View v) {
 
-                    User user = new User(true);
-                    user.email = email.getText().toString();
-                    user.password = user.hashPassword(
-                            password.getText().toString(), email.getText().toString());
+                    boolean valid = true;
 
-                    View view;
-                    if ( (view = getCurrentFocus()) != null ) {
-                        InputMethodManager imm = (InputMethodManager)
-                                getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    User user = new User(true);
+                    if ( (user.user_name = user.email = login_id.getText().toString()).length() == 0 ) {
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                        login_id.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        login_id.requestFocus();
+                        valid = false;
+                    }
+                    if ( password.getText().length() == 0 ) {
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                        login_id.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        login_id.requestFocus();
+                        valid = false;
+                    }
+
+                    if (!valid) {
+                        Toast.makeText(v.getContext(), R.string.error_red_fields, Toast.LENGTH_LONG).show();
+                        return;
+                    } else {
+                        user.password = user.hashPassword(
+                                password.getText().toString(), login_id.getText().toString());
                     }
 
                     Call<User> call = Server.connect().loginUser(user);

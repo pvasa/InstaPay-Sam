@@ -6,18 +6,20 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.PhoneNumberUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import java.util.regex.Pattern;
 
 import matrians.instapaysam.Schemas.User;
 import retrofit2.Call;
@@ -29,6 +31,9 @@ import retrofit2.Response;
  **/
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private final String PASSWORD_REGEX =
+            "(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,}";
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -43,127 +48,229 @@ public class RegisterActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        final TextInputEditText first_name;
-        if ( (first_name = (TextInputEditText) findViewById(R.id.fname)) != null &&
-                first_name.getText().length() == 0) {
-            Snackbar.make((View)first_name.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            first_name.requestFocus();
-        }
+        final TextInputEditText first_name = (TextInputEditText) findViewById(R.id.fname);
+        if (first_name != null)
+            first_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
+                    if (!hasFocus) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
+                    }
+                }
+            });
 
-        final TextInputEditText last_name;
-        if ( (last_name = (TextInputEditText) findViewById(R.id.lname)) != null &&
-                last_name.getText().length() == 0) {
-            Snackbar.make((View)last_name.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            last_name.requestFocus();
-        }
+        final TextInputEditText last_name = (TextInputEditText) findViewById(R.id.lname);
+        if (last_name != null)
+            last_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
+                    if (!hasFocus) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
+                    }
+                }
+            });
 
-        final TextInputEditText email;
-        if ( (email = (TextInputEditText) findViewById(R.id.email)) != null &&
-                email.getText().length() != 0)
+        final TextInputEditText email = (TextInputEditText) findViewById(R.id.email);
+        if (email != null)
             email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
-                        if (!Utils.isValidEmail(email.getText().toString())) {
-                            Snackbar.make((View)v.getParent(),
-                                    R.string.snack_invalid_email, Snackbar.LENGTH_LONG).show();
-                            v.requestFocus();
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        } else if (!Patterns.EMAIL_ADDRESS.matcher(
+                                editText.getText().toString()).matches()) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_invalid_email), Toast.LENGTH_SHORT).show();
+                            editText.setTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_dark));
                         }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
                     }
                 }
             });
-        else {
-            Snackbar.make((View)email.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            email.requestFocus();
-        }
 
-        final TextInputEditText user_name;
-        if ( (user_name = (TextInputEditText) findViewById(R.id.uname)) != null &&
-                user_name.getText().length() == 0) {
-            Snackbar.make((View)user_name.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            user_name.requestFocus();
-        }
+        final TextInputEditText user_name = (TextInputEditText) findViewById(R.id.uname);
+        if (user_name != null)
+            user_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
+                    if (!hasFocus) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
+                    }
+                }
+            });
 
-        final TextInputEditText password;
-        if ( (password = (TextInputEditText) findViewById(R.id.password)) != null &&
-                password.getText().length() != 0)
+        final TextInputEditText password = (TextInputEditText) findViewById(R.id.password);
+        if (password != null)
             password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
-                        if (!Utils.isValidPassword(password.getText().toString())) {
-                            Snackbar.make((View)v.getParent(),
-                                    R.string.snack_invalid_password, Snackbar.LENGTH_LONG).show();
-                            v.requestFocus();
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        } else if (!(Pattern.compile(PASSWORD_REGEX)).
+                                matcher(password.getText().toString()).matches()) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_invalid_password), Toast.LENGTH_SHORT).show();
+                            editText.setTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_dark));
                         }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
                     }
                 }
             });
-        else {
-            Snackbar.make((View)password.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            password.requestFocus();
-        }
 
-        final TextInputEditText c_password;
-        if ( (c_password = (TextInputEditText) findViewById(R.id.cpassword)) != null &&
-                c_password.getText().length() != 0)
+        final TextInputEditText c_password = (TextInputEditText) findViewById(R.id.cpassword);
+        if (c_password != null)
             c_password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
-                        if (!c_password.getText().toString().equals(password.getText().toString())) {
-                            Snackbar.make((View)v.getParent(),
-                                    R.string.snack_passwords_unmatch, Snackbar.LENGTH_LONG).show();
-                            v.requestFocus();
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        } else if (password != null && !password.getText().toString().
+                                equals(editText.getText().toString())) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_passwords_unmatch), Toast.LENGTH_SHORT).show();
+                            password.setTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_dark));
+                            editText.setTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_dark));
                         }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
                     }
                 }
             });
-        else {
-            Snackbar.make((View)c_password.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            c_password.requestFocus();
-        }
 
-        final TextInputEditText address;
-        if ( (address = (TextInputEditText) findViewById(R.id.address)) != null &&
-                address.getText().length() == 0) {
-            Snackbar.make((View)address.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            address.requestFocus();
-        }
+        final TextInputEditText address = (TextInputEditText) findViewById(R.id.address);
+        if (address != null)
+            address.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
+                    if (!hasFocus) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
+                    }
+                }
+            });
 
-        final TextInputEditText postal_code;
-        if ( (postal_code = (TextInputEditText) findViewById(R.id.pcode)) != null &&
-                postal_code.getText().length() == 0) {
-            Snackbar.make((View)postal_code.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            postal_code.requestFocus();
-        }
+        final TextInputEditText postal_code = (TextInputEditText) findViewById(R.id.pcode);
+        if (postal_code != null)
+            postal_code.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    TextInputEditText editText = (TextInputEditText) v;
+                    if (!hasFocus) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
+                    }
+                }
+            });
 
-        final TextInputEditText phone;
-        if ( (phone = (TextInputEditText) findViewById(R.id.phone)) != null &&
-                phone.getText().length() != 0)
+        final TextInputEditText phone = (TextInputEditText) findViewById(R.id.phone);
+        if (phone != null)
             phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if (!PhoneNumberUtils.isGlobalPhoneNumber(phone.getText().toString()))
-                        Snackbar.make((View)v.getParent(),
-                                getString(R.string.snack_invalid_phone),
-                                Snackbar.LENGTH_LONG).show();
-                    v.requestFocus();
+                    TextInputEditText editText = (TextInputEditText) v;
+                    if (!hasFocus) {
+                        if (editText.getText().length() == 0) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                        } else if (!Patterns.PHONE.matcher(
+                                editText.getText().toString()).matches()) {
+                            Toast.makeText(v.getContext(), getResources().getString(
+                                    R.string.error_invalid_phone), Toast.LENGTH_SHORT).show();
+                            editText.setTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_dark));
+                        }
+                    } else {
+                        editText.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorSecondaryText));
+                        editText.setTextColor(ContextCompat.getColor(
+                                v.getContext(), R.color.colorPrimaryText));
+                    }
                 }
             });
-        else {
-            Snackbar.make((View)phone.getParent(),
-                    R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-            phone.requestFocus();
-        }
 
         View view;
         if ((view = findViewById(R.id.toolbar_layout)) != null) {
@@ -176,81 +283,126 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onClick(final View v) {
 
-                    View view;
-                    if ( (view = getCurrentFocus()) != null ) {
-                        InputMethodManager imm = (InputMethodManager)
-                                getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
+                    boolean valid = true;
 
                     User user = new User(false);
                     if ( (user.first_name = first_name.getText().toString()).length() == 0 ) {
-                        Snackbar.make((View)first_name.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
                         first_name.requestFocus();
-                        return;
+                        first_name.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
                     }
 
                     if ( (user.last_name = last_name.getText().toString()).length() == 0 ) {
-                        Snackbar.make((View)last_name.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
                         last_name.requestFocus();
-                        return;
+                        last_name.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
                     }
 
                     if ( (user.email = email.getText().toString()).length() == 0 ) {
-                        Snackbar.make((View)email.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
                         email.requestFocus();
-                        return;
+                        email.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
+                    } else if (!Patterns.EMAIL_ADDRESS.matcher(user.email).matches()) {
+                        Toast.makeText(v.getContext(),
+                                R.string.error_invalid_email, Toast.LENGTH_SHORT).show();
+                        email.requestFocus();
+                        email.setTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_dark));
+                        valid = false;
                     }
 
                     if ( (user.user_name = user_name.getText().toString()).length() == 0 ) {
-                        Snackbar.make((View)user_name.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
                         user_name.requestFocus();
-                        return;
+                        user_name.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
                     }
 
                     if ( password.getText().length() == 0 ) {
-                        Snackbar.make((View)password.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
                         password.requestFocus();
-                        return;
-                    } else if ( c_password.getText().length() == 0 ) {
-                        Snackbar.make((View)c_password.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
-                        c_password.requestFocus();
-                        return;
-                    } else if (!password.getText().toString().equals(c_password.getText().toString())) {
-                        Snackbar.make((View)v.getParent(),
-                                R.string.snack_passwords_unmatch,
-                                Snackbar.LENGTH_LONG).show();
+                        password.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
+                    } else if (!(Pattern.compile(PASSWORD_REGEX)).
+                            matcher(password.getText().toString()).matches()) {
+                        Toast.makeText(v.getContext(),
+                                R.string.error_invalid_password, Toast.LENGTH_SHORT).show();
                         password.requestFocus();
-                        return;
+                        password.setTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_dark));
+                        valid = false;
                     }
-                    user.password = user.hashPassword(
-                            password.getText().toString(), email.getText().toString());
+                    if ( c_password.getText().length() == 0 ) {
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                        c_password.requestFocus();
+                        c_password.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
+                    } else if (!password.getText().toString().equals(c_password.getText().toString())) {
+                        Toast.makeText(v.getContext(),
+                                R.string.error_passwords_unmatch,
+                                Toast.LENGTH_SHORT).show();
+                        password.setTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_dark));
+                        c_password.setTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_dark));
+                        valid = false;
+                    }
 
                     if ( (user.home_addr = address.getText().toString()).length() == 0 ) {
-                        Snackbar.make((View)address.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
                         address.requestFocus();
-                        return;
+                        address.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
                     }
 
                     if ( (user.postal_code = postal_code.getText().toString()).length() == 0 ) {
-                        Snackbar.make((View)postal_code.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
                         postal_code.requestFocus();
-                        return;
+                        postal_code.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
                     }
 
                     if ( (user.phone = phone.getText().toString()).length() == 0 ) {
-                        Snackbar.make((View)phone.getParent(),
-                                R.string.snack_field_empty, Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(),
+                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
                         phone.requestFocus();
+                        phone.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_light));
+                        valid = false;
+                    } else if (!Patterns.PHONE.matcher(phone.getText().toString()).matches()) {
+                        Toast.makeText(v.getContext(),
+                                R.string.error_invalid_phone,
+                                Toast.LENGTH_SHORT).show();
+                        phone.setTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_dark));
+                        valid = false;
+                    }
+
+                    if (!valid) {
+                        Toast.makeText(v.getContext(), R.string.error_red_fields, Toast.LENGTH_LONG).show();
                         return;
+                    } else {
+                        user.password = user.hashPassword(
+                                password.getText().toString(), email.getText().toString());
                     }
 
                     Call<User> call = Server.connect().createUser(user);
@@ -265,14 +417,14 @@ public class RegisterActivity extends AppCompatActivity {
                                 editor.apply();
                                 setResult(1);
                                 finish();
-                            } else Snackbar.make((View)v.getParent(),
-                                    R.string.snack_invalid_login, Snackbar.LENGTH_LONG).show();
+                            } else Toast.makeText(v.getContext(),
+                                    R.string.error_invalid_login, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            Snackbar.make((View)v.getParent(),
-                                    R.string.snack_register_fail, Snackbar.LENGTH_LONG).show();
+                            Toast.makeText(v.getContext(),
+                                    R.string.error_register_fail, Toast.LENGTH_SHORT).show();
                             Log.d("RETROFIT ERROR", t.toString());
                         }
                     });

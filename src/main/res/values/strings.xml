@@ -1,31 +1,36 @@
 <resources>
     <string name="app_name">InstaPay Sam</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
 
     <string name="login_status">LoginStatus</string>
     <string name="login_id">LoginID</string>
 
+    <string name="title_create_account">Create an account</string>
+
     <string name="ed_email">Email</string>
     <string name="ed_password">Password</string>
-    <string name="btn_login">Login</string>
     <string name="ed_first_name">First name</string>
     <string name="ed_last_name">Last name</string>
     <string name="ed_username">Username</string>
-    <string name="btn_register">Register</string>
     <string name="ed_phone_number">Phone number</string>
     <string name="ed_postal_code">Postal code</string>
     <string name="ed_home_address">Home address</string>
     <string name="ed_confirm_password">Confirm password</string>
+
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+
     <string name="link_login">Already registered? Login now.</string>
     <string name="link_register">Or create an account.</string>
-    <string name="action_logout">Logout</string>
-    <string name="snack_invalid_email">Invalid email address.</string>
-    <string name="snack_invalid_login">Invalid login. Try again.</string>
-    <string name="snack_register_fail">Registration failed. Try again.</string>
-    <string name="snack_passwords_unmatch">Passwords do not match.</string>
-    <string name="snack_invalid_password">Invalid password.</string>
-    <string name="snack_empty_field">Field cannot be empty.</string>
-    <string name="snack_invalid_phone">Invalid phone number.</string>
-    <string name="title_create_account">Create an account</string>
-    <string name="snack_field_empty">Field cannot be empty.</string>
+
+    <string name="error_invalid_email">Invalid email address.</string>
+    <string name="error_invalid_login">Invalid login. Try again.</string>
+    <string name="error_register_fail">Registration failed. Try again.</string>
+    <string name="error_passwords_unmatch">Passwords do not match.</string>
+    <string name="error_invalid_password">Invalid password.</string>
+    <string name="error_empty_field">Field cannot be empty.</string>
+    <string name="error_invalid_phone">Invalid phone number.</string>
+    <string name="error_field_empty">Field cannot be empty.</string>
+    <string name="error_red_fields">Correct the red fields.</string>
 </resources>
