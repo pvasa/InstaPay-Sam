@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import matrians.instapaysam.Schemas.User;
 import retrofit2.Call;
@@ -34,7 +36,10 @@ public class LoginActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         final TextInputEditText email = (TextInputEditText) findViewById(R.id.login_id);
         final TextInputEditText password = (TextInputEditText) findViewById(R.id.password);
@@ -55,6 +60,13 @@ public class LoginActivity extends AppCompatActivity {
                     user.password = user.hashPassword(
                             password.getText().toString(), email.getText().toString());
 
+                    View view;
+                    if ( (view = getCurrentFocus()) != null ) {
+                        InputMethodManager imm = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+
                     Call<User> call = Server.connect().loginUser(user);
                     call.enqueue(new Callback<User>() {
                         @Override
@@ -71,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.apply();
                                 setResult(1);
                                 finish();
-                            } else Snackbar.make(v.getRootView(),
+                            } else Snackbar.make((View)v.getParent(),
                                     "Invalid login. Try again.", Snackbar.LENGTH_LONG).show();
                         }
 
