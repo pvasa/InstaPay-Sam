@@ -2,6 +2,7 @@ package matrians.instapaysam;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -10,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.samsung.android.sdk.SsdkUnsupportedException;
@@ -33,6 +36,12 @@ public class HomeActivity extends AppCompatActivity {
         if (!preferences.contains(getString(R.string.login_id)) ||
                 preferences.getInt(getString(R.string.login_status), 0) == 0) {
             setContentView(R.layout.activity_home);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                Window w = getWindow();
+                w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            }
 
             findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
                 @Override

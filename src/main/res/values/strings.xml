@@ -37,4 +37,5 @@
     <string name="snack_register_success">Registration successful. You can login now.</string>
     <string name="snack_invalid_login">Invalid login. Try again.</string>
     <string name="snack_login_failed">Login failed. Try again.</string>
+    <string name="desc_home_background">Home background</string>
 </resources>

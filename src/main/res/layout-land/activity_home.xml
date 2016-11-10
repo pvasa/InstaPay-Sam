@@ -32,15 +32,16 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center|bottom"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+            android:orientation="horizontal"
+            android:layout_marginStart="?attr/actionBarSize"
+            android:layout_marginEnd="?attr/actionBarSize">
 
             <Button
                 android:id="@+id/btn_login"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
                 style="?android:buttonBarStyle"
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
@@ -48,12 +49,13 @@
 
             <Button
                 android:id="@+id/btn_register"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
                 style="?android:buttonBarStyle"
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
-                android:layout_marginBottom="?attr/actionBarSize"
                 android:text="@string/btn_register"/>
 
         </LinearLayout>
