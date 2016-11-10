@@ -33,4 +33,8 @@
     <string name="error_invalid_phone">Invalid phone number.</string>
     <string name="error_field_empty">Field cannot be empty.</string>
     <string name="error_red_fields">Correct the red fields.</string>
+    <string name="welcome_to_instapay">Welcome to InstaPay</string>
+    <string name="snack_register_success">Registration successful. You can login now.</string>
+    <string name="snack_invalid_login">Invalid login. Try again.</string>
+    <string name="snack_login_failed">Login failed. Try again.</string>
 </resources>

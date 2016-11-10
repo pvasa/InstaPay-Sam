@@ -1,6 +1,5 @@
 package matrians.instapaysam;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,10 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -130,9 +126,6 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
 
-                            Log.d("LOGIN RESPONSE", response.message() + ' ' +
-                                    response.code() + ' ' + response.body().success + ' ' +
-                                    response.body().email + ' ' + response.body().password);
                             if (response.body().success) {
                                 SharedPreferences.Editor editor = PreferenceManager.
                                         getDefaultSharedPreferences(getApplicationContext()).edit();
@@ -142,12 +135,13 @@ public class LoginActivity extends AppCompatActivity {
                                 setResult(1);
                                 finish();
                             } else Snackbar.make((View)v.getParent(),
-                                    "Invalid login. Try again.", Snackbar.LENGTH_LONG).show();
+                                    R.string.snack_invalid_login, Snackbar.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            Snackbar.make(v.getRootView(), "Login failed. Try again.", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(v.getRootView(),
+                                    R.string.snack_login_failed, Snackbar.LENGTH_LONG).show();
                             Log.d("RETROFIT ERROR", t.toString());
                         }
                     });
@@ -163,31 +157,5 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_vendors, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
