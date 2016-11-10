@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import matrians.instapaysam.Schemas.User;
@@ -36,6 +38,22 @@ public class LoginActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        View view;
+        if ((view = findViewById(R.id.toolbar_layout)) != null) {
+            ((CollapsingToolbarLayout) view).setTitle(getString(R.string.title_login));
+        }
+
+        FloatingActionButton fab;
+        if ((fab = (FloatingActionButton) findViewById(R.id.fab)) != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(v.getContext(), RegisterActivity.class));
+                    finish();
+                }
+            });
         }
 
         final TextInputEditText login_id = (TextInputEditText) findViewById(R.id.login_id);
@@ -82,13 +100,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-        View view;
-        if ((view = findViewById(R.id.toolbar_layout)) != null) {
-            ((CollapsingToolbarLayout) view).setTitle("Login to InstaPay");
-        }
-
-        if ((view = findViewById(R.id.btn_login)) != null) {
-            view.setOnClickListener(new View.OnClickListener() {
+        Button loginButton;
+        if ((loginButton = (Button) findViewById(R.id.btn_login)) != null) {
+            loginButton.setOnClickListener(new View.OnClickListener() {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void onClick(final View v) {
@@ -148,12 +162,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-        if ((view = findViewById(R.id.link_register)) != null) {
-            view.setOnClickListener(new View.OnClickListener() {
+        View linkForgotPassword;
+        if ((linkForgotPassword = findViewById(R.id.link_forgot_password)) != null) {
+            linkForgotPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(v.getContext(), RegisterActivity.class));
-                    finish();
+                    //startActivity(new Intent(v.getContext(), RegisterActivity.class));
+                    //finish();
                 }
             });
         }

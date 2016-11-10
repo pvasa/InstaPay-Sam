@@ -84,19 +84,21 @@
 
             <Button
                 android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 style="?android:buttonBarStyle"
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
-                android:layout_margin="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:text="@string/btn_login"/>
 
-            <TextView android:id="@+id/link_register"
+            <TextView android:id="@+id/link_forgot_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/link_register"
+                android:text="@string/link_forgot_password"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorAccent"
                 android:gravity="center"/>
@@ -104,5 +106,14 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/ic_person_add_white_48dp" />
 
 </android.support.design.widget.CoordinatorLayout>

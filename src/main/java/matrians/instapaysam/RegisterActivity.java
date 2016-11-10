@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.regex.Pattern;
@@ -42,6 +44,22 @@ public class RegisterActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        View view;
+        if ((view = findViewById(R.id.toolbar_layout)) != null) {
+            ((CollapsingToolbarLayout) view).setTitle(getString(R.string.title_create_account));
+        }
+
+        FloatingActionButton fab;
+        if ((fab = (FloatingActionButton) findViewById(R.id.fab)) != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(v.getContext(), LoginActivity.class));
+                    finish();
+                }
+            });
         }
 
         final TextInputEditText first_name = (TextInputEditText) findViewById(R.id.fname);
@@ -268,13 +286,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             });
 
-        View view;
-        if ((view = findViewById(R.id.toolbar_layout)) != null) {
-            ((CollapsingToolbarLayout) view).setTitle(getString(R.string.title_create_account));
-        }
-
-        if ((view = findViewById(R.id.btn_register)) != null) {
-            view.setOnClickListener(new View.OnClickListener() {
+        Button registerButton;
+        if ((registerButton = (Button) findViewById(R.id.btn_register)) != null) {
+            registerButton.setOnClickListener(new View.OnClickListener() {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void onClick(final View v) {
@@ -424,15 +438,6 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.d("RETROFIT ERROR", t.toString());
                         }
                     });
-                }
-            });
-        }
-        if ((view = findViewById(R.id.link_login)) != null) {
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(v.getContext(), LoginActivity.class));
-                    finish();
                 }
             });
         }

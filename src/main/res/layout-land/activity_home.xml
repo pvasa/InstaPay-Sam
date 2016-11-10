@@ -21,16 +21,27 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/welcome_to_instapay"
+            android:text="@string/title_home"
             android:textSize="32sp"
             android:layout_weight="0"
             android:textColor="@android:color/white"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subtitle_home"
+            android:textSize="24sp"
+            android:layout_weight="0"
+            android:textColor="@android:color/white"
+            android:layout_margin="4dp"
             android:layout_gravity="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:weightSum="2"
             android:gravity="center|bottom"
             android:orientation="horizontal"
             android:layout_marginStart="?attr/actionBarSize"
