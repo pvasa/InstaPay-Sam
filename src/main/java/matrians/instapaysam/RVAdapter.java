@@ -15,7 +15,6 @@ import java.util.List;
 
 import matrians.instapaysam.Schemas.Vendor;
 
-@SuppressWarnings("Duplicates")
 class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
 
     private List<Vendor> dataset;
@@ -36,7 +35,9 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    v.getContext().startActivity(new Intent(v.getContext(), ScanActivity.class));
+                    Intent intent = new Intent(v.getContext(), ScanActivity.class);
+                    intent.putExtra("vendor", tvCompanyName.getText().toString());
+                    v.getContext().startActivity(intent);
                 }
             });
         }
