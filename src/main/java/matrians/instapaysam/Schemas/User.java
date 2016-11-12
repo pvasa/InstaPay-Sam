@@ -11,9 +11,10 @@ import javax.crypto.spec.PBEKeySpec;
 
 /**
  Team Matrians
- **/
+ */
 
 public class User {
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private String lor;
     public boolean success;
     public String first_name;

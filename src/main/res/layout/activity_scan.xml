@@ -37,18 +37,11 @@
                 android:src="@color/transparent_white_percent_70"
                 android:contentDescription="@string/white_translucent_background_desc"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:scrollbars="vertical"
-                android:scrollbarStyle="insideOverlay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center_horizontal"
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@drawable/ic_add_a_photo_white_48px"/>
 

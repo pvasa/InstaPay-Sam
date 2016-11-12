@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">InstaPay</string>
 
+    <string name="keyAdapter">adapter</string>
+
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
 
@@ -44,4 +46,5 @@
     <string name="link_forgot_password">Forgot password?</string>
     <string name="subtitle_home">Buy fast, pay easy.</string>
     <string name="white_translucent_background_desc">White translucent background</string>
+    <string name="keyVendor">vendor</string>
 </resources>

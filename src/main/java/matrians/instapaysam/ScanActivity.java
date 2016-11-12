@@ -16,6 +16,10 @@ import java.util.HashSet;
 
 import matrians.instapaysam.camera.CameraSingleFrag;
 
+/**
+ Team Matrians
+ */
+
 public class ScanActivity extends AppCompatActivity {
 
     void initCameraFrag() {
@@ -34,7 +38,8 @@ public class ScanActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(actionBar.getTitle() + " - " + getIntent().getStringExtra("vendor"));
+            actionBar.setTitle(actionBar.getTitle() + " - " +
+                    getIntent().getStringExtra(getString(R.string.keyVendor)));
         }
 
         if (savedInstanceState == null) {
