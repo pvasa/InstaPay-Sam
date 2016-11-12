@@ -40,10 +40,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName="matrians.instapaysam.VendorsActivity"/>
 
-        <activity android:name=".camera.CameraSingleFrag"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName="matrians.instapaysam.ScanActivity"/>
-
     </application>
 
 </manifest>

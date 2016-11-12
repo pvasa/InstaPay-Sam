@@ -29,9 +29,7 @@ public class ScanActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             //Check permissions
-            ensurePermissions(Manifest.permission.CAMERA,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            ensurePermissions(Manifest.permission.CAMERA);
         } else initCameraFrag();
     }
 
@@ -60,16 +58,19 @@ public class ScanActivity extends AppCompatActivity {
         if (!deniedPermissionList.isEmpty()) {
             ActivityCompat.requestPermissions(
                     this, deniedPermissionList.toArray(new String[0]), 0);
-        }
-        else initCameraFrag();
+        } else initCameraFrag();
     }
 
     /**
      * Shows alert dialog.
      */
     private void showAlertDialog(final String... permissions) {
+        StringBuilder sbuilder = new StringBuilder();
+        for (String permission : permissions) {
+            sbuilder.append(permission).append(", ");
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This function requires permissions to access Camera.");
+        builder.setMessage("This function requires permissions to access Camera. " + sbuilder.toString());
         builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

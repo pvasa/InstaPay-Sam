@@ -16,7 +16,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@color/transparent_white_percent_50"
+        android:src="@color/transparent_white_percent_70"
         android:contentDescription="@string/white_translucent_background_desc"/>
 
     <ScrollView
