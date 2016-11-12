@@ -4,6 +4,7 @@ package matrians.instapaysam;
  Team Matrians
  **/
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ class RVAdapter extends RecyclerView.Adapter<RVAdapter.ViewHolder> {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    v.getContext().startActivity(new Intent(v.getContext(), ScanActivity.class));
                 }
             });
         }

@@ -43,4 +43,5 @@
 
     <string name="link_forgot_password">Forgot password?</string>
     <string name="subtitle_home">Buy fast, pay easy.</string>
+    <string name="white_translucent_background_desc">White translucent background</string>
 </resources>
