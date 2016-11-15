@@ -30,7 +30,7 @@
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"
-                android:contentDescription="@string/desc_home_background"/>
+                android:contentDescription="@string/descHomeBackground"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -67,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress|text"
-                    android:hint="@string/ed_email" />
+                    android:hint="@string/edEmail" />
             </android.support.design.widget.TextInputLayout>
 
             <!-- Password Label -->
@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:hint="@string/ed_password"/>
+                    android:hint="@string/edPassword"/>
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -93,12 +93,12 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
-                android:text="@string/btn_login"/>
+                android:text="@string/btnLogin"/>
 
             <TextView android:id="@+id/link_forgot_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/link_forgot_password"
+                android:text="@string/linkForgotPassword"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/colorAccent"
                 android:gravity="center"/>

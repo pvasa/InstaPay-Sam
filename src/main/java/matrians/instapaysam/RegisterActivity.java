@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -65,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -87,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -109,13 +110,13 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         } else if (!Patterns.EMAIL_ADDRESS.matcher(
                                 editText.getText().toString()).matches()) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_invalid_email), Toast.LENGTH_SHORT).show();
+                                    R.string.errInvalidEmail), Toast.LENGTH_SHORT).show();
                             editText.setTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_dark));
                         }
@@ -137,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -159,13 +160,13 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         } else if (!(Pattern.compile(PASSWORD_REGEX)).
                                 matcher(password.getText().toString()).matches()) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_invalid_password), Toast.LENGTH_SHORT).show();
+                                    R.string.errInvalidPassword), Toast.LENGTH_SHORT).show();
                             editText.setTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_dark));
                         }
@@ -187,13 +188,13 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         } else if (password != null && !password.getText().toString().
                                 equals(editText.getText().toString())) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_passwords_unmatch), Toast.LENGTH_SHORT).show();
+                                    R.string.errPasswordsMismatch), Toast.LENGTH_SHORT).show();
                             password.setTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_dark));
                             editText.setTextColor(ContextCompat.getColor(
@@ -217,7 +218,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -239,7 +240,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -261,13 +262,13 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_empty_field), Toast.LENGTH_SHORT).show();
+                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         } else if (!Patterns.PHONE.matcher(
                                 editText.getText().toString()).matches()) {
                             Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.error_invalid_phone), Toast.LENGTH_SHORT).show();
+                                    R.string.errInvalidPhone), Toast.LENGTH_SHORT).show();
                             editText.setTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_dark));
                         }
@@ -290,18 +291,18 @@ public class RegisterActivity extends AppCompatActivity {
                     boolean valid = true;
 
                     User user = new User(false);
-                    if ( (user.first_name = first_name.getText().toString()).length() == 0 ) {
+                    if ( (user.firstName = first_name.getText().toString()).length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         first_name.requestFocus();
                         first_name.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
                         valid = false;
                     }
 
-                    if ( (user.last_name = last_name.getText().toString()).length() == 0 ) {
+                    if ( (user.lastName = last_name.getText().toString()).length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         last_name.requestFocus();
                         last_name.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
@@ -310,23 +311,23 @@ public class RegisterActivity extends AppCompatActivity {
 
                     if ( (user.email = email.getText().toString()).length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         email.requestFocus();
                         email.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
                         valid = false;
                     } else if (!Patterns.EMAIL_ADDRESS.matcher(user.email).matches()) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_invalid_email, Toast.LENGTH_SHORT).show();
+                                R.string.errInvalidEmail, Toast.LENGTH_SHORT).show();
                         email.requestFocus();
                         email.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
                         valid = false;
                     }
 
-                    if ( (user.user_name = user_name.getText().toString()).length() == 0 ) {
+                    if ( (user.userName = user_name.getText().toString()).length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         user_name.requestFocus();
                         user_name.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
@@ -335,7 +336,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     if ( password.getText().length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         password.requestFocus();
                         password.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
@@ -343,7 +344,7 @@ public class RegisterActivity extends AppCompatActivity {
                     } else if (!(Pattern.compile(PASSWORD_REGEX)).
                             matcher(password.getText().toString()).matches()) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_invalid_password, Toast.LENGTH_SHORT).show();
+                                R.string.errInvalidPassword, Toast.LENGTH_SHORT).show();
                         password.requestFocus();
                         password.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
@@ -351,14 +352,14 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                     if ( c_password.getText().length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         c_password.requestFocus();
                         c_password.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
                         valid = false;
                     } else if (!password.getText().toString().equals(c_password.getText().toString())) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_passwords_unmatch,
+                                R.string.errPasswordsMismatch,
                                 Toast.LENGTH_SHORT).show();
                         password.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
@@ -367,18 +368,18 @@ public class RegisterActivity extends AppCompatActivity {
                         valid = false;
                     }
 
-                    if ( (user.home_addr = address.getText().toString()).length() == 0 ) {
+                    if ( (user.homeAddr = address.getText().toString()).length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         address.requestFocus();
                         address.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
                         valid = false;
                     }
 
-                    if ( (user.postal_code = postal_code.getText().toString()).length() == 0 ) {
+                    if ( (user.postalCode = postal_code.getText().toString()).length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         postal_code.requestFocus();
                         postal_code.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
@@ -387,14 +388,14 @@ public class RegisterActivity extends AppCompatActivity {
 
                     if ( (user.phone = phone.getText().toString()).length() == 0 ) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_field_empty, Toast.LENGTH_SHORT).show();
+                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         phone.requestFocus();
                         phone.setHintTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_light));
                         valid = false;
                     } else if (!Patterns.PHONE.matcher(phone.getText().toString()).matches()) {
                         Toast.makeText(v.getContext(),
-                                R.string.error_invalid_phone,
+                                R.string.errInvalidPhone,
                                 Toast.LENGTH_SHORT).show();
                         phone.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
@@ -402,10 +403,10 @@ public class RegisterActivity extends AppCompatActivity {
                     }
 
                     if (!valid) {
-                        Toast.makeText(v.getContext(), R.string.error_red_fields, Toast.LENGTH_LONG).show();
+                        Toast.makeText(v.getContext(), R.string.errRedFields, Toast.LENGTH_LONG).show();
                         return;
                     } else {
-                        user.password = user.hashPassword(
+                        user.password = Utils.hashPassword(
                                 password.getText().toString(), email.getText().toString());
                     }
 
@@ -416,19 +417,19 @@ public class RegisterActivity extends AppCompatActivity {
                             if (response.body().success) {
                                 SharedPreferences.Editor editor = PreferenceManager.
                                         getDefaultSharedPreferences(getApplicationContext()).edit();
-                                editor.putInt(getString(R.string.login_status), 1);
-                                editor.putString(getString(R.string.login_id), response.body().email);
+                                editor.putInt(getString(R.string.prefLoginStatus), LoginActivity.STATUS_LOGGED_OUT);
+                                editor.putString(getString(R.string.prefLoginId), response.body().email);
                                 editor.apply();
                                 setResult(1);
                                 finish();
-                            } else Toast.makeText(v.getContext(),
-                                    R.string.error_invalid_login, Toast.LENGTH_SHORT).show();
+                            } else Snackbar.make((View) v.getParent(),
+                                    response.body().err, Snackbar.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
                             Toast.makeText(v.getContext(),
-                                    R.string.error_register_fail, Toast.LENGTH_SHORT).show();
+                                    R.string.errRegisterFail, Toast.LENGTH_SHORT).show();
                             Log.d("RETROFIT ERROR", t.toString());
                         }
                     });

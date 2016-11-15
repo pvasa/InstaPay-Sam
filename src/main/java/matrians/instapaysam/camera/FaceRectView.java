@@ -9,6 +9,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.camera2.params.Face;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Size;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.samsung.android.sdk.camera.SCameraCharacteristics;
 /**
  * A Simple {@link View} that can draw face rect.
  */
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class FaceRectView extends View {
     private int mRatioWidth = 0;
     private int mRatioHeight = 0;

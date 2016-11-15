@@ -11,10 +11,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.HashSet;
 
-import matrians.instapaysam.camera.CameraSingleFrag;
+import matrians.instapaysam.camera.BarcodeCaptureFrag;
 
 /**
  Team Matrians
@@ -22,10 +24,11 @@ import matrians.instapaysam.camera.CameraSingleFrag;
 
 public class ScanActivity extends AppCompatActivity {
 
+    static boolean flashOn = false;
+
     void initCameraFrag() {
         getFragmentManager().beginTransaction().
-                replace(R.id.camera, new CameraSingleFrag()).commit();
-
+                replace(R.id.camera, new BarcodeCaptureFrag()).commit();
     }
 
     @Override
@@ -60,6 +63,41 @@ public class ScanActivity extends AppCompatActivity {
         initCameraFrag();
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_scan, menu);
+        if (flashOn) {
+            menu.findItem(R.id.action_flash).setIcon(R.drawable.ic_action_flash_on);
+        } else {
+            menu.findItem(R.id.action_flash).setIcon(R.drawable.ic_action_flash_off);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        switch (item.getItemId()) {
+            case R.id.action_flash:
+                if (flashOn = !flashOn) {
+                    item.setIcon(R.drawable.ic_action_flash_on);
+                } else {
+                    item.setIcon(R.drawable.ic_action_flash_off);
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Check for permissions and showDialog if not granted.
+     * @param permissions - permissions to be checked
+     */
     private void ensurePermissions(String... permissions) {
         HashSet<String> deniedPermissionList = new HashSet<>();
 
@@ -77,23 +115,19 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     /**
-     * Shows alert dialog.
+     * Shows alert dialog for permissions.
      */
     private void showAlertDialog(final String... permissions) {
-        StringBuilder sbuilder = new StringBuilder();
-        for (String permission : permissions) {
-            sbuilder.append(permission).append(", ");
-        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This function requires permissions to access Camera. " + sbuilder.toString());
-        builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.alertPermissionRequest);
+        builder.setPositiveButton(R.string.alertBtnPositive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 ensurePermissions(permissions);
             }
         });
-        builder.setNegativeButton("Don't grant", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.alertBtnNegative, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

@@ -37,7 +37,7 @@ public class VendorsActivity extends AppCompatActivity {
 
         View view;
         if ((view = findViewById(R.id.toolbar_layout)) != null) {
-            ((CollapsingToolbarLayout) view).setTitle(getString(R.string.title_vendors));
+            ((CollapsingToolbarLayout) view).setTitle(getString(R.string.titleVendors));
         }
 
         Call<List<Vendor>> call = Server.connect().getVendors();
@@ -49,7 +49,7 @@ public class VendorsActivity extends AppCompatActivity {
                 Bundle args = new Bundle();
                 args.putParcelable(getString(R.string.keyAdapter), adapter);
                 fragment.setArguments(args);
-                getFragmentManager().beginTransaction().replace(R.id.content, fragment).commit();
+                getFragmentManager().beginTransaction().replace(R.id.content, fragment).commitAllowingStateLoss();
             }
 
             @Override
@@ -72,15 +72,14 @@ public class VendorsActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        //noinspection SimplifiableIfStatement
         switch (item.getItemId()) {
             case R.id.action_settings:
                 break;
             case R.id.action_logout:
                 SharedPreferences.Editor editor =
                         PreferenceManager.getDefaultSharedPreferences(this).edit();
-                editor.remove(getString(R.string.login_id));
-                editor.remove(getString(R.string.login_status));
+                editor.remove(getString(R.string.prefLoginId));
+                editor.remove(getString(R.string.prefLoginStatus));
                 editor.apply();
                 startActivity(new Intent(this, HomeActivity.class));
                 finish();

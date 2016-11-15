@@ -1,50 +1,58 @@
 <resources>
     <string name="app_name">InstaPay</string>
 
+    <string name="actionSettings">Settings</string>
+    <string name="actionLogout">Logout</string>
+
     <string name="keyAdapter">adapter</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="action_logout">Logout</string>
-
-    <string name="login_status">LoginStatus</string>
-    <string name="login_id">LoginID</string>
-
-    <string name="title_home">Welcome to InstaPay</string>
-    <string name="title_create_account">Create account</string>
-    <string name="title_login">Login now</string>
-    <string name="title_vendors">Vendors</string>
-
-    <string name="ed_email">Email</string>
-    <string name="ed_password">Password</string>
-    <string name="ed_first_name">First name</string>
-    <string name="ed_last_name">Last name</string>
-    <string name="ed_username">Username</string>
-    <string name="ed_phone_number">Phone number</string>
-    <string name="ed_postal_code">Postal code</string>
-    <string name="ed_home_address">Home address</string>
-    <string name="ed_confirm_password">Confirm password</string>
-
-    <string name="btn_login">Login</string>
-    <string name="btn_register">Register</string>
-
-    <string name="error_invalid_email">Invalid email address.</string>
-    <string name="error_invalid_login">Invalid login. Try again.</string>
-    <string name="error_register_fail">Registration failed. Try again.</string>
-    <string name="error_passwords_unmatch">Passwords do not match.</string>
-    <string name="error_invalid_password">Invalid password.</string>
-    <string name="error_empty_field">Field cannot be empty.</string>
-    <string name="error_invalid_phone">Invalid phone number.</string>
-    <string name="error_field_empty">Field cannot be empty.</string>
-    <string name="error_red_fields">Correct the red fields.</string>
-
-    <string name="snack_register_success">Registration successful. You can login now.</string>
-    <string name="snack_invalid_login">Invalid login. Try again.</string>
-    <string name="snack_login_failed">Login failed. Try again.</string>
-
-    <string name="desc_home_background">Home background</string>
-
-    <string name="link_forgot_password">Forgot password?</string>
-    <string name="subtitle_home">Buy fast, pay easy.</string>
-    <string name="white_translucent_background_desc">White translucent background</string>
     <string name="keyVendor">vendor</string>
+
+    <string name="prefLoginStatus">LoginStatus</string>
+    <string name="prefLoginId">LoginID</string>
+
+    <string name="titleHome">Welcome to InstaPay</string>
+    <string name="titleCreateAccount">Create account</string>
+    <string name="titleLogin">Login now</string>
+    <string name="titleVendors">Vendors</string>
+
+    <string name="edEmail">Email</string>
+    <string name="edPassword">Password</string>
+    <string name="edFirstName">First name</string>
+    <string name="edLastName">Last name</string>
+    <string name="edUserName">Username</string>
+    <string name="edPhoneNumber">Phone number</string>
+    <string name="edPostalCode">Postal code</string>
+    <string name="edHomeAddr">Home address</string>
+    <string name="edConfirmPassword">Confirm password</string>
+
+    <string name="btnLogin">Login</string>
+    <string name="btnRegister">Register</string>
+
+    <string name="errInvalidEmail">Invalid email address.</string>
+    <string name="errInvalidLogin">Invalid login. Try again.</string>
+    <string name="errRegisterFail">Registration failed. Try again.</string>
+    <string name="errPasswordsMismatch">Passwords do not match.</string>
+    <string name="errInvalidPassword">Invalid password.</string>
+    <string name="errEmptyField">Field cannot be empty.</string>
+    <string name="errInvalidPhone">Invalid phone number.</string>
+    <string name="errFieldEmpty">Field cannot be empty.</string>
+    <string name="errRedFields">Correct the red fields.</string>
+
+    <string name="snackRegisterSuccess">Registration successful. You can login now.</string>
+    <string name="snackInvalidLogin">Invalid login. Try again.</string>
+    <string name="snackLoginFailed">Login failed. Try again.</string>
+    <string name="snackNetworkError">Network error.</string>
+
+    <string name="descHomeBackground">Home background</string>
+    <string name="descScanBackground">White translucent background</string>
+
+    <string name="linkForgotPassword">Forgot password?</string>
+
+    <string name="subtitleHome">Buy fast, pay easy.</string>
+    <string name="alertPermissionRequest">This function requires permissions to access Camera.</string>
+    <string name="alertBtnPositive">Grant</string>
+    <string name="alertBtnNegative">Don\'t grant</string>
+    <string name="actionFlashOn">Flash on</string>
+    <string name="actionFlashOff">Flash off</string>
+    <string name="actionFlash">Flash</string>
 </resources>

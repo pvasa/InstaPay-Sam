@@ -84,7 +84,9 @@ class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
      */
     @Override
     public int getItemCount() {
-        return dataset.size();
+        if (dataset != null)
+            return dataset.size();
+        return 0;
     }
 
     @Override

@@ -9,7 +9,7 @@
         android:src="@drawable/home_background"
         android:scaleType="centerCrop"
         android:fitsSystemWindows="true"
-        android:contentDescription="@string/desc_home_background"/>
+        android:contentDescription="@string/descHomeBackground"/>
 
     <LinearLayout
         android:id="@+id/content"
@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_home"
+            android:text="@string/titleHome"
             android:textSize="32sp"
             android:layout_weight="0"
             android:textColor="@android:color/white"
@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/subtitle_home"
+            android:text="@string/subtitleHome"
             android:textSize="24sp"
             android:layout_weight="0"
             android:textColor="@android:color/white"
@@ -56,7 +56,7 @@
                 style="?android:buttonBarStyle"
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
-                android:text="@string/btn_login"/>
+                android:text="@string/btnLogin"/>
 
             <Button
                 android:id="@+id/btn_register"
@@ -67,7 +67,7 @@
                 style="?android:buttonBarStyle"
                 android:background="@color/colorAccent"
                 android:textColor="@android:color/white"
-                android:text="@string/btn_register"/>
+                android:text="@string/btnRegister"/>
 
         </LinearLayout>
 

@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -132,10 +131,6 @@ public class CameraSingleFrag extends Fragment {
      * An {@link matrians.instapaysam.camera.AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
-    /**
-     * A {@link matrians.instapaysam.camera.FaceRectView} for face detection UI.
-     */
-    private FaceRectView mFaceRectView;
     private ImageReader mJpegReader;
     private ImageReader mRawReader;
     private ImageSaver mImageSaver = new ImageSaver();
@@ -195,10 +190,6 @@ public class CameraSingleFrag extends Fragment {
                     // do nothing
                     break;
                 case PREVIEW:
-                    if (result.get(SCaptureResult.STATISTICS_FACES) != null) {
-                        processFace(result.get(SCaptureResult.STATISTICS_FACES),
-                                result.get(SCaptureResult.SCALER_CROP_REGION));
-                    }
                     break;
 
                 // If AF is triggered and AF_STATE indicates AF process is finished, app will trigger AE pre-capture.
@@ -370,9 +361,6 @@ public class CameraSingleFrag extends Fragment {
         } else {
             result = (mCharacteristics.get(SCameraCharacteristics.SENSOR_ORIENTATION) - degrees + 360) % 360;
         }
-        mFaceRectView.setTransform(mPreviewSize,
-                mCharacteristics.get(SCameraCharacteristics.LENS_FACING),
-                result, orientation);
     }
 
     /**
@@ -522,7 +510,6 @@ public class CameraSingleFrag extends Fragment {
         });
 
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-        mFaceRectView = (FaceRectView) view.findViewById(R.id.face);
 
         // Set SurfaceTextureListener that handle life cycle of TextureView
         mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
@@ -837,10 +824,8 @@ public class CameraSingleFrag extends Fragment {
             int orientation = getResources().getConfiguration().orientation;
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-                mFaceRectView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
             } else {
                 mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
-                mFaceRectView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
             }
 
             // calculate transform matrix for face rect view
@@ -879,19 +864,6 @@ public class CameraSingleFrag extends Fragment {
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera opening.", e);
         }
-    }
-
-    /**
-     * Process face information to draw face UI
-     */
-    private void processFace(final Face[] faces, final Rect zoomRect) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mFaceRectView.setFaceRect(faces, zoomRect);
-                mFaceRectView.invalidate();
-            }
-        });
     }
 
     private void setDefaultJpegSize(SCameraManager manager, int facing) {

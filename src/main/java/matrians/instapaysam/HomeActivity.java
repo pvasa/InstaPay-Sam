@@ -26,8 +26,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!preferences.contains(getString(R.string.login_id)) ||
-                preferences.getInt(getString(R.string.login_status), 0) == 0) {
+        if (!preferences.contains(getString(R.string.prefLoginId)) ||
+                preferences.getInt(getString(R.string.prefLoginStatus), LoginActivity.STATUS_LOGGED_OUT) ==
+                        LoginActivity.STATUS_LOGGED_OUT) {
             setContentView(R.layout.activity_home);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -88,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
                 if (resultCode == 1) {
                     findViewById(R.id.btn_register).setVisibility(View.INVISIBLE);
                     if (view != null)
-                        Snackbar.make(view, R.string.snack_register_success,
+                        Snackbar.make(view, R.string.snackRegisterSuccess,
                                 Snackbar.LENGTH_LONG).show();
                 }
                 break;

@@ -26,16 +26,16 @@
         </activity>
 
         <activity android:name=".VendorsActivity"
-            android:label="@string/title_vendors"
+            android:label="@string/titleVendors"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".LoginActivity"
-            android:label="@string/title_login"
+            android:label="@string/titleLogin"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName="matrians.instapaysam.HomeActivity"/>
 
         <activity android:name=".RegisterActivity"
-            android:label="@string/title_create_account"
+            android:label="@string/titleCreateAccount"
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName="matrians.instapaysam.HomeActivity"/>
 
