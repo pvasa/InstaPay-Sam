@@ -1,5 +1,8 @@
 package matrians.instapaysam;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -29,5 +32,15 @@ class Utils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    static ProgressDialog showProgress(Context context, String message) {
+        ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+        dialog.setMessage(message);
+        dialog.show();
+        return dialog;
     }
 }

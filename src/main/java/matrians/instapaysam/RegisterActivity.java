@@ -1,5 +1,6 @@
 package matrians.instapaysam;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private final String PASSWORD_REGEX =
             "(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,}";
+    private ProgressDialog dialog;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -288,6 +290,8 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onClick(final View v) {
 
+                    dialog = Utils.showProgress(v.getContext(), "Creating user. Just a moment.");
+
                     boolean valid = true;
 
                     User user = new User(false);
@@ -406,14 +410,14 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(v.getContext(), R.string.errRedFields, Toast.LENGTH_LONG).show();
                         return;
                     } else {
-                        user.password = Utils.hashPassword(
-                                password.getText().toString(), email.getText().toString());
+                        user.password = password.getText().toString();
                     }
 
                     Call<User> call = Server.connect().createUser(user);
                     call.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
+                            dialog.dismiss();
                             if (response.body().success) {
                                 SharedPreferences.Editor editor = PreferenceManager.
                                         getDefaultSharedPreferences(getApplicationContext()).edit();
@@ -428,6 +432,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
+                            dialog.dismiss();
                             Toast.makeText(v.getContext(),
                                     R.string.errRegisterFail, Toast.LENGTH_SHORT).show();
                             Log.d("RETROFIT ERROR", t.toString());

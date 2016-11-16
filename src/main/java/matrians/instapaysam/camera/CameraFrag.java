@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
 import android.util.Rational;
@@ -40,6 +41,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.camera.SCamera;
 import com.samsung.android.sdk.camera.SCameraCaptureSession;
@@ -71,12 +73,17 @@ import java.util.concurrent.TimeUnit;
 
 import matrians.instapaysam.R;
 
+@SuppressWarnings("FieldCanBeLocal")
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class CameraSingleFrag extends Fragment {
+public class CameraFrag extends Fragment {
     /**
      * Tag for the {@link Log}.
      */
     private static final String TAG = "CameraSingle";
+
+    int screenWidth;
+    int screenHeight;
+
     /**
      * Maximum preview width app will use.
      */
@@ -163,6 +170,29 @@ public class CameraSingleFrag extends Fragment {
      * Current app state.
      */
     private CAMERA_STATE mState = CAMERA_STATE.IDLE;
+
+    private BarcodeDetector detector;
+
+    /*private SCameraCaptureSession.StateCallback mSessionStateCallback = new SCameraCaptureSession.StateCallback() {
+        @Override
+        public void onConfigured(SCameraCaptureSession sCameraCaptureSession) {
+            switch (getState()) {
+                case PREVIEW:
+                    SparseArray<Barcode> barcodes = detector.detect(frame);
+                    for (int i = 0; i < barcodes.size(); i++) {
+                        Barcode thisCode = barcodes.valueAt(i);
+                        Log.d("BARCODE", thisCode.rawValue);
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onConfigureFailed(SCameraCaptureSession sCameraCaptureSession) {
+
+        }
+    };*/
+
     /**
      * A {@link SCameraCaptureSession.CaptureCallback} for {@link SCameraCaptureSession#setRepeatingRequest(SCaptureRequest, SCameraCaptureSession.CaptureCallback, Handler)}
      */
@@ -292,10 +322,22 @@ public class CameraSingleFrag extends Fragment {
         return inflater.inflate(R.layout.frag_camera, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        screenWidth = displayMetrics.widthPixels;
+        screenHeight = displayMetrics.heightPixels;
+        detector = new BarcodeDetector.Builder(getActivity()).build();
+        if(!detector.isOperational()) {
+            Toast.makeText(getActivity(), "Could not set up the detector!", Toast.LENGTH_LONG).show();
+            getActivity().finish();
+        }
+    }
+
     private void checkRequiredFeatures() {
         try {
             // Find available lens facing value for this device
-            Set<Integer> lensFacings = new HashSet<Integer>();
+            Set<Integer> lensFacings = new HashSet<>();
             for (String id : mSCamera.getSCameraManager().getCameraIdList()) {
                 SCameraCharacteristics cameraCharacteristics = mSCamera.getSCameraManager().getCameraCharacteristics(id);
                 lensFacings.add(cameraCharacteristics.get(SCameraCharacteristics.LENS_FACING));
@@ -344,22 +386,6 @@ public class CameraSingleFrag extends Fragment {
             Log.e(TAG, "Interrupted while trying to lock camera closing.", e);
         } finally {
             mCameraOpenCloseLock.release();
-        }
-    }
-
-    /**
-     * Configure required transform for {@link Face} to be displayed correctly in the screen.
-     */
-    private void configureFaceRectTransform() {
-        int orientation = getResources().getConfiguration().orientation;
-        int degrees = getActivity().getWindowManager().getDefaultDisplay().getRotation() * 90;
-
-        int result;
-        if (mCharacteristics.get(SCameraCharacteristics.LENS_FACING) == SCameraCharacteristics.LENS_FACING_FRONT) {
-            result = (mCharacteristics.get(SCameraCharacteristics.SENSOR_ORIENTATION) + degrees) % 360;
-            result = (360 - result) % 360;  // compensate the mirror
-        } else {
-            result = (mCharacteristics.get(SCameraCharacteristics.SENSOR_ORIENTATION) - degrees + 360) % 360;
         }
     }
 
@@ -614,8 +640,7 @@ public class CameraSingleFrag extends Fragment {
     private Size getOptimalPreviewSize(Size[] sizes, double targetRatio) {
         final double ASPECT_TOLERANCE = 0.001;
 
-        // TODO: Don't hardcode this but use device's measurements.
-        final int MAX_ASPECT_HEIGHT = 1080;
+        final int MAX_ASPECT_HEIGHT = screenHeight;
         // Count sizes with height <= 1080p to mimic camera1 api behavior.
         int count = 0;
         for (Size s : sizes) {
@@ -827,9 +852,6 @@ public class CameraSingleFrag extends Fragment {
             } else {
                 mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
             }
-
-            // calculate transform matrix for face rect view
-            configureFaceRectTransform();
 
             // Opening the camera device here
             mSCameraManager.openCamera(mCameraId, new SCameraDevice.StateCallback() {

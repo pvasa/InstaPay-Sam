@@ -1,5 +1,6 @@
 package matrians.instapaysam;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
 
     static final int STATUS_LOGGED_IN = 1;
     static final int STATUS_LOGGED_OUT = 0;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,13 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(final View v) {
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog = Utils.showProgress(v.getContext(), "Verifying credentials.");
+                        }
+                    });
+
                     boolean valid = true;
 
                     User user = new User(true);
@@ -128,14 +137,14 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(v.getContext(), R.string.errRedFields, Toast.LENGTH_LONG).show();
                         return;
                     } else {
-                        user.password = Utils.hashPassword(
-                                password.getText().toString(), loginId.getText().toString());
+                        user.password = password.getText().toString();
                     }
 
                     Call<User> call = Server.connect().loginUser(user);
                     call.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
+                            dialog.dismiss();
                             if (response.body().success) {
                                 SharedPreferences.Editor editor = PreferenceManager.
                                         getDefaultSharedPreferences(getApplicationContext()).edit();
@@ -150,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
+                            dialog.dismiss();
                             Snackbar.make((View) v.getParent(),
                                     R.string.snackNetworkError, Snackbar.LENGTH_LONG).show();
                             Log.d("RETROFIT ERROR", t.toString());

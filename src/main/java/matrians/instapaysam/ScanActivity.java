@@ -16,7 +16,7 @@ import android.view.MenuItem;
 
 import java.util.HashSet;
 
-import matrians.instapaysam.camera.BarcodeCaptureFrag;
+import matrians.instapaysam.camera.CameraFrag;
 
 /**
  Team Matrians
@@ -28,7 +28,7 @@ public class ScanActivity extends AppCompatActivity {
 
     void initCameraFrag() {
         getFragmentManager().beginTransaction().
-                replace(R.id.camera, new BarcodeCaptureFrag()).commit();
+                replace(R.id.camera, new CameraFrag()).commit();
     }
 
     @Override
@@ -62,7 +62,6 @@ public class ScanActivity extends AppCompatActivity {
         }
         initCameraFrag();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

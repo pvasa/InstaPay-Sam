@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 /**
  Team Matrians
@@ -85,12 +85,8 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 break;
             case CODE_REGISTER:
-                View view = findViewById(R.id.content);
                 if (resultCode == 1) {
-                    findViewById(R.id.btn_register).setVisibility(View.INVISIBLE);
-                    if (view != null)
-                        Snackbar.make(view, R.string.snackRegisterSuccess,
-                                Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(this, "Account created. Proceed to login.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
