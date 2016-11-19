@@ -1,6 +1,7 @@
 package matrians.instapaysam.camera;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -51,9 +52,6 @@ import com.samsung.android.sdk.camera.SCaptureRequest;
 import com.samsung.android.sdk.camera.SCaptureResult;
 import com.samsung.android.sdk.camera.STotalCaptureResult;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -227,11 +225,6 @@ public class CameraFrag extends Fragment implements
      * An {@link ImageReader} that handles still image capture.
      */
     private ImageReader mImageReader;
-
-    /**
-     * This is the output file for our picture.
-     */
-    private File mFile;
 
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
@@ -481,7 +474,6 @@ public class CameraFrag extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
     }
 
     @Override
@@ -542,6 +534,8 @@ public class CameraFrag extends Fragment implements
      * @param width  The width of available size for camera preview
      * @param height The height of available size for camera preview
      */
+    @SuppressWarnings("SuspiciousNameCombination")
+    @SuppressLint("SwitchIntDef")
     private void setUpCameraOutputs(int width, int height) {
         Activity activity = getActivity();
         SCameraManager manager = sCamera.getSCameraManager();
@@ -941,50 +935,6 @@ public class CameraFrag extends Fragment implements
             requestBuilder.set(SCaptureRequest.CONTROL_AE_MODE,
                     SCaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
         }
-    }
-
-    /**
-     * Saves a JPEG {@link Image} into the specified {@link File}.
-     */
-    private static class ImageSaver implements Runnable {
-
-        /**
-         * The JPEG image
-         */
-        private final Image mImage;
-        /**
-         * The file we save the image into.
-         */
-        private final File mFile;
-
-        ImageSaver(Image image, File file) {
-            mImage = image;
-            mFile = file;
-        }
-
-        @Override
-        public void run() {
-            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-            FileOutputStream output = null;
-            try {
-                output = new FileOutputStream(mFile);
-                output.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mImage.close();
-                if (null != output) {
-                    try {
-                        output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
     }
 
     /**
