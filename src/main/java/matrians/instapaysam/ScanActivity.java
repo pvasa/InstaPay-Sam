@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.renderscript.RenderScript;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,14 +22,14 @@ import matrians.instapaysam.camera.CameraFrag;
 /**
  Team Matrians
  */
-
 public class ScanActivity extends AppCompatActivity {
 
     static boolean flashOn = false;
+    public static RenderScript renderScript;
 
     void initCameraFrag() {
         getFragmentManager().beginTransaction().
-                replace(R.id.camera, new CameraFrag()).commit();
+                replace(R.id.camera, CameraFrag.newInstance()).commit();
     }
 
     @Override
@@ -45,9 +46,13 @@ public class ScanActivity extends AppCompatActivity {
                     getIntent().getStringExtra(getString(R.string.keyVendor)));
         }
 
+        renderScript = RenderScript.create(this);
+
         if (savedInstanceState == null) {
-            //Check permissions
-            ensurePermissions(Manifest.permission.CAMERA);
+            ensurePermissions(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
         } else initCameraFrag();
     }
 

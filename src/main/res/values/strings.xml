@@ -55,4 +55,8 @@
     <string name="actionFlashOn">Flash on</string>
     <string name="actionFlashOff">Flash off</string>
     <string name="actionFlash">Flash</string>
+    <string name="descBarcodeBox">BarcodeBox</string>
+    <string name="snackBarcodeNotFound">Cannot detect barcode. Try again.</string>
+    <string name="errCamera2Support">Camera2API not supported</string>
+    <string name="snackBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
 </resources>

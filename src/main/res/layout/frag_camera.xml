@@ -7,19 +7,6 @@
     <matrians.instapaysam.camera.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"/>
-
-    <matrians.instapaysam.camera.FaceRectView
-        android:id="@+id/face"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"/>
-
-    <Button
-        android:id="@+id/picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

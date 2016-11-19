@@ -14,8 +14,7 @@ import android.widget.Toast;
 
 /**
  Team Matrians
- **/
-
+ */
 public class HomeActivity extends AppCompatActivity {
 
     private final int CODE_LOGIN = 1;

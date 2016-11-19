@@ -433,8 +433,8 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
                             dialog.dismiss();
-                            Toast.makeText(v.getContext(),
-                                    R.string.errRegisterFail, Toast.LENGTH_SHORT).show();
+                            Snackbar.make((View) v.getParent(),
+                                    R.string.errRegisterFail, Snackbar.LENGTH_LONG).show();
                             Log.d("RETROFIT ERROR", t.toString());
                         }
                     });

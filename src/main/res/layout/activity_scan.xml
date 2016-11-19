@@ -25,7 +25,16 @@
     <FrameLayout
         android:id="@+id/camera"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
+
+    <!--<ImageView
+        android:id="@+id/rectangle"
+        android:layout_height="100dp"
+        android:layout_width="300dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/rectangle"
+        android:contentDescription="@string/descBarcodeBox"/>-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
