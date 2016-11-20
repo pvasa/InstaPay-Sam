@@ -27,11 +27,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v8.renderscript.Allocation;
-import android.support.v8.renderscript.Element;
-import android.support.v8.renderscript.RenderScript;
-import android.support.v8.renderscript.Script;
-import android.support.v8.renderscript.Type;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseArray;
@@ -57,7 +52,6 @@ import com.samsung.android.sdk.camera.SCaptureRequest;
 import com.samsung.android.sdk.camera.SCaptureResult;
 import com.samsung.android.sdk.camera.STotalCaptureResult;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -68,8 +62,8 @@ import java.util.concurrent.TimeUnit;
 
 import matrians.instapaysam.R;
 import matrians.instapaysam.Schemas.Product;
-import matrians.instapaysam.ScriptC_yuv420888;
 import matrians.instapaysam.Server;
+import matrians.instapaysam.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -239,73 +233,6 @@ public class CameraFrag extends Fragment implements
 
     private String VID;
 
-    private Bitmap YUV_420_888_toRGB (Image image, int width, int height){
-        // Get the three image planes
-        Image.Plane[] planes = image.getPlanes();
-        ByteBuffer buffer = planes[0].getBuffer();
-        byte[] y = new byte[buffer.remaining()];
-        buffer.get(y);
-
-        buffer = planes[1].getBuffer();
-        byte[] u = new byte[buffer.remaining()];
-        buffer.get(u);
-
-        buffer = planes[2].getBuffer();
-        byte[] v = new byte[buffer.remaining()];
-        buffer.get(v);
-
-        // get the relevant RowStrides and PixelStrides
-        // (we know from documentation that PixelStride is 1 for y)
-        int yRowStride= planes[0].getRowStride();
-        int uvRowStride= planes[1].getRowStride();  // we know from   documentation that RowStride is the same for u and v.
-        int uvPixelStride= planes[1].getPixelStride();  // we know from   documentation that PixelStride is the same for u and v.
-
-
-        // rs creation just for demo. Create rs just once in onCreate and use it again.
-        RenderScript rs = RenderScript.create(getActivity());
-        //RenderScript rs = MainActivity.rs;
-        ScriptC_yuv420888 mYuv420=new ScriptC_yuv420888 (rs);
-
-        // Y,U,V are defined as global allocations, the out-Allocation is the Bitmap.
-        // Note also that uAlloc and vAlloc are 1-dimensional while yAlloc is 2-dimensional.
-        Type.Builder typeUCharY = new Type.Builder(rs, Element.U8(rs));
-        typeUCharY.setX(yRowStride).setY(height);
-        Allocation yAlloc = Allocation.createTyped(rs, typeUCharY.create());
-        yAlloc.copyFrom(y);
-        mYuv420.set_ypsIn(yAlloc);
-
-        Type.Builder typeUcharUV = new Type.Builder(rs, Element.U8(rs));
-        // note that the size of the u's and v's are as follows:
-        //      (  (width/2)*PixelStride + padding  ) * (height/2)
-        // =    (RowStride                          ) * (height/2)
-        // but I noted that on the S7 it is 1 less...
-        typeUcharUV.setX(u.length);
-        Allocation uAlloc = Allocation.createTyped(rs, typeUcharUV.create());
-        uAlloc.copyFrom(u);
-        mYuv420.set_uIn(uAlloc);
-
-        Allocation vAlloc = Allocation.createTyped(rs, typeUcharUV.create());
-        vAlloc.copyFrom(v);
-        mYuv420.set_vIn(vAlloc);
-
-        // handover parameters
-        mYuv420.set_picWidth(width);
-        mYuv420.set_uvRowStride (uvRowStride);
-        mYuv420.set_uvPixelStride (uvPixelStride);
-
-        Bitmap outBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Allocation outAlloc = Allocation.createFromBitmap(rs, outBitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
-
-        Script.LaunchOptions lo = new Script.LaunchOptions();
-        lo.setX(0, width);  // by this we ignore the y’s padding zone, i.e. the right side of x between width and yRowStride
-        lo.setY(0, height);
-
-        mYuv420.forEach_doConvert(outAlloc,lo);
-        outAlloc.copyTo(outBitmap);
-
-        return outBitmap;
-    }
-
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -321,7 +248,7 @@ public class CameraFrag extends Fragment implements
                 @Override
                 public void run() {
                     try (Image image = reader.acquireNextImage()) {
-                        Bitmap bitmap = YUV_420_888_toRGB(image, image.getWidth(), image.getHeight());
+                        Bitmap bitmap = Utils.YUV_420_888_toRGB(image, getActivity());
 
                         Frame frame = new Frame.Builder().setBitmap(bitmap).build();
                         final SparseArray<Barcode> barcodes = detector.detect(frame);
