@@ -1,9 +1,8 @@
 package matrians.instapaysam.Schemas;
 
 /**
- Team Matrians
+ * Team Matrians
  */
-
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class User {
     private char lor;

@@ -13,7 +13,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 /**
- Team Matrians
+ * Team Matrians
  */
 public class HomeActivity extends AppCompatActivity {
 

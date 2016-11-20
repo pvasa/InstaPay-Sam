@@ -10,9 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- Team Matrians
+ * Team Matrians
  */
-
 public class RVFrag extends Fragment {
 
     private RecyclerView.Adapter adapter;

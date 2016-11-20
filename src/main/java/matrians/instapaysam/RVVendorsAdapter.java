@@ -15,9 +15,8 @@ import java.util.List;
 import matrians.instapaysam.Schemas.Vendor;
 
 /**
- Team Matrians
+ * Team Matrians
  */
-
 class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder> implements Parcelable {
 
     private List<Vendor> dataset;
@@ -37,18 +36,22 @@ class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
 
         TextView tvCompanyName,
                 tvCompanyAddr,
+                tvEmail,
                 tvPhone;
+        String vid;
         ViewHolder(View v) {
             super(v);
             tvCompanyName = (TextView) v.findViewById(R.id.tvCompanyName);
             tvCompanyAddr = (TextView) v.findViewById(R.id.tvCompanyAddr);
+            tvEmail = (TextView) v.findViewById(R.id.tvCompanyEmail);
             tvPhone = (TextView) v.findViewById(R.id.tvPhone);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ScanActivity.class);
-                    intent.putExtra(v.getContext().getString(R.string.keyVendor),
+                    intent.putExtra(v.getContext().getString(R.string.keyVendorName),
                             tvCompanyName.getText().toString());
+                    intent.putExtra(v.getContext().getString(R.string.keyVendorID), vid);
                     v.getContext().startActivity(intent);
                 }
             });
@@ -76,7 +79,9 @@ class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvCompanyName.setText(dataset.get(position).company_name);
         holder.tvCompanyAddr.setText(dataset.get(position).company_addr);
+        holder.tvEmail.setText(dataset.get(position).email);
         holder.tvPhone.setText(dataset.get(position).phone);
+        holder.vid = dataset.get(position)._id;
     }
 
     /** Return the size of your dataset (invoked by the layout manager)

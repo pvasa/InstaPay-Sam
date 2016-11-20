@@ -2,21 +2,25 @@ package matrians.instapaysam;
 
 import java.util.List;
 
+import matrians.instapaysam.Schemas.Product;
 import matrians.instapaysam.Schemas.User;
 import matrians.instapaysam.Schemas.Vendor;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
- Team Matrians
- **/
-
-interface InstaPayEndpointInterface {
+ * Team Matrians
+ */
+public interface InstaPayEndpointInterface {
 
     @GET("vendors")
     Call<List<Vendor>> getVendors();
+
+    @GET("product/{vid}/{pid}")
+    Call<Product> getProduct(@Path("vid") String vid, @Path("pid") String pid);
 
     @POST("user")
     Call<User> createUser(@Body User user);

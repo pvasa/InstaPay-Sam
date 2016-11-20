@@ -4,9 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- Team Matrians
+ * Team Matrians
  */
-
 public class Vendor implements Parcelable {
     public String first_name;
     public String last_name;
@@ -15,6 +14,7 @@ public class Vendor implements Parcelable {
     public String company_addr;
     public String postal_code;
     public String phone;
+    public String _id;
 
     @Override
     public int describeContents() {
@@ -30,6 +30,7 @@ public class Vendor implements Parcelable {
         dest.writeString(this.company_addr);
         dest.writeString(this.postal_code);
         dest.writeString(this.phone);
+        dest.writeString(this._id);
     }
 
     private Vendor(Parcel in) {
@@ -40,6 +41,7 @@ public class Vendor implements Parcelable {
         this.company_addr = in.readString();
         this.postal_code = in.readString();
         this.phone = in.readString();
+        this._id = in.readString();
     }
 
     public static final Parcelable.Creator<Vendor> CREATOR = new Parcelable.Creator<Vendor>() {

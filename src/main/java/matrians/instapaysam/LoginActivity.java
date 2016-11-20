@@ -23,9 +23,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
-    Team Matrians
+ * Team Matrians
  */
-
 public class LoginActivity extends AppCompatActivity {
 
     static final int STATUS_LOGGED_IN = 1;

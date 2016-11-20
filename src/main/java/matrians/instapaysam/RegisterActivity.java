@@ -26,9 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- Team Matrians
- **/
-
+ * Team Matrians
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private final String PASSWORD_REGEX =

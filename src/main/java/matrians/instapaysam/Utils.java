@@ -10,10 +10,12 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+/**
+ * Team Matrians
+ */
 class Utils {
 
     static String hashPassword(String password, String salt) {
-
         int iterations = 10000;
         int keyLength = 512;
         char[] passwordChars = password.toCharArray();

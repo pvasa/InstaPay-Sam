@@ -22,9 +22,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- Team Matrians
- **/
-
+ * Team Matrians
+ */
 public class VendorsActivity extends AppCompatActivity {
 
     @Override
