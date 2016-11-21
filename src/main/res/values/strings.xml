@@ -62,4 +62,5 @@
     <string name="errCamera2Support">Camera2API not supported</string>
     <string name="snackBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
     <string name="snackBarcodeErr">Could not detect barcode. Try again.</string>
+    <string name="errPreviewSize">Couldn\'t find any suitable preview size</string>
 </resources>

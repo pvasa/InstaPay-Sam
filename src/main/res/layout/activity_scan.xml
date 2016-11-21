@@ -23,18 +23,23 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/camera"
+        android:id="@+id/cameraFrag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"/>
 
-    <!--<ImageView
-        android:id="@+id/rectangle"
-        android:layout_height="100dp"
-        android:layout_width="300dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/rectangle"
-        android:contentDescription="@string/descBarcodeBox"/>-->
+    <ImageView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/transparent_white_percent_80"
+        android:contentDescription="@string/descBarcodeBox"/>
+
+    <FrameLayout
+        android:id="@+id/rvFrag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

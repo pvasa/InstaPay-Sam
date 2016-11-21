@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,8 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
+import matrians.instapaysam.Schemas.Product;
 import matrians.instapaysam.camera.CameraFrag;
 
 /**
@@ -26,11 +29,21 @@ public class ScanActivity extends AppCompatActivity {
 
     static boolean flashOn = false;
 
-    void initCameraFrag() {
-        Fragment cameraFrag = CameraFrag.newInstance();
-        cameraFrag.setArguments(getIntent().getExtras());
+    void init() {
+        Parcelable adapter = new RVProductsAdapter(new ArrayList<Product>());
+        Bundle rvArgs = new Bundle();
+        rvArgs.putParcelable(getString(R.string.keyAdapter), adapter);
+        Fragment rvFrag = new RVFrag();
+        rvFrag.setArguments(rvArgs);
         getFragmentManager().beginTransaction().
-                replace(R.id.camera, cameraFrag).commit();
+                replace(R.id.rvFrag, rvFrag).commitAllowingStateLoss();
+
+        Fragment cameraFrag = CameraFrag.newInstance();
+        Bundle cameraArgs = new Bundle(getIntent().getExtras());
+        cameraArgs.putAll(rvArgs);
+        cameraFrag.setArguments(cameraArgs);
+        getFragmentManager().beginTransaction().
+                replace(R.id.cameraFrag, cameraFrag).commit();
     }
 
     @Override
@@ -50,9 +63,10 @@ public class ScanActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             ensurePermissions(
                     Manifest.permission.CAMERA,
+                    Manifest.permission.INTERNET,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        } else initCameraFrag();
+        } else init();
     }
 
     @Override
@@ -64,7 +78,7 @@ public class ScanActivity extends AppCompatActivity {
                 return;
             }
         }
-        initCameraFrag();
+        init();
     }
 
     @Override
@@ -114,7 +128,7 @@ public class ScanActivity extends AppCompatActivity {
         if (!deniedPermissionList.isEmpty()) {
             ActivityCompat.requestPermissions(
                     this, deniedPermissionList.toArray(new String[0]), 0);
-        } else initCameraFrag();
+        } else init();
     }
 
     /**

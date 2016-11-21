@@ -61,6 +61,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import matrians.instapaysam.R;
+import matrians.instapaysam.RVProductsAdapter;
 import matrians.instapaysam.Schemas.Product;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
@@ -73,6 +74,8 @@ import retrofit2.Response;
  */
 public class CameraFrag extends Fragment implements
         FragmentCompat.OnRequestPermissionsResultCallback {
+
+    private RVProductsAdapter productsAdapter;
 
     /**
      * Conversion from screen rotation to JPEG orientation.
@@ -276,7 +279,8 @@ public class CameraFrag extends Fragment implements
                                 public void onResponse(Call<Product> call, Response<Product> response) {
                                     if (view != null) {
                                         if (response.body().success) {
-                                            Log.i(TAG, String.valueOf(response.body().price));
+                                            Log.d(TAG, response.body().name);
+                                            productsAdapter.addProduct(response.body());
                                             Snackbar.make(view, "Product added: " + response.body().name,
                                                     Snackbar.LENGTH_LONG).show();
                                         } else Snackbar.make(view,
@@ -431,7 +435,7 @@ public class CameraFrag extends Fragment implements
      * @param aspectRatio       The aspect ratio
      * @return The optimal {@code Size}, or an arbitrary one if none were big enough
      */
-    private static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
+    private Size chooseOptimalSize(Size[] choices, int textureViewWidth,
                                           int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
 
         // Collect the supported resolutions that are at least as big as the preview Surface
@@ -459,7 +463,7 @@ public class CameraFrag extends Fragment implements
         } else if (notBigEnough.size() > 0) {
             return Collections.max(notBigEnough, new CompareSizesByArea());
         } else {
-            Log.e(TAG, "Couldn't find any suitable preview size");
+            Log.e(TAG, getString(R.string.errPreviewSize));
             return choices[0];
         }
     }
@@ -472,6 +476,7 @@ public class CameraFrag extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         VID = getArguments().getString(getString(R.string.keyVendorID));
+        productsAdapter = getArguments().getParcelable(getString(R.string.keyAdapter));
         return inflater.inflate(R.layout.frag_camera, container, false);
     }
 
@@ -727,7 +732,7 @@ public class CameraFrag extends Fragment implements
                 mImageReader = null;
             }
         } catch (InterruptedException e) {
-            throw new RuntimeException("Interrupted while trying to lock camera closing.", e);
+            e.printStackTrace();
         } finally {
             mCameraOpenCloseLock.release();
         }
@@ -922,8 +927,6 @@ public class CameraFrag extends Fragment implements
                 public void onCaptureCompleted(@NonNull SCameraCaptureSession session,
                                                @NonNull SCaptureRequest request,
                                                @NonNull STotalCaptureResult result) {
-                    //showToast("Saved: " + mFile);
-                    //Log.d(TAG, mFile.toString());
                     unlockFocus();
                 }
             };

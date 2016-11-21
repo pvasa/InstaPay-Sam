@@ -67,7 +67,7 @@ class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
     public RVVendorsAdapter.ViewHolder onCreateViewHolder (
             ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_view, parent, false);
+                .inflate(R.layout.card_view_vendors, parent, false);
         return new ViewHolder(v);
     }
 
@@ -77,8 +77,8 @@ class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvCompanyName.setText(dataset.get(position).company_name);
-        holder.tvCompanyAddr.setText(dataset.get(position).company_addr);
+        holder.tvCompanyName.setText(dataset.get(position).companyName);
+        holder.tvCompanyAddr.setText(dataset.get(position).companyAddr);
         holder.tvEmail.setText(dataset.get(position).email);
         holder.tvPhone.setText(dataset.get(position).phone);
         holder.vid = dataset.get(position)._id;

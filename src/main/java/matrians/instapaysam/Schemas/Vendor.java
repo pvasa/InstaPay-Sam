@@ -7,12 +7,12 @@ import android.os.Parcelable;
  * Team Matrians
  */
 public class Vendor implements Parcelable {
-    public String first_name;
-    public String last_name;
+    public String firstName;
+    public String lastName;
     public String email;
-    public String company_name;
-    public String company_addr;
-    public String postal_code;
+    public String companyName;
+    public String companyAddr;
+    public String postalCode;
     public String phone;
     public String _id;
 
@@ -23,23 +23,23 @@ public class Vendor implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.first_name);
-        dest.writeString(this.last_name);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
         dest.writeString(this.email);
-        dest.writeString(this.company_name);
-        dest.writeString(this.company_addr);
-        dest.writeString(this.postal_code);
+        dest.writeString(this.companyName);
+        dest.writeString(this.companyAddr);
+        dest.writeString(this.postalCode);
         dest.writeString(this.phone);
         dest.writeString(this._id);
     }
 
     private Vendor(Parcel in) {
-        this.first_name = in.readString();
-        this.last_name = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
         this.email = in.readString();
-        this.company_name = in.readString();
-        this.company_addr = in.readString();
-        this.postal_code = in.readString();
+        this.companyName = in.readString();
+        this.companyAddr = in.readString();
+        this.postalCode = in.readString();
         this.phone = in.readString();
         this._id = in.readString();
     }
