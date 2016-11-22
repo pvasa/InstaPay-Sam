@@ -63,4 +63,5 @@
     <string name="snackBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
     <string name="snackBarcodeErr">Could not detect barcode. Try again.</string>
     <string name="errPreviewSize">Couldn\'t find any suitable preview size</string>
+    <string name="descCardClose">Card remove</string>
 </resources>

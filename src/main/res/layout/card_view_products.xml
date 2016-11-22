@@ -7,26 +7,49 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="0dp"
     android:layout_margin="2dp"
+    app:cardBackgroundColor="@color/transparent_white_percent_50"
     android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="6dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvProductName"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:textSize="16sp"/>
+            android:layout_gravity="start"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvProductPrice"
+            <TextView
+                android:id="@+id/tvProductName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tvProductPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <NumberPicker
+            android:id="@+id/quantityPicker"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close_black_24dp"
+        android:layout_gravity="end|center_vertical"
+        android:padding="8dp"
+        android:contentDescription="@string/descCardClose"/>
 
 </android.support.v7.widget.CardView>

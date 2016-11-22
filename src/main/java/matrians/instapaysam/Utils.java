@@ -51,17 +51,17 @@ public class Utils {
 
         // Get the three image planes
         Image.Plane[] planes = image.getPlanes();
-        ByteBuffer buffer = planes[0].getBuffer();
-        byte[] y = new byte[buffer.remaining()];
-        buffer.get(y);
+        ByteBuffer bufferY = planes[0].getBuffer();
+        byte[] y = new byte[bufferY.remaining()];
+        bufferY.get(y);
 
-        buffer = planes[1].getBuffer();
-        byte[] u = new byte[buffer.remaining()];
-        buffer.get(u);
+        ByteBuffer bufferU = planes[1].getBuffer();
+        byte[] u = new byte[bufferU.remaining()];
+        bufferU.get(u);
 
-        buffer = planes[2].getBuffer();
-        byte[] v = new byte[buffer.remaining()];
-        buffer.get(v);
+        ByteBuffer bufferV = planes[2].getBuffer();
+        byte[] v = new byte[bufferV.remaining()];
+        bufferV.get(v);
 
         // get the relevant RowStrides and PixelStrides
         // (we know from documentation that PixelStride is 1 for y)

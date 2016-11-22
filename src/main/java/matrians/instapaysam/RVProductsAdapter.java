@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -37,10 +38,23 @@ public class RVProductsAdapter
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvProductName,
                 tvProductPrice;
+        NumberPicker quantityPicker;
+        View close;
         ViewHolder(View v) {
             super(v);
             tvProductName = (TextView) v.findViewById(R.id.tvProductName);
             tvProductPrice = (TextView) v.findViewById(R.id.tvProductPrice);
+            quantityPicker = (NumberPicker) v.findViewById(R.id.quantityPicker);
+            quantityPicker.setMinValue(1);
+            quantityPicker.setMaxValue(20);
+            String[] quantities = new String[20];
+            int i = 0;
+            while (i < 20) {
+                quantities[i] = String.valueOf(++i);
+            }
+            quantityPicker.setDisplayedValues(quantities);
+            quantityPicker.setWrapSelectorWheel(true);
+            close = v.findViewById(R.id.close);
         }
     }
 
@@ -62,9 +76,16 @@ public class RVProductsAdapter
      * @param position - position of current element in dataset
      */
     @Override
-    public void onBindViewHolder(RVProductsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RVProductsAdapter.ViewHolder holder, int position) {
         holder.tvProductName.setText(dataset.get(position).name);
         holder.tvProductPrice.setText(String.valueOf(dataset.get(position).price));
+        holder.close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataset.remove(holder.getAdapterPosition());
+                notifyDataSetChanged();
+            }
+        });
     }
 
     public void addProduct (Product product) {

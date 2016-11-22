@@ -13,8 +13,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,7 +29,15 @@ import matrians.instapaysam.camera.CameraFrag;
  */
 public class ScanActivity extends AppCompatActivity {
 
-    static boolean flashOn = false;
+    int FLASH_OFF = 0;
+    int FLASH_ON = 1;
+    int FLASH_AUTO = 2;
+    int currentFlash = 0;
+    int[] flashes = new int[] {
+            R.drawable.ic_flash_off_black_24dp,
+            R.drawable.ic_flash_on_black_24dp,
+            R.drawable.ic_flash_auto_black_24dp
+    };
 
     void init() {
         Parcelable adapter = new RVProductsAdapter(new ArrayList<Product>());
@@ -49,6 +59,12 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_scan);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,6 +75,15 @@ public class ScanActivity extends AppCompatActivity {
             actionBar.setTitle(actionBar.getTitle() + " - " +
                     getIntent().getStringExtra(getString(R.string.keyVendorName)));
         }
+
+        ImageView flash = (ImageView) findViewById(R.id.flash);
+        flash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((ImageView) view).setImageResource(flashes[currentFlash]);
+                currentFlash = currentFlash == 2 ? 0 : ++currentFlash;
+            }
+        });
 
         if (savedInstanceState == null) {
             ensurePermissions(
@@ -81,36 +106,6 @@ public class ScanActivity extends AppCompatActivity {
         init();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_scan, menu);
-        if (flashOn) {
-            menu.findItem(R.id.action_flash).setIcon(R.drawable.ic_action_flash_on);
-        } else {
-            menu.findItem(R.id.action_flash).setIcon(R.drawable.ic_action_flash_off);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-        switch (item.getItemId()) {
-            case R.id.action_flash:
-                if (flashOn = !flashOn) {
-                    item.setIcon(R.drawable.ic_action_flash_on);
-                } else {
-                    item.setIcon(R.drawable.ic_action_flash_off);
-                }
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Check for permissions and showDialog if not granted.
      * @param permissions - permissions to be checked
@@ -124,7 +119,6 @@ public class ScanActivity extends AppCompatActivity {
                 deniedPermissionList.add(permission);
             }
         }
-
         if (!deniedPermissionList.isEmpty()) {
             ActivityCompat.requestPermissions(
                     this, deniedPermissionList.toArray(new String[0]), 0);
