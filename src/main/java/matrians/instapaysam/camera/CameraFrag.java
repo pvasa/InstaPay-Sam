@@ -27,6 +27,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseArray;
@@ -36,6 +37,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
@@ -109,12 +111,12 @@ public class CameraFrag extends Fragment implements
     /**
      * Camera state: Waiting for the exposure to be precapture state.
      */
-    private static final int STATE_WAITING_PRECAPTURE = 2;
+    private static final int STATE_WAITING_PRE_CAPTURE = 2;
 
     /**
      * Camera state: Waiting for the exposure state to be something other than precapture.
      */
-    private static final int STATE_WAITING_NON_PRECAPTURE = 3;
+    private static final int STATE_WAITING_NON_PRE_CAPTURE = 3;
 
     /**
      * Camera state: Picture was taken.
@@ -236,6 +238,12 @@ public class CameraFrag extends Fragment implements
 
     private String VID;
 
+    private TextView totalAmount;
+
+    private void updateTotalAmount(float totalAmount) {
+        this.totalAmount.setText(String.valueOf(totalAmount));
+    }
+
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -254,25 +262,23 @@ public class CameraFrag extends Fragment implements
                         Bitmap bitmap = Utils.YUV_420_888_toRGB(image, getActivity());
 
                         Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-                        final SparseArray<Barcode> barcodes = detector.detect(frame);
+                        final SparseArray<Barcode> barCodes = detector.detect(frame);
 
-                        if (barcodes.size() <= 0) {
+                        if (barCodes.size() <= 0) {
                             View view = getView();
                             if (view != null)
-                                Snackbar.make(view, R.string.snackBarcodeErr, Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(view, R.string.snackBarcodeErr,
+                                        Snackbar.LENGTH_LONG).show();
                             return;
                         }
 
                         final View view = getView();
                         assert view != null;
-                        for (int i = 0; i < barcodes.size(); i++) {
+                        for (int i = 0; i < barCodes.size(); i++) {
 
-                            String barcodeValue = barcodes.valueAt(0).rawValue;
+                            String barcodeValue = barCodes.valueAt(0).rawValue;
 
-                            Log.d(TAG, barcodeValue);
                             showToast(barcodeValue);
-
-                            Log.d(TAG, VID);
 
                             String pName;
                             if (!"".equals(pName = productsAdapter.isProductPresent(barcodeValue))) {
@@ -298,7 +304,7 @@ public class CameraFrag extends Fragment implements
                                 public void onFailure(Call<Product> call, Throwable t) {
                                     Snackbar.make(view,
                                             R.string.snackNetworkError, Snackbar.LENGTH_LONG).show();
-                                    Log.d("RETROFIT ERROR", t.toString());
+                                    Log.d(TAG, t.toString());
                                 }
                             });
                         }
@@ -372,17 +378,17 @@ public class CameraFrag extends Fragment implements
                     }
                     break;
                 }
-                case STATE_WAITING_PRECAPTURE: {
+                case STATE_WAITING_PRE_CAPTURE: {
                     // CONTROL_AE_STATE can be null on some devices
                     Integer aeState = result.get(SCaptureResult.CONTROL_AE_STATE);
                     if (aeState == null ||
                             aeState == SCaptureResult.CONTROL_AE_STATE_PRECAPTURE ||
                             aeState == SCaptureRequest.CONTROL_AE_STATE_FLASH_REQUIRED) {
-                        mState = STATE_WAITING_NON_PRECAPTURE;
+                        mState = STATE_WAITING_NON_PRE_CAPTURE;
                     }
                     break;
                 }
-                case STATE_WAITING_NON_PRECAPTURE: {
+                case STATE_WAITING_NON_PRE_CAPTURE: {
                     // CONTROL_AE_STATE can be null on some devices
                     Integer aeState = result.get(SCaptureResult.CONTROL_AE_STATE);
                     if (aeState == null || aeState != SCaptureResult.CONTROL_AE_STATE_PRECAPTURE) {
@@ -484,6 +490,19 @@ public class CameraFrag extends Fragment implements
                              Bundle savedInstanceState) {
         VID = getArguments().getString(getString(R.string.keyVendorID));
         productsAdapter = getArguments().getParcelable(getString(R.string.keyAdapter));
+        if (productsAdapter != null)
+            productsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    super.onChanged();
+                    float totalAmount = 0;
+                    for (Product product : productsAdapter.getProductList()) {
+                        totalAmount += (product.price * product.quantity);
+                    }
+                    updateTotalAmount(totalAmount);
+                }
+            });
+
         return inflater.inflate(R.layout.frag_camera, container, false);
     }
 
@@ -513,6 +532,8 @@ public class CameraFrag extends Fragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        totalAmount = (TextView) getActivity().findViewById(R.id.tvTotalAmount);
+
         getActivity().findViewById(R.id.fabCamera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -643,7 +664,7 @@ public class CameraFrag extends Fragment implements
                         }
                         break;
                     default:
-                        Log.e(TAG, "Display rotation is invalid: " + displayRotation);
+                        Log.e(TAG, getString(R.string.errRotation) + displayRotation);
                 }
 
                 Point displaySize = new Point();
@@ -901,7 +922,7 @@ public class CameraFrag extends Fragment implements
             mPreviewRequestBuilder.set(SCaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER,
                     SCaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START);
             // Tell #mCaptureCallback to wait for the precapture sequence to be set.
-            mState = STATE_WAITING_PRECAPTURE;
+            mState = STATE_WAITING_PRE_CAPTURE;
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
         } catch (CameraAccessException e) {

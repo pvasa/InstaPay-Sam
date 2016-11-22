@@ -54,7 +54,6 @@
                 android:id="@+id/tvQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_1"
                 android:drawablePadding="6dp"
                 android:drawableEnd="@drawable/ic_mode_edit_black_24dp"
                 android:textAppearance="?android:textAppearanceMedium"/>

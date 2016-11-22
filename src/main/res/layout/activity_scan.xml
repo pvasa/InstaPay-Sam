@@ -26,6 +26,27 @@
         android:layout_below="@+id/flash"
         android:layout_marginBottom="?attr/actionBarSize"/>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="16dp"
+        android:layout_alignStart="@+id/flash">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="@string/txtTotalAmount"/>
+        <TextView
+            android:id="@+id/tvTotalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="@string/_0"/>
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/flash"
         android:layout_width="wrap_content"

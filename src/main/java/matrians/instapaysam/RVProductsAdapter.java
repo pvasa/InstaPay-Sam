@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,23 +69,25 @@ public class RVProductsAdapter
      */
     @Override
     public void onBindViewHolder(final RVProductsAdapter.ViewHolder holder, int position) {
-        holder.tvProductName.setText(dataSet.get(position).name);
-        holder.tvProductPrice.setText(String.valueOf(dataSet.get(position).price));
+        final Product currentProduct = dataSet.get(holder.getAdapterPosition());
+        holder.tvProductName.setText(currentProduct.name);
+        holder.tvProductPrice.setText(String.valueOf(currentProduct.price));
+        holder.tvQuantity.setText(String.valueOf(currentProduct.quantity));
         holder.tvQuantity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final NumberPicker picker = new NumberPicker(view.getContext());
                 picker.setMinValue(1);
-                picker.setMaxValue(dataSet.get(holder.getAdapterPosition()).quantity);
-                Log.d("QTY", dataSet.get(holder.getAdapterPosition()).quantity + "");
+                picker.setMaxValue(currentProduct.maxQuantity);
+                picker.setValue(currentProduct.quantity);
                 new AlertDialog.Builder(view.getContext())
-                .setTitle("Quantity")
+                .setTitle(R.string.titleQuantity)
                 .setView(picker)
                 .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        holder.tvQuantity.setText(String.valueOf(picker.getValue()));
                         dataSet.get(holder.getAdapterPosition()).quantity = picker.getValue();
+                        notifyDataSetChanged();
                         dialogInterface.dismiss();
                     }
                 }).show();
@@ -110,7 +111,6 @@ public class RVProductsAdapter
     }
 
     public void addProduct (Product product) {
-        Log.d("ADAPTER", product.name);
         dataSet.add(product);
         notifyDataSetChanged();
     }

@@ -1,21 +1,25 @@
 <resources>
     <string name="app_name">InstaPay</string>
 
+    <string name="_0">0</string>
+    <string name="_1">1</string>
+
     <string name="actionSettings">Settings</string>
     <string name="actionLogout">Logout</string>
 
-    <string name="keyAdapter">adapter</string>
-    <string name="keyVendorName">vendorName</string>
-    <string name="keyVendorEmail">vendorEmail</string>
-    <string name="keyVendorID">vendorID</string>
+    <string name="alertPermissionRequest">This function requires permissions to access Camera.</string>
+    <string name="alertBtnPositive">Grant</string>
+    <string name="alertBtnNegative">Don\'t grant</string>
 
-    <string name="prefLoginStatus">LoginStatus</string>
-    <string name="prefLoginId">LoginID</string>
+    <string name="btnLogin">Login</string>
+    <string name="btnRegister">Register</string>
 
-    <string name="titleHome">Welcome to InstaPay</string>
-    <string name="titleCreateAccount">Create account</string>
-    <string name="titleLogin">Login now</string>
-    <string name="titleVendors">Vendors</string>
+    <string name="descHomeBackground">Home background</string>
+    <string name="descScanBackground">White translucent background</string>
+    <string name="descCardClose">Card remove</string>
+    <string name="descBarcodeBox">BarcodeBox</string>
+    <string name="descFlashSwitch">Flash switch</string>
+    <string name="descEditQuantity">Edit quantity</string>
 
     <string name="edEmail">Email</string>
     <string name="edPassword">Password</string>
@@ -26,9 +30,6 @@
     <string name="edPostalCode">Postal code</string>
     <string name="edHomeAddr">Home address</string>
     <string name="edConfirmPassword">Confirm password</string>
-
-    <string name="btnLogin">Login</string>
-    <string name="btnRegister">Register</string>
 
     <string name="errInvalidEmail">Invalid email address.</string>
     <string name="errInvalidLogin">Invalid login. Try again.</string>
@@ -41,6 +42,17 @@
     <string name="errRedFields">Correct the red fields.</string>
     <string name="errPreviewSize">Couldn\'t find any suitable preview size</string>
     <string name="errCamera2Support">Camera2API not supported</string>
+    <string name="errRotation">"Display rotation is invalid: "</string>
+
+    <string name="keyAdapter">adapter</string>
+    <string name="keyVendorName">vendorName</string>
+    <string name="keyVendorEmail">vendorEmail</string>
+    <string name="keyVendorID">vendorID</string>
+
+    <string name="linkForgotPassword">Forgot password?</string>
+
+    <string name="prefLoginStatus">LoginStatus</string>
+    <string name="prefLoginId">LoginID</string>
 
     <string name="snackRegisterSuccess">Registration successful. You can login now.</string>
     <string name="snackInvalidLogin">Invalid login. Try again.</string>
@@ -49,24 +61,18 @@
     <string name="snackBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
     <string name="snackBarcodeErr">Could not detect barcode. Try again.</string>
     <string name="snackBarcodeNotFound">Cannot detect barcode. Try again.</string>
-
-    <string name="descHomeBackground">Home background</string>
-    <string name="descScanBackground">White translucent background</string>
-    <string name="descCardClose">Card remove</string>
-    <string name="descBarcodeBox">BarcodeBox</string>
-    <string name="descFlashSwitch">Flash switch</string>
-
-    <string name="linkForgotPassword">Forgot password?</string>
+    <string name="snackProductDuplicate">" already there in list. Try to increase quantity."</string>
+    <string name="snackProductAdded">" added to cart."</string>
 
     <string name="subtitleHome">Buy fast, pay easy.</string>
 
-    <string name="alertPermissionRequest">This function requires permissions to access Camera.</string>
-    <string name="alertBtnPositive">Grant</string>
-    <string name="alertBtnNegative">Don\'t grant</string>
-    <string name="descEditQuantity">Edit quantity</string>
+    <string name="titleHome">Welcome to InstaPay</string>
+    <string name="titleCreateAccount">Create account</string>
+    <string name="titleLogin">Login now</string>
+    <string name="titleVendors">Vendors</string>
+    <string name="titleQuantity">Quantity</string>
+
     <string name="txtQty">Qty:</string>
     <string name="txtPrice">Price: $</string>
-    <string name="_1">1</string>
-    <string name="snackProductDuplicate">" already there in list. Try to increase quantity."</string>
-    <string name="snackProductAdded">" added to cart."</string>
+    <string name="txtTotalAmount">Total amount: $</string>
 </resources>
