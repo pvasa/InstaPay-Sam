@@ -67,4 +67,6 @@
     <string name="txtQty">Qty:</string>
     <string name="txtPrice">Price: $</string>
     <string name="_1">1</string>
+    <string name="snackProductDuplicate">" already there in list. Try to increase quantity."</string>
+    <string name="snackProductAdded">" added to cart."</string>
 </resources>

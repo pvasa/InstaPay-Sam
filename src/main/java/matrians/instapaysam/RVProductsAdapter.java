@@ -86,6 +86,7 @@ public class RVProductsAdapter
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         holder.tvQuantity.setText(String.valueOf(picker.getValue()));
+                        dataSet.get(holder.getAdapterPosition()).quantity = picker.getValue();
                         dialogInterface.dismiss();
                     }
                 }).show();
@@ -100,10 +101,22 @@ public class RVProductsAdapter
         });
     }
 
+    public String isProductPresent (String id) {
+        for (Product product : dataSet) {
+            if (id.equals(String.valueOf(product.id)))
+                return product.name;
+        }
+        return "";
+    }
+
     public void addProduct (Product product) {
         Log.d("ADAPTER", product.name);
         dataSet.add(product);
         notifyDataSetChanged();
+    }
+
+    public List<Product> getProductList() {
+        return dataSet;
     }
 
     /** Return the size of your dataSet (invoked by the layout manager)

@@ -263,6 +263,8 @@ public class CameraFrag extends Fragment implements
                             return;
                         }
 
+                        final View view = getView();
+                        assert view != null;
                         for (int i = 0; i < barcodes.size(); i++) {
 
                             String barcodeValue = barcodes.valueAt(0).rawValue;
@@ -272,20 +274,25 @@ public class CameraFrag extends Fragment implements
 
                             Log.d(TAG, VID);
 
+                            String pName;
+                            if (!"".equals(pName = productsAdapter.isProductPresent(barcodeValue))) {
+                                Snackbar.make(view, pName + getString(R.string.snackProductDuplicate)
+                                        , Snackbar.LENGTH_LONG).show();
+                                continue;
+                            }
+
                             Call<Product> call = Server.connect().getProduct(VID, barcodeValue);
                             call.enqueue(new Callback<Product>() {
-                                View view = getView();
                                 @Override
                                 public void onResponse(Call<Product> call, Response<Product> response) {
-                                    if (view != null) {
-                                        if (response.body().success) {
-                                            Log.d(TAG, response.body().name);
-                                            productsAdapter.addProduct(response.body());
-                                            Snackbar.make(view, "Product added: " + response.body().name,
-                                                    Snackbar.LENGTH_LONG).show();
-                                        } else Snackbar.make(view,
-                                                response.body().err, Snackbar.LENGTH_LONG).show();
-                                    }
+                                    if (response.body().success) {
+                                        Log.d(TAG, response.body().name);
+                                        productsAdapter.addProduct(response.body());
+                                        Snackbar.make(view, response.body().name +
+                                                getString(R.string.snackProductAdded),
+                                                Snackbar.LENGTH_LONG).show();
+                                    } else Snackbar.make(view,
+                                            response.body().err, Snackbar.LENGTH_LONG).show();
                                 }
                                 @Override
                                 public void onFailure(Call<Product> call, Throwable t) {
@@ -505,13 +512,19 @@ public class CameraFrag extends Fragment implements
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         getActivity().findViewById(R.id.fabCamera).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePicture();
             }
         });
-        mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+        getActivity().findViewById(R.id.fabCheckout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                productsAdapter.getProductList();
+            }
+        });
     }
 
     @Override
