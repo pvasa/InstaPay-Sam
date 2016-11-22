@@ -1,7 +1,9 @@
 package matrians.instapaysam;
 
+import android.content.DialogInterface;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,14 +24,14 @@ public class RVProductsAdapter
         extends RecyclerView.Adapter<RVProductsAdapter.ViewHolder>
         implements Parcelable {
 
-    private List<Product> dataset;
+    private List<Product> dataSet;
 
     /**
-     * Constructor to initialize the dataset.
-     * @param dataset - set of the data to show in RecyclerView
+     * Constructor to initialize the dataSet.
+     * @param dataSet - set of the data to show in RecyclerView
      */
-    RVProductsAdapter(List<Product> dataset) {
-        this.dataset = dataset;
+    RVProductsAdapter(List<Product> dataSet) {
+        this.dataSet = dataSet;
     }
 
     /**
@@ -37,23 +39,14 @@ public class RVProductsAdapter
      */
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvProductName,
-                tvProductPrice;
-        NumberPicker quantityPicker;
+                tvProductPrice,
+                tvQuantity;
         View close;
         ViewHolder(View v) {
             super(v);
             tvProductName = (TextView) v.findViewById(R.id.tvProductName);
             tvProductPrice = (TextView) v.findViewById(R.id.tvProductPrice);
-            quantityPicker = (NumberPicker) v.findViewById(R.id.quantityPicker);
-            quantityPicker.setMinValue(1);
-            quantityPicker.setMaxValue(20);
-            String[] quantities = new String[20];
-            int i = 0;
-            while (i < 20) {
-                quantities[i] = String.valueOf(++i);
-            }
-            quantityPicker.setDisplayedValues(quantities);
-            quantityPicker.setWrapSelectorWheel(true);
+            tvQuantity = (TextView) v.findViewById(R.id.tvQuantity);
             close = v.findViewById(R.id.close);
         }
     }
@@ -73,16 +66,35 @@ public class RVProductsAdapter
 
     /** Replace the contents of a view (invoked by the layout manager)
      * @param holder - CardView
-     * @param position - position of current element in dataset
+     * @param position - position of current element in dataSet
      */
     @Override
     public void onBindViewHolder(final RVProductsAdapter.ViewHolder holder, int position) {
-        holder.tvProductName.setText(dataset.get(position).name);
-        holder.tvProductPrice.setText(String.valueOf(dataset.get(position).price));
+        holder.tvProductName.setText(dataSet.get(position).name);
+        holder.tvProductPrice.setText(String.valueOf(dataSet.get(position).price));
+        holder.tvQuantity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final NumberPicker picker = new NumberPicker(view.getContext());
+                picker.setMinValue(1);
+                picker.setMaxValue(dataSet.get(holder.getAdapterPosition()).quantity);
+                Log.d("QTY", dataSet.get(holder.getAdapterPosition()).quantity + "");
+                new AlertDialog.Builder(view.getContext())
+                .setTitle("Quantity")
+                .setView(picker)
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        holder.tvQuantity.setText(String.valueOf(picker.getValue()));
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+            }
+        });
         holder.close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataset.remove(holder.getAdapterPosition());
+                dataSet.remove(holder.getAdapterPosition());
                 notifyDataSetChanged();
             }
         });
@@ -90,17 +102,17 @@ public class RVProductsAdapter
 
     public void addProduct (Product product) {
         Log.d("ADAPTER", product.name);
-        dataset.add(product);
+        dataSet.add(product);
         notifyDataSetChanged();
     }
 
-    /** Return the size of your dataset (invoked by the layout manager)
-     * @return size of the dataset
+    /** Return the size of your dataSet (invoked by the layout manager)
+     * @return size of the dataSet
      */
     @Override
     public int getItemCount() {
-        if (dataset != null)
-            return dataset.size();
+        if (dataSet != null)
+            return dataSet.size();
         return 0;
     }
 
@@ -111,12 +123,12 @@ public class RVProductsAdapter
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.dataset);
+        dest.writeList(this.dataSet);
     }
 
     private RVProductsAdapter(Parcel in) {
-        this.dataset = new ArrayList<>();
-        in.readList(this.dataset, Product.class.getClassLoader());
+        this.dataSet = new ArrayList<>();
+        in.readList(this.dataSet, Product.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<RVProductsAdapter> CREATOR =

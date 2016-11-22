@@ -7,6 +7,7 @@ public class Product {
     public long id;
     public String name;
     public float price;
+    public int quantity;
     public String err;
     public boolean success;
 

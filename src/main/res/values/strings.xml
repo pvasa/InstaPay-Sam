@@ -39,29 +39,32 @@
     <string name="errInvalidPhone">Invalid phone number.</string>
     <string name="errFieldEmpty">Field cannot be empty.</string>
     <string name="errRedFields">Correct the red fields.</string>
+    <string name="errPreviewSize">Couldn\'t find any suitable preview size</string>
+    <string name="errCamera2Support">Camera2API not supported</string>
 
     <string name="snackRegisterSuccess">Registration successful. You can login now.</string>
     <string name="snackInvalidLogin">Invalid login. Try again.</string>
     <string name="snackLoginFailed">Login failed. Try again.</string>
     <string name="snackNetworkError">Network error.</string>
+    <string name="snackBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
+    <string name="snackBarcodeErr">Could not detect barcode. Try again.</string>
+    <string name="snackBarcodeNotFound">Cannot detect barcode. Try again.</string>
 
     <string name="descHomeBackground">Home background</string>
     <string name="descScanBackground">White translucent background</string>
+    <string name="descCardClose">Card remove</string>
+    <string name="descBarcodeBox">BarcodeBox</string>
+    <string name="descFlashSwitch">Flash switch</string>
 
     <string name="linkForgotPassword">Forgot password?</string>
 
     <string name="subtitleHome">Buy fast, pay easy.</string>
+
     <string name="alertPermissionRequest">This function requires permissions to access Camera.</string>
     <string name="alertBtnPositive">Grant</string>
     <string name="alertBtnNegative">Don\'t grant</string>
-    <string name="actionFlashOn">Flash on</string>
-    <string name="actionFlashOff">Flash off</string>
-    <string name="actionFlash">Flash</string>
-    <string name="descBarcodeBox">BarcodeBox</string>
-    <string name="snackBarcodeNotFound">Cannot detect barcode. Try again.</string>
-    <string name="errCamera2Support">Camera2API not supported</string>
-    <string name="snackBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
-    <string name="snackBarcodeErr">Could not detect barcode. Try again.</string>
-    <string name="errPreviewSize">Couldn\'t find any suitable preview size</string>
-    <string name="descCardClose">Card remove</string>
+    <string name="descEditQuantity">Edit quantity</string>
+    <string name="txtQty">Qty:</string>
+    <string name="txtPrice">Price: $</string>
+    <string name="_1">1</string>
 </resources>

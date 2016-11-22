@@ -11,35 +11,54 @@
     android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="6dp"
-        android:orientation="horizontal">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:padding="2dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:orientation="vertical">
-
+            android:padding="2dp">
             <TextView
-                android:id="@+id/tvProductName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="16sp"/>
-
+                android:text="@string/txtPrice"
+                android:textAppearance="?android:textAppearanceMedium"/>
             <TextView
                 android:id="@+id/tvProductPrice"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceMedium"/>
         </LinearLayout>
 
-        <NumberPicker
-            android:id="@+id/quantityPicker"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:padding="2dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txtQty"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:layout_marginEnd="4dp"/>
+            <TextView
+                android:id="@+id/tvQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_1"
+                android:drawablePadding="6dp"
+                android:drawableEnd="@drawable/ic_mode_edit_black_24dp"
+                android:textAppearance="?android:textAppearanceMedium"/>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -49,7 +68,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_close_black_24dp"
         android:layout_gravity="end|center_vertical"
-        android:padding="8dp"
+        android:padding="12dp"
         android:contentDescription="@string/descCardClose"/>
 
 </android.support.v7.widget.CardView>
