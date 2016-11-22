@@ -2,7 +2,6 @@
     <string name="app_name">InstaPay</string>
 
     <string name="_0">0</string>
-    <string name="_1">1</string>
 
     <string name="actionSettings">Settings</string>
     <string name="actionLogout">Logout</string>
@@ -15,11 +14,9 @@
     <string name="btnRegister">Register</string>
 
     <string name="descHomeBackground">Home background</string>
-    <string name="descScanBackground">White translucent background</string>
     <string name="descCardClose">Card remove</string>
     <string name="descBarcodeBox">BarcodeBox</string>
     <string name="descFlashSwitch">Flash switch</string>
-    <string name="descEditQuantity">Edit quantity</string>
 
     <string name="edEmail">Email</string>
     <string name="edPassword">Password</string>
@@ -32,7 +29,6 @@
     <string name="edConfirmPassword">Confirm password</string>
 
     <string name="errInvalidEmail">Invalid email address.</string>
-    <string name="errInvalidLogin">Invalid login. Try again.</string>
     <string name="errRegisterFail">Registration failed. Try again.</string>
     <string name="errPasswordsMismatch">Passwords do not match.</string>
     <string name="errInvalidPassword">Invalid password.</string>
@@ -46,7 +42,6 @@
 
     <string name="keyAdapter">adapter</string>
     <string name="keyVendorName">vendorName</string>
-    <string name="keyVendorEmail">vendorEmail</string>
     <string name="keyVendorID">vendorID</string>
 
     <string name="linkForgotPassword">Forgot password?</string>
@@ -54,13 +49,9 @@
     <string name="prefLoginStatus">LoginStatus</string>
     <string name="prefLoginId">LoginID</string>
 
-    <string name="snackRegisterSuccess">Registration successful. You can login now.</string>
-    <string name="snackInvalidLogin">Invalid login. Try again.</string>
-    <string name="snackLoginFailed">Login failed. Try again.</string>
     <string name="snackNetworkError">Network error.</string>
     <string name="snackBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
     <string name="snackBarcodeErr">Could not detect barcode. Try again.</string>
-    <string name="snackBarcodeNotFound">Cannot detect barcode. Try again.</string>
     <string name="snackProductDuplicate">" already there in list. Try to increase quantity."</string>
     <string name="snackProductAdded">" added to cart."</string>
 
