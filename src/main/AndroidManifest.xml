@@ -45,6 +45,9 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName="matrians.instapaysam.VendorsActivity"/>
 
+        <activity android:name=".PaymentMethodsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

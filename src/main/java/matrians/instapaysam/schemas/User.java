@@ -7,6 +7,7 @@ package matrians.instapaysam.schemas;
 public class User {
     private char lor;
     public boolean success;
+    public String _id;
     public String err;
     public String firstName;
     public String lastName;

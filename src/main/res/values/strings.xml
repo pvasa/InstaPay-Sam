@@ -48,6 +48,7 @@
 
     <string name="prefLoginStatus">LoginStatus</string>
     <string name="prefLoginId">LoginID</string>
+    <string name="prefUserId">UserID</string>
 
     <string name="snackNetworkError">Network error.</string>
     <string name="snackBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
@@ -66,4 +67,5 @@
     <string name="txtQty">Qty:</string>
     <string name="txtPrice">Price: $</string>
     <string name="txtTotalAmount">Total amount: $</string>
+    <string name="titlePaymentMethods">Payment methods</string>
 </resources>
