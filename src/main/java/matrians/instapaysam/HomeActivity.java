@@ -56,13 +56,12 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(this, VendorsActivity.class));
             finish();
         }
+    }
 
-        /*if (ContextCompat.checkSelfPermission(this,
-                "com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY")
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{"com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY"}, 2);
-        } else loadCamera();*/
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.checkPlayServices(this);
     }
 
     @Override
