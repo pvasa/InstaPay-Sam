@@ -64,7 +64,7 @@ import java.util.concurrent.TimeUnit;
 
 import matrians.instapaysam.R;
 import matrians.instapaysam.RVProductsAdapter;
-import matrians.instapaysam.Schemas.Product;
+import matrians.instapaysam.schemas.Product;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
 import retrofit2.Call;

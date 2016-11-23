@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
-import matrians.instapaysam.Schemas.User;
+import matrians.instapaysam.schemas.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

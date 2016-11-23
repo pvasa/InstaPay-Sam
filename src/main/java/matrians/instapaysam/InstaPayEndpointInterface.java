@@ -2,9 +2,9 @@ package matrians.instapaysam;
 
 import java.util.List;
 
-import matrians.instapaysam.Schemas.Product;
-import matrians.instapaysam.Schemas.User;
-import matrians.instapaysam.Schemas.Vendor;
+import matrians.instapaysam.schemas.Product;
+import matrians.instapaysam.schemas.User;
+import matrians.instapaysam.schemas.Vendor;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

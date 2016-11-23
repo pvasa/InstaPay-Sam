@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import matrians.instapaysam.Schemas.Product;
+import matrians.instapaysam.schemas.Product;
 import matrians.instapaysam.camera.CameraFrag;
 
 /**

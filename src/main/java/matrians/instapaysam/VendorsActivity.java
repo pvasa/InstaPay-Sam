@@ -16,7 +16,7 @@ import android.view.View;
 
 import java.util.List;
 
-import matrians.instapaysam.Schemas.Vendor;
+import matrians.instapaysam.schemas.Vendor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

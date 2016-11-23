@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import matrians.instapaysam.Schemas.User;
+import matrians.instapaysam.schemas.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

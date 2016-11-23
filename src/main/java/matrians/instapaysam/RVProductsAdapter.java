@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import matrians.instapaysam.Schemas.Product;
+import matrians.instapaysam.schemas.Product;
 
 /**
  * Team Matrians
