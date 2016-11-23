@@ -1,4 +1,4 @@
-package matrians.instapaysam;
+package matrians.instapaysam.recyclerview;
 
 import android.content.DialogInterface;
 import android.os.Parcel;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import matrians.instapaysam.R;
 import matrians.instapaysam.schemas.Product;
 
 /**
@@ -29,7 +30,7 @@ public class RVProductsAdapter
      * Constructor to initialize the dataSet.
      * @param dataSet - set of the data to show in RecyclerView
      */
-    RVProductsAdapter(List<Product> dataSet) {
+    public RVProductsAdapter(List<Product> dataSet) {
         this.dataSet = dataSet;
     }
 

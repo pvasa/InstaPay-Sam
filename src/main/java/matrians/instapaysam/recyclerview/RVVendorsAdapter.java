@@ -1,4 +1,4 @@
-package matrians.instapaysam;
+package matrians.instapaysam.recyclerview;
 
 import android.content.Intent;
 import android.os.Parcel;
@@ -12,21 +12,23 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import matrians.instapaysam.R;
+import matrians.instapaysam.ScanActivity;
 import matrians.instapaysam.schemas.Vendor;
 
 /**
  * Team Matrians
  */
-class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder> implements Parcelable {
+public class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder> implements Parcelable {
 
-    private List<Vendor> dataset;
+    private List<Vendor> dataSet;
 
     /**
-     * Constructor to initialize the dataset.
-     * @param dataset - set of the data to show in RecyclerView
+     * Constructor to initialize the dataSet.
+     * @param dataSet - set of the data to show in RecyclerView
      */
-    RVVendorsAdapter(List<Vendor> dataset) {
-        this.dataset = dataset;
+    public RVVendorsAdapter(List<Vendor> dataSet) {
+        this.dataSet = dataSet;
     }
 
     /**
@@ -35,14 +37,14 @@ class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvCompanyName,
-                tvCompanyAddr,
+                tvCompanyAddress,
                 tvEmail,
                 tvPhone;
         String vid;
         ViewHolder(View v) {
             super(v);
             tvCompanyName = (TextView) v.findViewById(R.id.tvCompanyName);
-            tvCompanyAddr = (TextView) v.findViewById(R.id.tvCompanyAddr);
+            tvCompanyAddress = (TextView) v.findViewById(R.id.tvCompanyAddr);
             tvEmail = (TextView) v.findViewById(R.id.tvCompanyEmail);
             tvPhone = (TextView) v.findViewById(R.id.tvPhone);
             v.setOnClickListener(new View.OnClickListener() {
@@ -73,24 +75,24 @@ class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
 
     /** Replace the contents of a view (invoked by the layout manager)
      * @param holder - CardView
-     * @param position - position of current element in dataset
+     * @param position - position of current element in dataSet
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvCompanyName.setText(dataset.get(position).companyName);
-        holder.tvCompanyAddr.setText(dataset.get(position).companyAddr);
-        holder.tvEmail.setText(dataset.get(position).email);
-        holder.tvPhone.setText(dataset.get(position).phone);
-        holder.vid = dataset.get(position)._id;
+        holder.tvCompanyName.setText(dataSet.get(position).companyName);
+        holder.tvCompanyAddress.setText(dataSet.get(position).companyAddr);
+        holder.tvEmail.setText(dataSet.get(position).email);
+        holder.tvPhone.setText(dataSet.get(position).phone);
+        holder.vid = dataSet.get(position)._id;
     }
 
-    /** Return the size of your dataset (invoked by the layout manager)
-     * @return size of the dataset
+    /** Return the size of your dataSet (invoked by the layout manager)
+     * @return size of the dataSet
      */
     @Override
     public int getItemCount() {
-        if (dataset != null)
-            return dataset.size();
+        if (dataSet != null)
+            return dataSet.size();
         return 0;
     }
 
@@ -101,12 +103,12 @@ class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.dataset);
+        dest.writeList(this.dataSet);
     }
 
     private RVVendorsAdapter(Parcel in) {
-        this.dataset = new ArrayList<>();
-        in.readList(this.dataset, Vendor.class.getClassLoader());
+        this.dataSet = new ArrayList<>();
+        in.readList(this.dataSet, Vendor.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<RVVendorsAdapter> CREATOR =

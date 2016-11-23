@@ -289,7 +289,7 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onClick(final View v) {
 
-                    dialog = Utils.showProgress(v.getContext(), "Creating user. Just a moment.");
+                    dialog = Utils.showProgress(v.getContext(), getString(R.string.processRegistering));
 
                     boolean valid = true;
 
@@ -371,7 +371,7 @@ public class RegisterActivity extends AppCompatActivity {
                         valid = false;
                     }
 
-                    if ( (user.homeAddr = address.getText().toString()).length() == 0 ) {
+                    if ( (user.homeAddress = address.getText().toString()).length() == 0 ) {
                         Toast.makeText(v.getContext(),
                                 R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
                         address.requestFocus();

@@ -3,10 +3,12 @@ package matrians.instapaysam;
 import android.Manifest;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -17,12 +19,15 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import matrians.instapaysam.schemas.Product;
 import matrians.instapaysam.camera.CameraFrag;
+import matrians.instapaysam.recyclerview.RVFrag;
+import matrians.instapaysam.recyclerview.RVProductsAdapter;
+import matrians.instapaysam.schemas.Product;
 
 /**
  * Team Matrians
@@ -82,6 +87,23 @@ public class ScanActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ((ImageView) view).setImageResource(flashes[currentFlash]);
                 currentFlash = currentFlash == 2 ? 0 : ++currentFlash;
+            }
+        });
+
+        findViewById(R.id.fabCheckout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                float totalAmount = Float.parseFloat(
+                        ((TextView)findViewById(R.id.tvTotalAmount)).getText().toString());
+                if (0.0 == totalAmount) {
+                    Snackbar.make((View) view.getParent(),
+                            R.string.snackNoProducts, Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                Intent intent = new Intent(ScanActivity.this, PaymentMethodsActivity.class);
+                intent.putExtra(getString(R.string.keyTotalAmount),
+                        totalAmount);
+                startActivity(intent);
             }
         });
 

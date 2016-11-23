@@ -76,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginBottom="?attr/actionBarSize"
-                app:fabSize="normal"
                 app:srcCompat="@drawable/ic_add_a_photo_white_48px"/>
         </LinearLayout>
 
@@ -96,7 +95,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginBottom="?attr/actionBarSize"
-                app:fabSize="normal"
                 app:srcCompat="@drawable/ic_check_white_48px"/>
         </LinearLayout>
 

@@ -14,7 +14,7 @@ public class User {
     public String email;
     public String userName;
     public String password;
-    public String homeAddr;
+    public String homeAddress;
     public String postalCode;
     public String phone;
 

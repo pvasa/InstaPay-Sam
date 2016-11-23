@@ -43,6 +43,7 @@
     <string name="keyAdapter">adapter</string>
     <string name="keyVendorName">vendorName</string>
     <string name="keyVendorID">vendorID</string>
+    <string name="keyTotalAmount">totalAmount</string>
 
     <string name="linkForgotPassword">Forgot password?</string>
 
@@ -55,6 +56,8 @@
     <string name="snackBarcodeErr">Could not detect barcode. Try again.</string>
     <string name="snackProductDuplicate">" already there in list. Try to increase quantity."</string>
     <string name="snackProductAdded">" added to cart."</string>
+    <string name="snackNoPaymentMethods">No payment methods found. Please add one.</string>
+    <string name="snackNoProducts">Cannot checkout with empty cart.</string>
 
     <string name="subtitleHome">Buy fast, pay easy.</string>
 
@@ -63,9 +66,22 @@
     <string name="titleLogin">Login now</string>
     <string name="titleVendors">Vendors</string>
     <string name="titleQuantity">Quantity</string>
+    <string name="titlePaymentMethods">Payment methods</string>
 
     <string name="txtQty">Qty:</string>
     <string name="txtPrice">Price: $</string>
     <string name="txtTotalAmount">Total amount: $</string>
-    <string name="titlePaymentMethods">Payment methods</string>
+    <string name="txtStars">****-****-****-</string>
+    <string name="txtPayable">Payable: $</string>
+    <string name="txtHST">13% HST: $</string>
+    <string name="edCardName">Card name</string>
+    <string name="edCardNumber">Card number</string>
+    <string name="edCvc">cvc</string>
+    <string name="edExpYear">yyyy</string>
+    <string name="edExpMonth">mm</string>
+    <string name="edBillingAddress">Billing address</string>
+    <string name="processAddingCard">Adding card. Just a moment.</string>
+    <string name="processRegistering">Creating user. Just a moment.</string>
+    <string name="snackErrAddCard">Error adding card. Try again.</string>
+    <string name="toastCardAddSuccess">Card added successfully.</string>
 </resources>

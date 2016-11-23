@@ -151,6 +151,8 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString(getString(R.string.prefLoginId), response.body().email);
                                 editor.putString(getString(R.string.prefUserId), response.body()._id);
                                 editor.apply();
+                                Log.d("TAG", response.body()._id);
+                                Log.d("TAG", response.body().email);
                                 setResult(1);
                                 finish();
                             } else Snackbar.make((View) v.getParent(),

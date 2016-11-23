@@ -6,12 +6,18 @@ import android.os.Parcelable;
 /**
  * Team Matrians
  */
-public class Card implements Parcelable {
-    public String userEmail;
+public class MCard implements Parcelable {
+    private String userEmail;
     public String cardName;
     public String cardLast4Digits;
-    public String stripeToken;
+    private String stripeToken;
 
+    public MCard(String userEmail, String cardName, String cardLast4Digits, String stripeToken) {
+        this.userEmail = userEmail;
+        this.cardName = cardName;
+        this.cardLast4Digits = cardLast4Digits;
+        this.stripeToken = stripeToken;
+    }
 
     @Override
     public int describeContents() {
@@ -26,25 +32,22 @@ public class Card implements Parcelable {
         dest.writeString(this.stripeToken);
     }
 
-    public Card() {
-    }
-
-    protected Card(Parcel in) {
+    private MCard(Parcel in) {
         this.userEmail = in.readString();
         this.cardName = in.readString();
         this.cardLast4Digits = in.readString();
         this.stripeToken = in.readString();
     }
 
-    public static final Parcelable.Creator<Card> CREATOR = new Parcelable.Creator<Card>() {
+    public static final Parcelable.Creator<MCard> CREATOR = new Parcelable.Creator<MCard>() {
         @Override
-        public Card createFromParcel(Parcel source) {
-            return new Card(source);
+        public MCard createFromParcel(Parcel source) {
+            return new MCard(source);
         }
 
         @Override
-        public Card[] newArray(int size) {
-            return new Card[size];
+        public MCard[] newArray(int size) {
+            return new MCard[size];
         }
     };
 }

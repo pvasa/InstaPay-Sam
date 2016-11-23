@@ -63,7 +63,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import matrians.instapaysam.R;
-import matrians.instapaysam.RVProductsAdapter;
+import matrians.instapaysam.recyclerview.RVProductsAdapter;
 import matrians.instapaysam.schemas.Product;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
@@ -538,12 +538,6 @@ public class CameraFrag extends Fragment implements
             @Override
             public void onClick(View view) {
                 takePicture();
-            }
-        });
-        getActivity().findViewById(R.id.fabCheckout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                productsAdapter.getProductList();
             }
         });
     }

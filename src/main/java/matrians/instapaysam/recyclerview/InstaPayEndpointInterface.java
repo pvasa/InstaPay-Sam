@@ -1,8 +1,10 @@
-package matrians.instapaysam;
+package matrians.instapaysam.recyclerview;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
-import matrians.instapaysam.schemas.Card;
+import matrians.instapaysam.schemas.MCard;
 import matrians.instapaysam.schemas.Product;
 import matrians.instapaysam.schemas.User;
 import matrians.instapaysam.schemas.Vendor;
@@ -15,7 +17,7 @@ import retrofit2.http.Path;
 /**
  * Team Matrians
  */
-interface InstaPayEndpointInterface {
+public interface InstaPayEndpointInterface {
 
     @GET("vendors")
     Call<List<Vendor>> getVendors();
@@ -30,7 +32,11 @@ interface InstaPayEndpointInterface {
     Call<User> loginUser(@Body User user);
 
     @POST("card")
-    Call<List<Card>> getCards(@Body String _id, @Body String email);
+    Call<List<MCard>> getCards(@Body JSONObject object);
+
+    @POST("card")
+    Call<MCard> addCard(@Body MCard mCard);
+
     /*
     @GET("users/{username}")
     Call<User> getUser(@Path("username") String username);

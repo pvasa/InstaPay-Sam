@@ -1,5 +1,6 @@
 package matrians.instapaysam;
 
+import matrians.instapaysam.recyclerview.InstaPayEndpointInterface;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
