@@ -135,7 +135,7 @@ public class Utils {
         return outBitmap;
     }
 
-    static ProgressDialog showProgress(Context context, String message) {
+    public static ProgressDialog showProgress(Context context, String message) {
         ProgressDialog dialog = new ProgressDialog(context);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setIndeterminate(true);

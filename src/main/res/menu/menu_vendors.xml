@@ -4,13 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="matrians.instapaysam.VendorsActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_payment_methods"
         android:orderInCategory="100"
         android:title="@string/actionSettings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_logout"
+        android:id="@+id/action_settings"
         android:orderInCategory="101"
+        android:title="@string/actionSettings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="102"
         android:title="@string/actionLogout"
         app:showAsAction="never" />
 </menu>

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import matrians.instapaysam.schemas.MCard;
+import matrians.instapaysam.schemas.Payment;
 import matrians.instapaysam.schemas.Product;
 import matrians.instapaysam.schemas.User;
 import matrians.instapaysam.schemas.Vendor;
@@ -36,6 +37,9 @@ public interface InstaPayEndpointInterface {
 
     @POST("card")
     Call<MCard> addCard(@Body MCard mCard);
+
+    @POST("pay")
+    Call<Payment> pay(@Body Payment payment);
 
     /*
     @GET("users/{username}")

@@ -8,15 +8,19 @@ import android.os.Parcelable;
  */
 public class MCard implements Parcelable {
     private String userEmail;
-    public String cardName;
-    public String cardLast4Digits;
-    private String stripeToken;
+    public String name;
+    public String number;
+    public int expMonth;
+    public int expYear;
+    public String CVC;
 
-    public MCard(String userEmail, String cardName, String cardLast4Digits, String stripeToken) {
+    public MCard(String userEmail, String cardName, String cardNumber, int expMonth, int expYear, String CVC) {
         this.userEmail = userEmail;
-        this.cardName = cardName;
-        this.cardLast4Digits = cardLast4Digits;
-        this.stripeToken = stripeToken;
+        this.name = cardName;
+        this.number = cardNumber;
+        this.expMonth = expMonth;
+        this.expYear = expYear;
+        this.CVC = CVC;
     }
 
     @Override
@@ -27,16 +31,20 @@ public class MCard implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.userEmail);
-        dest.writeString(this.cardName);
-        dest.writeString(this.cardLast4Digits);
-        dest.writeString(this.stripeToken);
+        dest.writeString(this.name);
+        dest.writeString(this.number);
+        dest.writeInt(this.expMonth);
+        dest.writeInt(this.expYear);
+        dest.writeString(this.CVC);
     }
 
-    private MCard(Parcel in) {
+    protected MCard(Parcel in) {
         this.userEmail = in.readString();
-        this.cardName = in.readString();
-        this.cardLast4Digits = in.readString();
-        this.stripeToken = in.readString();
+        this.name = in.readString();
+        this.number = in.readString();
+        this.expMonth = in.readInt();
+        this.expYear = in.readInt();
+        this.CVC = in.readString();
     }
 
     public static final Parcelable.Creator<MCard> CREATOR = new Parcelable.Creator<MCard>() {

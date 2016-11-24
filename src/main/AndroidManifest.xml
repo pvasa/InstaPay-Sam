@@ -48,6 +48,9 @@
         <activity android:name=".PaymentMethodsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name="com.cooltechworks.creditcarddesign.CardEditActivity"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

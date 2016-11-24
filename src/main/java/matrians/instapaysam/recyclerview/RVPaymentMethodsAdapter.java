@@ -1,31 +1,52 @@
 package matrians.instapaysam.recyclerview;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.stripe.android.Stripe;
+import com.stripe.android.TokenCallback;
+import com.stripe.android.model.Card;
+import com.stripe.android.model.Token;
+import com.stripe.exception.AuthenticationException;
 
 import java.util.List;
 
 import matrians.instapaysam.R;
+import matrians.instapaysam.Server;
+import matrians.instapaysam.Utils;
 import matrians.instapaysam.schemas.MCard;
+import matrians.instapaysam.schemas.Payment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Team Matrians
  */
 public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMethodsAdapter.ViewHolder> implements Parcelable {
 
-    private List<MCard> dataSet;
+    private static List<MCard> dataSet;
+    private static ProgressDialog waitDialog;
+    private static String TAG = RVPaymentMethodsAdapter.class.getName();
+    private static float amount;
 
     /**
      * Constructor to initialize the dataSet.
      * @param dataSet - set of the data to show in RecyclerView
      */
-    public RVPaymentMethodsAdapter(List<MCard> dataSet) {
-        this.dataSet = dataSet;
+    public RVPaymentMethodsAdapter(List<MCard> dataSet, float payable) {
+        RVPaymentMethodsAdapter.dataSet = dataSet;
+        amount = payable;
     }
 
     /**
@@ -33,11 +54,82 @@ public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMetho
      */
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView cardName, cardLast4Digits;
+        String cardNumber, CVC;
+        int expMonth, expYear;
         ViewHolder(View v) {
             super(v);
             cardName = (TextView) v.findViewById(R.id.tvCardName);
             cardLast4Digits = (TextView) v.findViewById(R.id.tvLast4Digits);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    waitDialog = Utils.showProgress(view.getContext(),
+                            view.getContext().getString(R.string.dialogProcessingPayment));
+
+                    final String _id = PreferenceManager.getDefaultSharedPreferences(
+                            view.getContext()).getString(
+                            view.getContext().getString(R.string.prefUserId), null);
+                    final String userEmail = PreferenceManager.getDefaultSharedPreferences(
+                            view.getContext()).getString(
+                            view.getContext().getString(R.string.prefLoginId), null);
+                    try {
+                        generateTokenAndPay(
+                                view.getContext(),
+                                new Card(cardNumber, expMonth, expYear, CVC),
+                                _id, userEmail);
+                    } catch (AuthenticationException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         }
+    }
+
+    private static void generateTokenAndPay (
+            final Context context, Card card, final String _id, final String userEmail)
+            throws AuthenticationException {
+
+        new Stripe(context.getString(R.string.stripeTestPublishableKey)).createToken(
+                card, new TokenCallback() {
+                    @Override
+                    public void onError(Exception error) {
+                        Toast.makeText(context, context.getString(
+                                R.string.errPaymentFailed), Toast.LENGTH_LONG).show();
+                        Log.d(TAG, error.getLocalizedMessage());
+                    }
+                    @Override
+                    public void onSuccess(Token token) {
+                        Payment payment =
+                                new Payment(_id, userEmail,
+                                        token.getId(), amount);
+                        Call<Payment> call = Server.connect().pay(payment);
+                        call.enqueue(new Callback<Payment>() {
+                            @Override
+                            public void onResponse(Call<Payment> call, Response<Payment> response) {
+                                waitDialog.dismiss();
+                                if (200 == response.code()) {
+
+                                    // Fetch and open receipt
+
+                                    Toast.makeText(context,
+                                            R.string.txtPaymentSuccess,
+                                            Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context,
+                                            R.string.errPaymentFailed,
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<Payment> call, Throwable t) {
+                                waitDialog.dismiss();
+                                Toast.makeText(context,
+                                        R.string.errPaymentFailed, Toast.LENGTH_LONG).show();
+                                Log.d(TAG, t.toString());
+                            }
+                        });
+                    }
+                });
     }
 
     /** Create new views (invoked by the layout manager)
@@ -59,8 +151,14 @@ public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMetho
      */
     @Override
     public void onBindViewHolder(RVPaymentMethodsAdapter.ViewHolder holder, int position) {
-        holder.cardName.setText(dataSet.get(position).cardName);
-        holder.cardLast4Digits.setText(dataSet.get(position).cardLast4Digits);
+        MCard mCard = dataSet.get(position);
+        holder.cardNumber = mCard.number;
+        holder.expMonth = mCard.expMonth;
+        holder.expYear = mCard.expYear;
+        holder.CVC = mCard.CVC;
+
+        holder.cardName.setText(mCard.name);
+        holder.cardLast4Digits.setText(holder.cardNumber.substring(holder.cardNumber.length() - 4));
     }
 
     /** Return the size of your dataSet (invoked by the layout manager)
@@ -73,6 +171,11 @@ public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMetho
         return 0;
     }
 
+    public void addCard(MCard mCard) {
+        dataSet.add(mCard);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -80,14 +183,15 @@ public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMetho
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.dataSet);
+        dest.writeTypedList(dataSet);
     }
 
     private RVPaymentMethodsAdapter(Parcel in) {
-        this.dataSet = in.createTypedArrayList(MCard.CREATOR);
+        dataSet = in.createTypedArrayList(MCard.CREATOR);
     }
 
-    public static final Parcelable.Creator<RVPaymentMethodsAdapter> CREATOR = new Parcelable.Creator<RVPaymentMethodsAdapter>() {
+    public static final Parcelable.Creator<RVPaymentMethodsAdapter> CREATOR =
+            new Parcelable.Creator<RVPaymentMethodsAdapter>() {
         @Override
         public RVPaymentMethodsAdapter createFromParcel(Parcel source) {
             return new RVPaymentMethodsAdapter(source);

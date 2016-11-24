@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">InstaPay</string>
 
+    <string name="stripeTestPublishableKey">pk_test_B04KoH4BztCSTDWiC8XyXiBF</string>
+
     <string name="_0">0</string>
 
     <string name="actionSettings">Settings</string>
@@ -84,4 +86,14 @@
     <string name="processRegistering">Creating user. Just a moment.</string>
     <string name="snackErrAddCard">Error adding card. Try again.</string>
     <string name="toastCardAddSuccess">Card added successfully.</string>
+    <string name="errCardName">Card name cannot be empty.</string>
+    <string name="errCardNumber">Invalid card number.</string>
+    <string name="errExpDate">Invalid exp date.</string>
+    <string name="errCVC">Invalid cvc.</string>
+    <string name="titleAddCard">Add card</string>
+    <string name="errPaymentFailed">Payment failed. Try again.</string>
+    <string name="txtPaymentSuccess">Payment successful.</string>
+    <string name="dialogProcessingPayment">Processing secure payment…</string>
+    <string name="dialogFetchingCards">Fetching cards…</string>
+    <string name="dialogSavingCard">Saving card…</string>
 </resources>
