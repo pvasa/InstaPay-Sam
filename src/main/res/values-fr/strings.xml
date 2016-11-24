@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">InstaPay</string>
+
+    <string name="_0">0</string>
+    <string name="_1">1</string>
+
+    <string name="actionSettings">Param\ètres</string>
+    <string name="actionLogout">Se d\éconnecter</string>
+
+    <string name="alertPermissionRequest">Cette fonction requiert des autorisations pour acc\éder \à l\'appareil photo.</string>
+    <string name="alertBtnPositive">Subvention</string>
+    <string name="alertBtnNegative">Ne pas accorder</string>
+
+    <string name="btnLogin">S\'identifier</string>
+    <string name="btnRegister">registre</string>
+
+    <string name="descHomeBackground">Fond d\'accueil</string>
+    <string name="descScanBackground">Fond blanc translucide</string>
+    <string name="descCardClose">Carte supprimer</string>
+    <string name="descBarcodeBox">Bo\îte \à codes-barres</string>
+    <string name="descFlashSwitch">Commutateur Flash</string>
+    <string name="descEditQuantity">Modifier la quantit\é</string>
+
+    <string name="edEmail">Email</string>
+    <string name="edPassword">Mot de passe</string>
+    <string name="edFirstName">Pr\énom</string>
+    <string name="edLastName">Nom de famille</string>
+    <string name="edUserName">Nom d\'utilisateur</string>
+    <string name="edPhoneNumber">Num\éro de téléphone</string>
+    <string name="edPostalCode">Code postal</string>
+    <string name="edHomeAddr">Adresse du domicile</string>
+    <string name="edConfirmPassword">Confirmez le mot de passe</string>
+
+    <string name="errInvalidEmail">Adresse e-mail invalide.</string>
+    <string name="errInvalidLogin">Identifiant invalide. R\éessayer.</string>
+    <string name="errRegisterFail">\Échec de l\'enregistrement. R\éessayer.</string>
+    <string name="errPasswordsMismatch">Les mots de passe ne correspondent pas.</string>
+    <string name="errInvalidPassword">Mot de passe incorrect.</string>
+    <string name="errEmptyField">Le champ ne peut pas être vide.</string>
+    <string name="errInvalidPhone">Num\éro de t\él\éphone invalide.</string>
+    <string name="errFieldEmpty">Le champ ne peut pas \être vide.</string>
+    <string name="errRedFields">Corrigez les champs rouges.</string>
+    <string name="errPreviewSize">Impossible de trouver une taille de pr\évisualisation appropri\ée</string>
+    <string name="errCamera2Support">Camera2API non pris en charge</string>
+    <string name="errRotation">"La rotation de l\'affichage n\'est pas valide: "</string>
+
+    <string name="keyAdapter">adaptateur</string>
+    <string name="keyVendorName">Nom du fournisseur</string>
+    <string name="keyVendorEmail">vendeur Email</string>
+    <string name="keyVendorID">vendeur ID</string>
+
+    <string name="linkForgotPassword">mot de passe oublié?</string>
+
+    <string name="prefLoginStatus">Connexion Statut</string>
+    <string name="prefLoginId">S\'identifier ID</string>
+
+    <string name="snackRegisterSuccess">Inscription réussi. Vous pouvez vous connecter maintenant.</string>
+    <string name="snackInvalidLogin">Identifiant invalide. R\éessayer.</string>
+    <string name="snackLoginFailed">\Échec de la connexion. R\éessayer.</string>
+    <string name="snackNetworkError">Erreur de r\éseau.</string>
+    <string name="snackBarcodeDErr">Impossible de d\émarrer le d\étecteur de code \à barres. R\éessayer.</string>
+    <string name="snackBarcodeErr">Impossible de d\étecter le code-barres. R\éessayer.</string>
+    <string name="snackBarcodeNotFound">Impossible de d\étecter le code à barres. R\éessayer.</string>
+    <string name="snackProductDuplicate">" D\éj\à dans la liste. Essayez d\'augmenter la "</string>
+    <string name="snackProductAdded">" Ajout\é au panier."</string>
+
+    <string name="subtitleHome">Achetez vite, payez facilement.</string>
+
+    <string name="titleHome">Bienvenue sur InstaPay</string>
+    <string name="titleCreateAccount">Cr\éer un compte</string>
+    <string name="titleLogin">Connecte-toi maintenant</string>
+    <string name="titleVendors">Vendeurs</string>
+    <string name="titleQuantity">Quantit\é</string>
+
+    <string name="txtQty">Qty:</string>
+    <string name="txtPrice">Prix: $</string>
+    <string name="txtTotalAmount">Montant total: $</string>
+</resources>
