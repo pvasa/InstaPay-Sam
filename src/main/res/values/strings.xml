@@ -96,4 +96,5 @@
     <string name="dialogProcessingPayment">Processing secure payment…</string>
     <string name="dialogFetchingCards">Fetching cards…</string>
     <string name="dialogSavingCard">Saving card…</string>
+    <string name="actionPaymentMethods">Payment methods</string>
 </resources>

@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import matrians.instapaysam.recyclerview.RVFrag;
-import matrians.instapaysam.recyclerview.RVPaymentMethodsAdapter;
+import matrians.instapaysam.recyclerview.RVPayNowAdapter;
 import matrians.instapaysam.schemas.MCard;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +40,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     private final String TAG = "PAYMENT_METHODS";
     private ProgressDialog waitDialog;
-    private RVPaymentMethodsAdapter paymentMethodsAdapter;
+    private RVPayNowAdapter payNowAdapter;
     private float payable;
 
     private final int CODE_ADD_CARD = 1;
@@ -56,73 +56,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         findViewById(R.id.fabAdd).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-
                 startActivityForResult(
                         new Intent(PaymentMethodsActivity.this,
                         CardEditActivity.class), CODE_ADD_CARD);
-
-                /*dialog = new AlertDialog.Builder(view.getContext())
-                        .setView(R.layout.dialog_add_card)
-                        //.setView(new CreditCardView(PaymentMethodsActivity.this))
-                        .setTitle(R.string.titleAddCard)
-                        .setCancelable(false)
-                        .setPositiveButton("Done", null)
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        }).create();
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @SuppressWarnings("ConstantConditions")
-                    @Override
-                    public void onClick(final View view) {
-
-                        waitDialog = Utils.showProgress(view.getContext(), getString(R.string.processAddingCard));
-
-                        String cardName = ((TextView) dialog.findViewById(R.id.cardName))
-                                .getText().toString();
-                        String cardNumber =
-                                ((TextView) dialog.findViewById(R.id.cardNumber))
-                                        .getText().toString();
-                        Integer expMonth = Integer.parseInt(
-                                ((TextView) dialog.findViewById(R.id.expMonth))
-                                        .getText().toString());
-                        Integer expYear = Integer.parseInt(
-                                ((TextView) dialog.findViewById(R.id.expYear))
-                                        .getText().toString());
-                        String cvc =
-                                ((TextView) dialog.findViewById(R.id.cvc))
-                                        .getText().toString();
-                        Card card = new Card(cardNumber, expMonth, expYear, cvc);
-                        card.setName(cardName);
-                        if (card.getName().isEmpty()) {
-                            Toast.makeText(view.getContext(),
-                                    R.string.errCardName, Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        if (!card.validateCard()) {
-                            waitDialog.dismiss();
-                            if (!card.validateNumber()) {
-                                Toast.makeText(view.getContext(),
-                                        R.string.errCardNumber, Toast.LENGTH_LONG).show();
-                            } else if (!card.validateExpiryDate()) {
-                                Toast.makeText(view.getContext(),
-                                        R.string.errExpDate, Toast.LENGTH_LONG).show();
-                            } else if (!card.validateCVC()) {
-                                Toast.makeText(view.getContext(),
-                                        R.string.errCVC, Toast.LENGTH_LONG).show();
-                            }
-                            return;
-                        }
-                        try {
-                            sendToStripe(card, dialog);
-                        } catch (AuthenticationException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });*/
             }
         });
 
@@ -161,8 +97,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             Snackbar.LENGTH_LONG).show();
                 }
                 Log.d(TAG, response.body().toString());
-                Parcelable adapter = new RVPaymentMethodsAdapter(response.body(), payable);
-                paymentMethodsAdapter = (RVPaymentMethodsAdapter) adapter;
+                Parcelable adapter = new RVPayNowAdapter(response.body(), payable);
+                payNowAdapter = (RVPayNowAdapter) adapter;
                 Fragment fragment = new RVFrag();
                 Bundle args = new Bundle();
                 args.putParcelable(getString(R.string.keyAdapter), adapter);
@@ -238,7 +174,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     if (200 == response.code()) {
                         Toast.makeText(PaymentMethodsActivity.this,
                                 R.string.toastCardAddSuccess, Toast.LENGTH_LONG).show();
-                        paymentMethodsAdapter.addCard(mCard);
+                        payNowAdapter.addCard(mCard);
                     } else {
                         Toast.makeText(PaymentMethodsActivity.this,
                                 getString(R.string.snackErrAddCard), Toast.LENGTH_LONG).show();

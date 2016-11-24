@@ -33,19 +33,19 @@ import retrofit2.Response;
 /**
  * Team Matrians
  */
-public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMethodsAdapter.ViewHolder> implements Parcelable {
+public class RVPayNowAdapter extends RecyclerView.Adapter<RVPayNowAdapter.ViewHolder> implements Parcelable {
 
     private static List<MCard> dataSet;
     private static ProgressDialog waitDialog;
-    private static String TAG = RVPaymentMethodsAdapter.class.getName();
+    private static String TAG = RVPayNowAdapter.class.getName();
     private static float amount;
 
     /**
      * Constructor to initialize the dataSet.
      * @param dataSet - set of the data to show in RecyclerView
      */
-    public RVPaymentMethodsAdapter(List<MCard> dataSet, float payable) {
-        RVPaymentMethodsAdapter.dataSet = dataSet;
+    public RVPayNowAdapter(List<MCard> dataSet, float payable) {
+        RVPayNowAdapter.dataSet = dataSet;
         amount = payable;
     }
 
@@ -138,11 +138,11 @@ public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMetho
      * @return custom ViewHolder
      */
     @Override
-    public RVPaymentMethodsAdapter.ViewHolder onCreateViewHolder (
+    public RVPayNowAdapter.ViewHolder onCreateViewHolder (
             ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_view_payment_methods, parent, false);
-        return new RVPaymentMethodsAdapter.ViewHolder(v);
+        return new RVPayNowAdapter.ViewHolder(v);
     }
 
     /** Replace the contents of a view (invoked by the layout manager)
@@ -150,7 +150,7 @@ public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMetho
      * @param position - position of current element in dataSet
      */
     @Override
-    public void onBindViewHolder(RVPaymentMethodsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(RVPayNowAdapter.ViewHolder holder, int position) {
         MCard mCard = dataSet.get(position);
         holder.cardNumber = mCard.number;
         holder.expMonth = mCard.expMonth;
@@ -186,20 +186,20 @@ public class RVPaymentMethodsAdapter extends RecyclerView.Adapter<RVPaymentMetho
         dest.writeTypedList(dataSet);
     }
 
-    private RVPaymentMethodsAdapter(Parcel in) {
+    private RVPayNowAdapter(Parcel in) {
         dataSet = in.createTypedArrayList(MCard.CREATOR);
     }
 
-    public static final Parcelable.Creator<RVPaymentMethodsAdapter> CREATOR =
-            new Parcelable.Creator<RVPaymentMethodsAdapter>() {
+    public static final Parcelable.Creator<RVPayNowAdapter> CREATOR =
+            new Parcelable.Creator<RVPayNowAdapter>() {
         @Override
-        public RVPaymentMethodsAdapter createFromParcel(Parcel source) {
-            return new RVPaymentMethodsAdapter(source);
+        public RVPayNowAdapter createFromParcel(Parcel source) {
+            return new RVPayNowAdapter(source);
         }
 
         @Override
-        public RVPaymentMethodsAdapter[] newArray(int size) {
-            return new RVPaymentMethodsAdapter[size];
+        public RVPayNowAdapter[] newArray(int size) {
+            return new RVPayNowAdapter[size];
         }
     };
 }

@@ -74,6 +74,9 @@ public class VendorsActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()) {
+            case R.id.action_payment_methods:
+                startActivity(new Intent(this, PaymentMethodsActivity.class));
+                break;
             case R.id.action_settings:
                 break;
             case R.id.action_logout:

@@ -93,7 +93,7 @@ public class Utils {
         // rs creation just for demo. Create rs just once in onCreate and use it again.
         RenderScript rs = RenderScript.create(context);
         //RenderScript rs = MainActivity.rs;
-        ScriptC_yuv420888 mYuv420=new ScriptC_yuv420888 (rs);
+        ScriptC_yuv420888 mYuv420 = new ScriptC_yuv420888(rs);
 
         // Y,U,V are defined as global allocations, the out-Allocation is the Bitmap.
         // Note also that uAlloc and vAlloc are 1-dimensional while yAlloc is 2-dimensional.
@@ -118,12 +118,13 @@ public class Utils {
         mYuv420.set_vIn(vAlloc);
 
         // handover parameters
-        mYuv420.set_picWidth(width);
+        mYuv420.set_picWidth (width);
         mYuv420.set_uvRowStride (uvRowStride);
         mYuv420.set_uvPixelStride (uvPixelStride);
 
         Bitmap outBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Allocation outAlloc = Allocation.createFromBitmap(rs, outBitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+        Allocation outAlloc = Allocation.createFromBitmap(
+                rs, outBitmap, Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
 
         Script.LaunchOptions lo = new Script.LaunchOptions();
         lo.setX(0, width);  // by this we ignore the y’s padding zone, i.e. the right side of x between width and yRowStride
