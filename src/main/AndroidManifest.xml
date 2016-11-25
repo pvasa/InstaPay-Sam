@@ -43,7 +43,8 @@
 
         <activity android:name=".ScanActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName="matrians.instapaysam.VendorsActivity"/>
+            android:parentActivityName="matrians.instapaysam.VendorsActivity"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".PaymentMethodsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
