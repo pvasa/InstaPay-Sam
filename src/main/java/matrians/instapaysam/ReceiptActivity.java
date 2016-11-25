@@ -2,6 +2,7 @@ package matrians.instapaysam;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
@@ -61,6 +62,21 @@ public class ReceiptActivity extends AppCompatActivity {
         args.putParcelable(getString(R.string.keyAdapter), adapter);
         fragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.content, fragment).commitAllowingStateLoss();
+
+        findViewById(R.id.btnExit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ReceiptActivity.this.finishAffinity();
+            }
+        });
+
+        findViewById(R.id.btnHome).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ReceiptActivity.this.finishAffinity();
+                startActivity(new Intent(ReceiptActivity.this, VendorsActivity.class));
+            }
+        });
 
         float totalAmount = 0f;
         float HST;
@@ -128,5 +144,11 @@ public class ReceiptActivity extends AppCompatActivity {
             }
             document.close();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finishAffinity();
+        startActivity(new Intent(this, VendorsActivity.class));
     }
 }

@@ -64,7 +64,8 @@ public class RVReceiptAdapter
     public void onBindViewHolder(final RVReceiptAdapter.ViewHolder holder, int position) {
         final Product currentProduct = dataSet.get(holder.getAdapterPosition());
         holder.tvProductName.setText(currentProduct.name);
-        holder.tvProductPrice.setText(String.valueOf(currentProduct.price));
+        holder.tvProductPrice.setText(String.valueOf(
+                currentProduct.price * currentProduct.quantity));
         holder.tvQuantity.setText(String.valueOf(currentProduct.quantity));
     }
 

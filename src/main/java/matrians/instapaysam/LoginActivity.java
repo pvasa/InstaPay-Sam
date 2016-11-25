@@ -58,7 +58,9 @@ public class LoginActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivityForResult(new Intent(v.getContext(), RegisterActivity.class), HomeActivity.CODE_REGISTER);
+                    startActivityForResult(
+                            new Intent(v.getContext(), RegisterActivity.class),
+                            HomeActivity.CODE_REGISTER);
                     finish();
                 }
             });

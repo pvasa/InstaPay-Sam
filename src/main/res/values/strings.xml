@@ -97,4 +97,8 @@
     <string name="_$">$</string>
     <string name="tvTotalAmount">Total amount:</string>
     <string name="tostBackPressed">Press again to exit.</string>
+    <string name="titleNoCards">No cards</string>
+    <string name="messageNoCards">You have not saved any cards yet. Please add one to make shopping experience better and faster.</string>
+    <string name="btnExit">Exit</string>
+    <string name="btnHome">Home</string>
 </resources>

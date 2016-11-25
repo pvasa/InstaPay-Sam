@@ -22,6 +22,7 @@ import com.stripe.exception.AuthenticationException;
 
 import java.util.List;
 
+import matrians.instapaysam.PaymentMethodsActivity;
 import matrians.instapaysam.R;
 import matrians.instapaysam.ReceiptActivity;
 import matrians.instapaysam.Server;
@@ -44,6 +45,7 @@ public class RVPayNowAdapter extends
     private static float amount;
     private static Parcelable productsAdapter;
     private static String vendorName;
+    private static PaymentMethodsActivity paymentMethodsActivity;
 
     /**
      * Constructor to initialize the dataSet.
@@ -51,11 +53,12 @@ public class RVPayNowAdapter extends
      */
     public RVPayNowAdapter(List<MCard> dataSet,
                            float payable, Parcelable adapter,
-                           String vendorName) {
+                           String vendorName, Context context) {
         RVPayNowAdapter.dataSet = dataSet;
         amount = payable;
         productsAdapter = adapter;
         RVPayNowAdapter.vendorName = vendorName;
+        paymentMethodsActivity = (PaymentMethodsActivity) context;
     }
 
     /**
@@ -117,16 +120,20 @@ public class RVPayNowAdapter extends
                             public void onResponse(Call<Payment> call, Response<Payment> response) {
                                 waitDialog.dismiss();
                                 if (200 == response.code()) {
+
+                                    Toast.makeText(context,
+                                            R.string.txtPaymentSuccess,
+                                            Toast.LENGTH_LONG).show();
+
                                     Intent intent = new Intent(context, ReceiptActivity.class);
                                     intent.putExtra(context.getString(
                                             R.string.keyProducts), productsAdapter);
                                     intent.putExtra(
                                             context.getString(R.string.keyVendorName), vendorName);
                                     context.startActivity(intent);
+                                    paymentMethodsActivity.setResult(1);
+                                    paymentMethodsActivity.finish();
 
-                                    Toast.makeText(context,
-                                            R.string.txtPaymentSuccess,
-                                            Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(context,
                                             R.string.errPaymentFailed,

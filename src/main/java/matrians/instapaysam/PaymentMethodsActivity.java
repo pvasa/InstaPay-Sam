@@ -44,7 +44,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     private float payable;
     private Parcelable productsAdapter;
 
-    private final int CODE_ADD_CARD = 1;
+    static final int CODE_ADD_CARD = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,10 +100,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             R.string.snackNoPaymentMethods,
                             Snackbar.LENGTH_LONG).show();
                 }
-                Log.d(TAG, response.body().toString());
                 Parcelable adapter = new RVPayNowAdapter(
                         response.body(), payable, productsAdapter,
-                        getIntent().getStringExtra(getString(R.string.keyVendorName)));
+                        getIntent().getStringExtra(getString(R.string.keyVendorName)), PaymentMethodsActivity.this);
                 payNowAdapter = (RVPayNowAdapter) adapter;
                 Fragment fragment = new RVFrag();
                 Bundle args = new Bundle();
