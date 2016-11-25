@@ -63,10 +63,10 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import matrians.instapaysam.R;
-import matrians.instapaysam.recyclerview.RVProductsAdapter;
-import matrians.instapaysam.schemas.Product;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
+import matrians.instapaysam.recyclerview.RVProductsAdapter;
+import matrians.instapaysam.schemas.Product;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -96,7 +96,7 @@ public class CameraFrag extends Fragment implements
     /**
      * Tag for the {@link Log}.
      */
-    private static final String TAG = "CameraFrag";
+    private static String TAG = CameraFrag.class.getName();
 
     /**
      * Camera state: Showing camera preview.

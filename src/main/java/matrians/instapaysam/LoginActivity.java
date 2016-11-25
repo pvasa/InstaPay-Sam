@@ -27,6 +27,7 @@ import retrofit2.Response;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    private String TAG = this.getClass().getName();
     static final int STATUS_LOGGED_IN = 1;
     static final int STATUS_LOGGED_OUT = 0;
     private ProgressDialog dialog;
@@ -160,8 +161,8 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putString(getString(R.string.prefLoginId), response.body().email);
                                 editor.putString(getString(R.string.prefUserId), response.body()._id);
                                 editor.apply();
-                                Log.d("TAG", response.body()._id);
-                                Log.d("TAG", response.body().email);
+                                Log.d(TAG, response.body()._id);
+                                Log.d(TAG, response.body().email);
                                 setResult(1);
                                 finish();
                             } else Snackbar.make((View) v.getParent(),
@@ -173,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                             dialog.dismiss();
                             Snackbar.make((View) v.getParent(),
                                     R.string.snackNetworkError, Snackbar.LENGTH_LONG).show();
-                            Log.d("RETROFIT ERROR", t.toString());
+                            Log.d(TAG, t.toString());
                         }
                     });
                 }

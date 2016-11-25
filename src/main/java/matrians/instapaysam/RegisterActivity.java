@@ -30,6 +30,8 @@ import retrofit2.Response;
  */
 public class RegisterActivity extends AppCompatActivity {
 
+    private final String TAG = this.getClass().getName();
+
     private final String PASSWORD_REGEX =
             "(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,}";
     private ProgressDialog dialog;
@@ -442,7 +444,7 @@ public class RegisterActivity extends AppCompatActivity {
                             dialog.dismiss();
                             Snackbar.make((View) v.getParent(),
                                     R.string.errRegisterFail, Snackbar.LENGTH_LONG).show();
-                            Log.d("RETROFIT ERROR", t.toString());
+                            Log.d(TAG, t.toString());
                         }
                     });
                 }

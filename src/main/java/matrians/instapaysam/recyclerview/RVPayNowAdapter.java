@@ -35,11 +35,12 @@ import retrofit2.Response;
 /**
  * Team Matrians
  */
-public class RVPayNowAdapter extends RecyclerView.Adapter<RVPayNowAdapter.ViewHolder> implements Parcelable {
+public class RVPayNowAdapter extends
+        RecyclerView.Adapter<RVPayNowAdapter.ViewHolder> implements Parcelable {
 
+    private static String TAG = RVPayNowAdapter.class.getName();
     private static List<MCard> dataSet;
     private static ProgressDialog waitDialog;
-    private static String TAG = RVPayNowAdapter.class.getName();
     private static float amount;
     private static Parcelable productsAdapter;
     private static String vendorName;

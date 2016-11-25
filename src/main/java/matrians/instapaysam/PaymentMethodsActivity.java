@@ -38,7 +38,7 @@ import retrofit2.Response;
  */
 public class PaymentMethodsActivity extends AppCompatActivity {
 
-    private final String TAG = "PAYMENT_METHODS";
+    private String TAG = this.getClass().getName();
     private ProgressDialog waitDialog;
     private RVPayNowAdapter payNowAdapter;
     private float payable;
