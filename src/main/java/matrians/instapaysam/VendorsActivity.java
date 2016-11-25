@@ -28,6 +28,8 @@ import retrofit2.Response;
  */
 public class VendorsActivity extends AppCompatActivity {
 
+    private String TAG = this.getClass().getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +54,9 @@ public class VendorsActivity extends AppCompatActivity {
                 fragment.setArguments(args);
                 getFragmentManager().beginTransaction().replace(R.id.content, fragment).commitAllowingStateLoss();
             }
-
             @Override
             public void onFailure(Call<List<Vendor>> call, Throwable t) {
-                Log.d("Retrofit error", t.toString());
+                Log.d(TAG, t.toString());
             }
         });
     }

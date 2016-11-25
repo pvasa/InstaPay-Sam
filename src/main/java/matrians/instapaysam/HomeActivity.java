@@ -17,8 +17,8 @@ import android.widget.Toast;
  */
 public class HomeActivity extends AppCompatActivity {
 
-    private final int CODE_LOGIN = 1;
-    private final int CODE_REGISTER = 2;
+    static final int CODE_LOGIN = 1;
+    static final int CODE_REGISTER = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +81,17 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(new Intent(this, VendorsActivity.class));
                     finish();
                 }
+                if (resultCode == 2) {
+                    Toast.makeText(this, R.string.toastAccountCreated, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case CODE_REGISTER:
                 if (resultCode == 1) {
-                    Toast.makeText(this, "Account created. Proceed to login.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toastAccountCreated, Toast.LENGTH_SHORT).show();
+                }
+                else if (resultCode == 2) {
+                    startActivity(new Intent(this, VendorsActivity.class));
+                    finish();
                 }
                 break;
         }

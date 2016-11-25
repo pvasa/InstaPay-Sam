@@ -32,6 +32,15 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog dialog;
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            setResult(2);
+            finish();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -48,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(v.getContext(), RegisterActivity.class));
+                    startActivityForResult(new Intent(v.getContext(), RegisterActivity.class), HomeActivity.CODE_REGISTER);
                     finish();
                 }
             });

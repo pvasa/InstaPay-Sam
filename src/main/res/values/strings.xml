@@ -76,13 +76,6 @@
     <string name="txtStars">****-****-****-</string>
     <string name="txtPayable">Payable: $</string>
     <string name="txtHST">13% HST: $</string>
-    <string name="edCardName">Card name</string>
-    <string name="edCardNumber">Card number</string>
-    <string name="edCvc">cvc</string>
-    <string name="edExpYear">yyyy</string>
-    <string name="edExpMonth">mm</string>
-    <string name="edBillingAddress">Billing address</string>
-    <string name="processAddingCard">Adding card. Just a moment.</string>
     <string name="processRegistering">Creating user. Just a moment.</string>
     <string name="snackErrAddCard">Error adding card. Try again.</string>
     <string name="toastCardAddSuccess">Card added successfully.</string>
@@ -90,11 +83,14 @@
     <string name="errCardNumber">Invalid card number.</string>
     <string name="errExpDate">Invalid exp date.</string>
     <string name="errCVC">Invalid cvc.</string>
-    <string name="titleAddCard">Add card</string>
     <string name="errPaymentFailed">Payment failed. Try again.</string>
     <string name="txtPaymentSuccess">Payment successful.</string>
     <string name="dialogProcessingPayment">Processing secure payment…</string>
     <string name="dialogFetchingCards">Fetching cards…</string>
     <string name="dialogSavingCard">Saving card…</string>
     <string name="actionPaymentMethods">Payment methods</string>
+    <string name="keyProducts">products</string>
+    <string name="titleReceipt">Receipt</string>
+    <string name="_x">" x "</string>
+    <string name="toastAccountCreated">Account created. Proceed to login.</string>
 </resources>

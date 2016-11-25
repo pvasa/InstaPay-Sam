@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import matrians.instapaysam.R;
@@ -21,8 +20,7 @@ import matrians.instapaysam.schemas.Product;
  * Team Matrians
  */
 public class RVProductsAdapter
-        extends RecyclerView.Adapter<RVProductsAdapter.ViewHolder>
-        implements Parcelable {
+        extends RecyclerView.Adapter<RVProductsAdapter.ViewHolder> implements Parcelable {
 
     private List<Product> dataSet;
 
@@ -137,23 +135,22 @@ public class RVProductsAdapter
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(this.dataSet);
+        dest.writeTypedList(this.dataSet);
     }
 
     private RVProductsAdapter(Parcel in) {
-        this.dataSet = new ArrayList<>();
-        in.readList(this.dataSet, Product.class.getClassLoader());
+        this.dataSet = in.createTypedArrayList(Product.CREATOR);
     }
 
-    public static final Parcelable.Creator<RVProductsAdapter> CREATOR =
-            new Parcelable.Creator<RVProductsAdapter>() {
-                @Override
-                public RVProductsAdapter createFromParcel(Parcel source) {
-                    return new RVProductsAdapter(source);
-                }
-                @Override
-                public RVProductsAdapter[] newArray(int size) {
-                    return new RVProductsAdapter[size];
-                }
-            };
+    public static final Parcelable.Creator<RVProductsAdapter> CREATOR = new Parcelable.Creator<RVProductsAdapter>() {
+        @Override
+        public RVProductsAdapter createFromParcel(Parcel source) {
+            return new RVProductsAdapter(source);
+        }
+
+        @Override
+        public RVProductsAdapter[] newArray(int size) {
+            return new RVProductsAdapter[size];
+        }
+    };
 }

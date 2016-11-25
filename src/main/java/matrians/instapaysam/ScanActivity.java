@@ -43,9 +43,10 @@ public class ScanActivity extends AppCompatActivity {
             R.drawable.ic_flash_on_black_24dp,
             R.drawable.ic_flash_auto_black_24dp
     };
+    private Parcelable adapter;
 
     void init() {
-        Parcelable adapter = new RVProductsAdapter(new ArrayList<Product>());
+        adapter = new RVProductsAdapter(new ArrayList<Product>());
         Bundle rvArgs = new Bundle();
         rvArgs.putParcelable(getString(R.string.keyAdapter), adapter);
         Fragment rvFrag = new RVFrag();
@@ -103,6 +104,7 @@ public class ScanActivity extends AppCompatActivity {
                 Intent intent = new Intent(ScanActivity.this, PaymentMethodsActivity.class);
                 intent.putExtra(getString(R.string.keyTotalAmount),
                         totalAmount);
+                intent.putExtra(getString(R.string.keyProducts), adapter);
                 startActivity(intent);
             }
         });

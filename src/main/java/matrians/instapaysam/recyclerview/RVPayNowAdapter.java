@@ -2,6 +2,7 @@ package matrians.instapaysam.recyclerview;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -22,6 +23,7 @@ import com.stripe.exception.AuthenticationException;
 import java.util.List;
 
 import matrians.instapaysam.R;
+import matrians.instapaysam.ReceiptActivity;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
 import matrians.instapaysam.schemas.MCard;
@@ -39,14 +41,16 @@ public class RVPayNowAdapter extends RecyclerView.Adapter<RVPayNowAdapter.ViewHo
     private static ProgressDialog waitDialog;
     private static String TAG = RVPayNowAdapter.class.getName();
     private static float amount;
+    private static Parcelable productsAdapter;
 
     /**
      * Constructor to initialize the dataSet.
      * @param dataSet - set of the data to show in RecyclerView
      */
-    public RVPayNowAdapter(List<MCard> dataSet, float payable) {
+    public RVPayNowAdapter(List<MCard> dataSet, float payable, Parcelable adapter) {
         RVPayNowAdapter.dataSet = dataSet;
         amount = payable;
+        productsAdapter = adapter;
     }
 
     /**
@@ -109,7 +113,10 @@ public class RVPayNowAdapter extends RecyclerView.Adapter<RVPayNowAdapter.ViewHo
                                 waitDialog.dismiss();
                                 if (200 == response.code()) {
 
-                                    // Fetch and open receipt
+                                    Intent intent = new Intent(context, ReceiptActivity.class);
+                                    intent.putExtra(context.getString(
+                                            R.string.keyProducts), productsAdapter);
+                                    context.startActivity(intent);
 
                                     Toast.makeText(context,
                                             R.string.txtPaymentSuccess,

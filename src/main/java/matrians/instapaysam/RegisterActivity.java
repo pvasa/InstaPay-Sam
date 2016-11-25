@@ -34,6 +34,15 @@ public class RegisterActivity extends AppCompatActivity {
             "(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,}";
     private ProgressDialog dialog;
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            setResult(2);
+            finish();
+        }
+    }
+
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(v.getContext(), LoginActivity.class));
-                    finish();
+                    startActivityForResult(new Intent(v.getContext(), LoginActivity.class), HomeActivity.CODE_LOGIN);
                 }
             });
         }

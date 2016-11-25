@@ -42,6 +42,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
     private ProgressDialog waitDialog;
     private RVPayNowAdapter payNowAdapter;
     private float payable;
+    private Parcelable productsAdapter;
 
     private final int CODE_ADD_CARD = 1;
 
@@ -52,6 +53,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        productsAdapter = getIntent().getParcelableExtra(getString(R.string.keyProducts));
 
         findViewById(R.id.fabAdd).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +100,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             Snackbar.LENGTH_LONG).show();
                 }
                 Log.d(TAG, response.body().toString());
-                Parcelable adapter = new RVPayNowAdapter(response.body(), payable);
+                Parcelable adapter = new RVPayNowAdapter(response.body(), payable, productsAdapter);
                 payNowAdapter = (RVPayNowAdapter) adapter;
                 Fragment fragment = new RVFrag();
                 Bundle args = new Bundle();
