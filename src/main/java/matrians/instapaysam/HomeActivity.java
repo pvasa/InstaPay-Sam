@@ -12,6 +12,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Team Matrians
  */
@@ -19,6 +22,7 @@ public class HomeActivity extends AppCompatActivity {
 
     static final int CODE_LOGIN = 1;
     static final int CODE_REGISTER = 2;
+    private boolean backPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,5 +99,21 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        backPressedOnce = true;
+        Toast.makeText(this, R.string.tostBackPressed, Toast.LENGTH_SHORT).show();
+        new ScheduledThreadPoolExecutor(1).schedule(new Runnable() {
+            @Override
+            public void run() {
+                backPressedOnce = false;
+            }
+        }, 2, TimeUnit.SECONDS);
     }
 }

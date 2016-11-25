@@ -11,10 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -73,15 +71,6 @@ public class ScanActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_scan);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(actionBar.getTitle() + " - " +
-                    getIntent().getStringExtra(getString(R.string.keyVendorName)));
-        }
-
         ImageView flash = (ImageView) findViewById(R.id.flash);
         flash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +94,8 @@ public class ScanActivity extends AppCompatActivity {
                 intent.putExtra(getString(R.string.keyTotalAmount),
                         totalAmount);
                 intent.putExtra(getString(R.string.keyProducts), adapter);
+                intent.putExtra(getString(R.string.keyVendorName),
+                        getIntent().getStringExtra(getString(R.string.keyVendorName)));
                 startActivity(intent);
             }
         });

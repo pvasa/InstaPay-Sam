@@ -42,15 +42,19 @@ public class RVPayNowAdapter extends RecyclerView.Adapter<RVPayNowAdapter.ViewHo
     private static String TAG = RVPayNowAdapter.class.getName();
     private static float amount;
     private static Parcelable productsAdapter;
+    private static String vendorName;
 
     /**
      * Constructor to initialize the dataSet.
      * @param dataSet - set of the data to show in RecyclerView
      */
-    public RVPayNowAdapter(List<MCard> dataSet, float payable, Parcelable adapter) {
+    public RVPayNowAdapter(List<MCard> dataSet,
+                           float payable, Parcelable adapter,
+                           String vendorName) {
         RVPayNowAdapter.dataSet = dataSet;
         amount = payable;
         productsAdapter = adapter;
+        RVPayNowAdapter.vendorName = vendorName;
     }
 
     /**
@@ -112,10 +116,11 @@ public class RVPayNowAdapter extends RecyclerView.Adapter<RVPayNowAdapter.ViewHo
                             public void onResponse(Call<Payment> call, Response<Payment> response) {
                                 waitDialog.dismiss();
                                 if (200 == response.code()) {
-
                                     Intent intent = new Intent(context, ReceiptActivity.class);
                                     intent.putExtra(context.getString(
                                             R.string.keyProducts), productsAdapter);
+                                    intent.putExtra(
+                                            context.getString(R.string.keyVendorName), vendorName);
                                     context.startActivity(intent);
 
                                     Toast.makeText(context,

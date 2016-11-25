@@ -13,8 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import matrians.instapaysam.recyclerview.RVFrag;
 import matrians.instapaysam.recyclerview.RVVendorsAdapter;
@@ -29,6 +32,7 @@ import retrofit2.Response;
 public class VendorsActivity extends AppCompatActivity {
 
     private String TAG = this.getClass().getName();
+    private boolean backPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,8 @@ public class VendorsActivity extends AppCompatActivity {
                 Bundle args = new Bundle();
                 args.putParcelable(getString(R.string.keyAdapter), adapter);
                 fragment.setArguments(args);
-                getFragmentManager().beginTransaction().replace(R.id.content, fragment).commitAllowingStateLoss();
+                getFragmentManager().beginTransaction().replace(
+                        R.id.content, fragment).commitAllowingStateLoss();
             }
             @Override
             public void onFailure(Call<List<Vendor>> call, Throwable t) {
@@ -91,5 +96,21 @@ public class VendorsActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        backPressedOnce = true;
+        Toast.makeText(this, R.string.tostBackPressed, Toast.LENGTH_SHORT).show();
+        new ScheduledThreadPoolExecutor(1).schedule(new Runnable() {
+            @Override
+            public void run() {
+                backPressedOnce = false;
+            }
+        }, 2, TimeUnit.SECONDS);
     }
 }

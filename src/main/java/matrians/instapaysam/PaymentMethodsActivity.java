@@ -69,7 +69,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         if ((view = findViewById(R.id.toolbar_layout)) != null) {
             ((CollapsingToolbarLayout) view).setTitle(getString(R.string.titlePaymentMethods));
             float totalAmount = getIntent().getFloatExtra(getString(R.string.keyTotalAmount), 0f);
-            float hst = totalAmount * 0.13f;
+            float hst = new BigDecimal(Float.toString(totalAmount * 0.13f))
+                    .setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
             payable = new BigDecimal(Float.toString(totalAmount + hst))
                     .setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
             ((TextView) view.findViewById(R.id.tvTotalAmount)).setText(String.valueOf(totalAmount));
@@ -100,13 +101,16 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             Snackbar.LENGTH_LONG).show();
                 }
                 Log.d(TAG, response.body().toString());
-                Parcelable adapter = new RVPayNowAdapter(response.body(), payable, productsAdapter);
+                Parcelable adapter = new RVPayNowAdapter(
+                        response.body(), payable, productsAdapter,
+                        getIntent().getStringExtra(getString(R.string.keyVendorName)));
                 payNowAdapter = (RVPayNowAdapter) adapter;
                 Fragment fragment = new RVFrag();
                 Bundle args = new Bundle();
                 args.putParcelable(getString(R.string.keyAdapter), adapter);
                 fragment.setArguments(args);
-                getFragmentManager().beginTransaction().replace(R.id.content, fragment).commitAllowingStateLoss();
+                getFragmentManager().beginTransaction().replace(
+                        R.id.content, fragment).commitAllowingStateLoss();
             }
             @Override
             public void onFailure(Call<List<MCard>> call, Throwable t) {
