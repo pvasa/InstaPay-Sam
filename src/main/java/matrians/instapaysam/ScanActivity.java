@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -138,6 +139,11 @@ public class ScanActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(
                     this, deniedPermissionList.toArray(new String[0]), 0);
         } else init();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        ((ImageView) findViewById(R.id.flash)).getDrawable();
     }
 
     /**

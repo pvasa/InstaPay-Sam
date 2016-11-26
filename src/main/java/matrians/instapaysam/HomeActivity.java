@@ -1,11 +1,14 @@
 package matrians.instapaysam;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +26,7 @@ public class HomeActivity extends AppCompatActivity {
     static final int CODE_LOGIN = 1;
     static final int CODE_REGISTER = 2;
     private boolean backPressedOnce = false;
+    private final String TAG = this.getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,20 @@ public class HomeActivity extends AppCompatActivity {
                 preferences.getInt(getString(R.string.prefLoginStatus), LoginActivity.STATUS_LOGGED_OUT) ==
                         LoginActivity.STATUS_LOGGED_OUT) {
             setContentView(R.layout.activity_home);
+
+            if (!android.os.Build.MANUFACTURER.contains("samsung")) {
+                Log.d(TAG, android.os.Build.MANUFACTURER);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("This app works only on Samsung devices.");
+                builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        HomeActivity.this.finish();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.show();
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 Window w = getWindow();
