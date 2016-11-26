@@ -20,8 +20,7 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,14 +29,12 @@
 
         <activity android:name=".VendorsActivity"
             android:label="@string/titleVendors"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".LoginActivity"
             android:label="@string/titleLogin"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName="matrians.instapaysam.HomeActivity"
-            android:configChanges="orientation|screenSize"/>
+            android:parentActivityName="matrians.instapaysam.HomeActivity"/>
 
         <activity android:name=".RegisterActivity"
             android:label="@string/titleCreateAccount"
@@ -49,15 +46,13 @@
             android:parentActivityName="matrians.instapaysam.VendorsActivity"/>
 
         <activity android:name=".PaymentMethodsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name="com.cooltechworks.creditcarddesign.CardEditActivity"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ReceiptActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize"/>
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 
