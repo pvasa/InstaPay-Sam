@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
                         LoginActivity.STATUS_LOGGED_OUT) {
             setContentView(R.layout.activity_home);
 
-            if (android.os.Build.MANUFACTURER.contains("samsung")) {
+            if (!android.os.Build.MANUFACTURER.contains("samsung")) {
                 Log.d(TAG, android.os.Build.MANUFACTURER);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(R.string.dialogNoSamsung);
