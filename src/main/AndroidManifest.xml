@@ -47,15 +47,15 @@
 
         <activity android:name=".ScanActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName="matrians.instapaysam.VendorsActivity"/>
+            android:parentActivityName="matrians.instapaysam.VendorsActivity"
+            android:configChanges="orientation|screenSize"/>
 
         <activity android:name=".PaymentMethodsActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"/>
 
         <activity android:name="com.cooltechworks.creditcarddesign.CardEditActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize"/>
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".ReceiptActivity"
             android:theme="@style/AppTheme.NoActionBar"
