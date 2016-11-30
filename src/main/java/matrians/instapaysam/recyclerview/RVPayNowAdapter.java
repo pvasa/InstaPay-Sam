@@ -20,6 +20,7 @@ import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.exception.AuthenticationException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import matrians.instapaysam.PaymentMethodsActivity;
@@ -192,6 +193,9 @@ public class RVPayNowAdapter extends
     }
 
     public void addCard(MCard mCard) {
+        if (dataSet == null) {
+            dataSet = new ArrayList<>();
+        }
         dataSet.add(mCard);
         notifyDataSetChanged();
     }
