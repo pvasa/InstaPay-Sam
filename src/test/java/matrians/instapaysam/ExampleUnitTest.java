@@ -2,7 +2,7 @@ package matrians.instapaysam;
 
 import org.junit.Test;
 
-import matrians.instapaysam.schemas.User;
+import matrians.instapaysam.pojo.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

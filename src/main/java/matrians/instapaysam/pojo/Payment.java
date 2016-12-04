@@ -1,4 +1,4 @@
-package matrians.instapaysam.schemas;
+package matrians.instapaysam.pojo;
 
 /**
  * Team Matrians

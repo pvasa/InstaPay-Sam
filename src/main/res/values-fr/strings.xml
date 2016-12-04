@@ -48,7 +48,7 @@
     <string name="linkForgotPassword">mot de passe oublié?</string>
 
     <string name="prefLoginStatus">Connexion Statut</string>
-    <string name="prefLoginId">S\'identifier ID</string>
+    <string name="prefEmail">S\'identifier ID</string>
 
     <string name="snackNetworkError">Erreur de r\éseau.</string>
     <string name="snackBarcodeDErr">Impossible de d\émarrer le d\étecteur de code \à barres. R\éessayer.</string>

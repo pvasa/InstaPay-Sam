@@ -30,7 +30,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!preferences.contains(getString(R.string.prefLoginId)) ||
+        if (!preferences.contains(getString(R.string.prefEmail)) ||
                 preferences.getInt(getString(R.string.prefLoginStatus), LoginActivity.STATUS_LOGGED_OUT) ==
                         LoginActivity.STATUS_LOGGED_OUT) {
             setContentView(R.layout.activity_home);

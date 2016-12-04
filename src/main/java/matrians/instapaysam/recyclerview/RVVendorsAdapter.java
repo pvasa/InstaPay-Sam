@@ -14,7 +14,7 @@ import java.util.List;
 
 import matrians.instapaysam.R;
 import matrians.instapaysam.ScanActivity;
-import matrians.instapaysam.schemas.Vendor;
+import matrians.instapaysam.pojo.Vendor;
 
 /**
  * Team Matrians

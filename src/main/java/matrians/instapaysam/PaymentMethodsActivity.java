@@ -3,7 +3,6 @@ package matrians.instapaysam;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -24,11 +23,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
+import matrians.instapaysam.pojo.EncryptedMCard;
+import matrians.instapaysam.pojo.MCard;
 import matrians.instapaysam.recyclerview.RVFrag;
 import matrians.instapaysam.recyclerview.RVPayNowAdapter;
-import matrians.instapaysam.schemas.MCard;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,31 +79,35 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             ((TextView) view.findViewById(R.id.tvPayable)).setText(String.valueOf(payable));
         }
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String _id = preferences.getString(getString(R.string.prefUserId), null);
-        String email = preferences.getString(getString(R.string.prefLoginId), null);
+        final EncryptedMCard encryptedMCard = new EncryptedMCard(this);
 
-        JSONObject object = new JSONObject();
-        try {
-            object.put("_id", _id);
-            object.put("email", email);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         waitDialog = Utils.showProgress(this, getString(R.string.dialogFetchingCards));
-        Call<List<MCard>> call = Server.connect().getCards(object);
-        call.enqueue(new Callback<List<MCard>>() {
+        Call<List<EncryptedMCard>> call = Server.connect().getCards(encryptedMCard);
+        call.enqueue(new Callback<List<EncryptedMCard>>() {
             @Override
-            public void onResponse(Call<List<MCard>> call, Response<List<MCard>> response) {
-                waitDialog.dismiss();
-                if (response.code() == 204) {
+            public void onResponse(
+                    Call<List<EncryptedMCard>> call,
+                    Response<List<EncryptedMCard>> response) {
+
+                List<MCard> mCards = new ArrayList<>();
+                if (200 == response.code()) {
+                    for (EncryptedMCard eMCard : response.body()) {
+                        mCards.add(eMCard.decrypt(PaymentMethodsActivity.this));
+                    }
+                } else if (response.code() == 204) {
                     Snackbar.make(findViewById(R.id.rootView),
                             R.string.snackNoPaymentMethods,
                             Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(findViewById(R.id.rootView),
+                            R.string.errServerError,
+                            Snackbar.LENGTH_LONG).show();
                 }
+                waitDialog.dismiss();
                 Parcelable adapter = new RVPayNowAdapter(
-                        response.body(), payable, productsAdapter,
-                        getIntent().getStringExtra(getString(R.string.keyVendorName)), PaymentMethodsActivity.this);
+                        mCards, payable, productsAdapter,
+                        getIntent().getStringExtra(getString(R.string.keyVendorName)),
+                        PaymentMethodsActivity.this);
                 payNowAdapter = (RVPayNowAdapter) adapter;
                 Fragment fragment = new RVFrag();
                 Bundle args = new Bundle();
@@ -112,7 +117,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         R.id.content, fragment).commitAllowingStateLoss();
             }
             @Override
-            public void onFailure(Call<List<MCard>> call, Throwable t) {
+            public void onFailure(Call<List<EncryptedMCard>> call, Throwable t) {
                 waitDialog.dismiss();
                 Log.d(TAG, t.toString());
             }
@@ -166,28 +171,34 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 return;
             }
 
-            waitDialog = Utils.showProgress(this, getString(R.string.dialogSavingCard));
+            waitDialog.setMessage(getString(R.string.dialogSavingCard));
 
             String email = PreferenceManager
                     .getDefaultSharedPreferences(this)
-                    .getString(getString(R.string.prefLoginId), null);
-            final MCard mCard = new MCard(email, cardName, cardNumber, expMonth, expYear, cvv);
-            Call<MCard> call = Server.connect().addCard(mCard);
-            call.enqueue(new Callback<MCard>() {
+                    .getString(getString(R.string.prefEmail), null);
+
+            final MCard mCard = new MCard(this, cardName, cardNumber, expMonth, expYear, cvv);
+
+            Call<JSONObject> call = Server.connect().addCard(mCard.encrypt());
+            call.enqueue(new Callback<JSONObject>() {
                 @Override
-                public void onResponse(Call<MCard> call, Response<MCard> response) {
+                public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                     waitDialog.dismiss();
                     if (200 == response.code()) {
                         Toast.makeText(PaymentMethodsActivity.this,
                                 R.string.toastCardAddSuccess, Toast.LENGTH_LONG).show();
                         payNowAdapter.addCard(mCard);
                     } else {
-                        Toast.makeText(PaymentMethodsActivity.this,
-                                getString(R.string.snackErrAddCard), Toast.LENGTH_LONG).show();
+                        try {
+                            Toast.makeText(PaymentMethodsActivity.this,
+                                    response.body().getString("err"), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 @Override
-                public void onFailure(Call<MCard> call, Throwable t) {
+                public void onFailure(Call<JSONObject> call, Throwable t) {
                     waitDialog.dismiss();
                     Toast.makeText(PaymentMethodsActivity.this,
                             getString(R.string.snackErrAddCard), Toast.LENGTH_LONG).show();

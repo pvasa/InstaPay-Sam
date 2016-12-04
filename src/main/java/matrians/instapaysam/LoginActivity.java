@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import matrians.instapaysam.schemas.User;
+import matrians.instapaysam.pojo.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -156,15 +156,13 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             dialog.dismiss();
-                            if (response.body().success) {
+                            if (200 == response.code()) {
                                 SharedPreferences.Editor editor = PreferenceManager.
                                         getDefaultSharedPreferences(getApplicationContext()).edit();
                                 editor.putInt(getString(R.string.prefLoginStatus), STATUS_LOGGED_IN);
-                                editor.putString(getString(R.string.prefLoginId), response.body().email);
+                                editor.putString(getString(R.string.prefEmail), response.body().email);
                                 editor.putString(getString(R.string.prefUserId), response.body()._id);
                                 editor.apply();
-                                Log.d(TAG, response.body()._id);
-                                Log.d(TAG, response.body().email);
                                 setResult(1);
                                 finish();
                             } else Snackbar.make((View) v.getParent(),

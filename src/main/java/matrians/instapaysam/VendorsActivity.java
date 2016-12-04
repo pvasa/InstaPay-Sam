@@ -22,17 +22,17 @@ import com.cooltechworks.creditcarddesign.CardEditActivity;
 import com.cooltechworks.creditcarddesign.CreditCardUtils;
 import com.stripe.android.model.Card;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import matrians.instapaysam.pojo.EncryptedMCard;
+import matrians.instapaysam.pojo.MCard;
+import matrians.instapaysam.pojo.Vendor;
 import matrians.instapaysam.recyclerview.RVFrag;
 import matrians.instapaysam.recyclerview.RVVendorsAdapter;
-import matrians.instapaysam.schemas.MCard;
-import matrians.instapaysam.schemas.Vendor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,23 +61,15 @@ public class VendorsActivity extends AppCompatActivity {
         }
 
         dialog = Utils.showProgress(this, getString(R.string.dialogFetchingCards));
-        JSONObject object = new JSONObject();
-        String _id = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(getString(R.string.prefUserId), null);
-        String email = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(getString(R.string.prefLoginId), null);
-        try {
-            object.put("_id", _id);
-            object.put("email", email);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Call<List<MCard>> callC = Server.connect().getCards(object);
-        callC.enqueue(new Callback<List<MCard>>() {
+
+        EncryptedMCard encryptedMCard = new EncryptedMCard(this);
+
+        Call<List<EncryptedMCard>> callC = Server.connect().getCards(encryptedMCard);
+        callC.enqueue(new Callback<List<EncryptedMCard>>() {
             @Override
-            public void onResponse(Call<List<MCard>> call, Response<List<MCard>> response) {
+            public void onResponse(Call<List<EncryptedMCard>> call, Response<List<EncryptedMCard>> response) {
                 dialog.dismiss();
-                if (response.code() == 204) {
+                if (204 == response.code()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(VendorsActivity.this);
                     builder.setTitle(R.string.titleNoCards);
                     builder.setMessage(R.string.messageNoCards);
@@ -100,7 +92,7 @@ public class VendorsActivity extends AppCompatActivity {
                 }
             }
             @Override
-            public void onFailure(Call<List<MCard>> call, Throwable t) {
+            public void onFailure(Call<List<EncryptedMCard>> call, Throwable t) {
                 dialog.dismiss();
                 Log.d(TAG, t.toString());
             }
@@ -148,7 +140,7 @@ public class VendorsActivity extends AppCompatActivity {
             case R.id.action_logout:
                 SharedPreferences.Editor editor =
                         PreferenceManager.getDefaultSharedPreferences(this).edit();
-                editor.remove(getString(R.string.prefLoginId));
+                editor.remove(getString(R.string.prefEmail));
                 editor.remove(getString(R.string.prefLoginStatus));
                 editor.apply();
                 startActivity(new Intent(this, HomeActivity.class));
@@ -228,12 +220,14 @@ public class VendorsActivity extends AppCompatActivity {
 
             String email = PreferenceManager
                     .getDefaultSharedPreferences(this)
-                    .getString(getString(R.string.prefLoginId), null);
-            final MCard mCard = new MCard(email, cardName, cardNumber, expMonth, expYear, cvv);
-            Call<MCard> call = Server.connect().addCard(mCard);
-            call.enqueue(new Callback<MCard>() {
+                    .getString(getString(R.string.prefEmail), null);
+            final MCard mCard = new MCard(this, cardName, cardNumber, expMonth, expYear, cvv);
+
+            Call<JSONObject> call = Server.connect().addCard(mCard.encrypt());
+            call.enqueue(new Callback<JSONObject>() {
                 @Override
-                public void onResponse(Call<MCard> call, Response<MCard> response) {
+                public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                    Log.d(TAG, response.body().toString());
                     dialog.dismiss();
                     if (200 == response.code()) {
                         Toast.makeText(VendorsActivity.this,
@@ -245,7 +239,7 @@ public class VendorsActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<MCard> call, Throwable t) {
+                public void onFailure(Call<JSONObject> call, Throwable t) {
                     dialog.dismiss();
                     Toast.makeText(VendorsActivity.this,
                             getString(R.string.snackErrAddCard), Toast.LENGTH_LONG).show();

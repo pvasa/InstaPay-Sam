@@ -4,11 +4,11 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import matrians.instapaysam.schemas.MCard;
-import matrians.instapaysam.schemas.Payment;
-import matrians.instapaysam.schemas.Product;
-import matrians.instapaysam.schemas.User;
-import matrians.instapaysam.schemas.Vendor;
+import matrians.instapaysam.pojo.EncryptedMCard;
+import matrians.instapaysam.pojo.Payment;
+import matrians.instapaysam.pojo.Product;
+import matrians.instapaysam.pojo.User;
+import matrians.instapaysam.pojo.Vendor;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -23,20 +23,20 @@ public interface InstaPayEndpointInterface {
     @GET("vendors")
     Call<List<Vendor>> getVendors();
 
-    @GET("product/{vid}/{pid}")
+    @GET("products/{vid}/{pid}")
     Call<Product> getProduct(@Path("vid") String vid, @Path("pid") String pid);
 
-    @POST("user")
+    @POST("users")
     Call<User> createUser(@Body User user);
 
-    @POST("user")
+    @POST("users")
     Call<User> loginUser(@Body User user);
 
-    @POST("card")
-    Call<List<MCard>> getCards(@Body JSONObject object);
+    @POST("cards")
+    Call<List<EncryptedMCard>> getCards(@Body EncryptedMCard eMCard);
 
-    @POST("card")
-    Call<MCard> addCard(@Body MCard mCard);
+    @POST("cards")
+    Call<JSONObject> addCard(@Body EncryptedMCard eMCard);
 
     @POST("pay")
     Call<Payment> pay(@Body Payment payment);

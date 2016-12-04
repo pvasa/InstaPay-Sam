@@ -25,7 +25,7 @@ import java.util.HashSet;
 import matrians.instapaysam.camera.CameraFrag;
 import matrians.instapaysam.recyclerview.RVFrag;
 import matrians.instapaysam.recyclerview.RVProductsAdapter;
-import matrians.instapaysam.schemas.Product;
+import matrians.instapaysam.pojo.Product;
 
 /**
  * Team Matrians

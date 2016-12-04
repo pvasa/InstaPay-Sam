@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
-import matrians.instapaysam.schemas.User;
+import matrians.instapaysam.pojo.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -427,11 +427,11 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             dialog.dismiss();
-                            if (response.body().success) {
+                            if (200 == response.code()) {
                                 SharedPreferences.Editor editor = PreferenceManager.
                                         getDefaultSharedPreferences(getApplicationContext()).edit();
                                 editor.putInt(getString(R.string.prefLoginStatus), LoginActivity.STATUS_LOGGED_OUT);
-                                editor.putString(getString(R.string.prefLoginId), response.body().email);
+                                editor.putString(getString(R.string.prefEmail), response.body().email);
                                 editor.apply();
                                 setResult(1);
                                 finish();

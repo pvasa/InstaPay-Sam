@@ -66,7 +66,7 @@ import matrians.instapaysam.R;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
 import matrians.instapaysam.recyclerview.RVProductsAdapter;
-import matrians.instapaysam.schemas.Product;
+import matrians.instapaysam.pojo.Product;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -282,8 +282,9 @@ public class CameraFrag extends Fragment implements
 
                             String pName;
                             if (!"".equals(pName = productsAdapter.isProductPresent(barcodeValue))) {
-                                Snackbar.make(view, pName + getString(R.string.snackProductDuplicate)
-                                        , Snackbar.LENGTH_LONG).show();
+                                Snackbar.make(view,
+                                        pName + getString(R.string.snackProductDuplicate),
+                                        Snackbar.LENGTH_LONG).show();
                                 continue;
                             }
 
@@ -291,8 +292,7 @@ public class CameraFrag extends Fragment implements
                             call.enqueue(new Callback<Product>() {
                                 @Override
                                 public void onResponse(Call<Product> call, Response<Product> response) {
-                                    if (response.body().success) {
-                                        Log.d(TAG, response.body().name);
+                                    if (200 == response.code()) {
                                         productsAdapter.addProduct(response.body());
                                         Snackbar.make(view, response.body().name +
                                                 getString(R.string.snackProductAdded),

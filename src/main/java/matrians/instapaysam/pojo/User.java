@@ -1,4 +1,4 @@
-package matrians.instapaysam.schemas;
+package matrians.instapaysam.pojo;
 
 /**
  * Team Matrians
@@ -6,7 +6,6 @@ package matrians.instapaysam.schemas;
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class User {
     private char lor;
-    public boolean success;
     public String _id;
     public String err;
     public String firstName;
@@ -22,7 +21,6 @@ public class User {
 
     public User(boolean login) {
         lor = login ? 'l' : 'r';
-        success = false;
         err = "none";
     }
 }

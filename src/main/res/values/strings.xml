@@ -50,7 +50,7 @@
     <string name="linkForgotPassword">Forgot password?</string>
 
     <string name="prefLoginStatus">LoginStatus</string>
-    <string name="prefLoginId">LoginID</string>
+    <string name="prefEmail">Email</string>
     <string name="prefUserId">UserID</string>
 
     <string name="snackNetworkError">Network error.</string>
@@ -86,8 +86,8 @@
     <string name="errPaymentFailed">Payment failed. Try again.</string>
     <string name="txtPaymentSuccess">Payment successful.</string>
     <string name="dialogProcessingPayment">Processing secure payment…</string>
-    <string name="dialogFetchingCards">Fetching cards…</string>
-    <string name="dialogSavingCard">Saving card…</string>
+    <string name="dialogFetchingCards">Fetching and decrypting cards…</string>
+    <string name="dialogSavingCard">Encrypting and saving card…</string>
     <string name="actionPaymentMethods">Payment methods</string>
     <string name="keyProducts">products</string>
     <string name="titleReceipt">Receipt</string>
@@ -102,4 +102,8 @@
     <string name="btnExit">Exit</string>
     <string name="btnHome">Home</string>
     <string name="dialogNoSamsung">This app works only on Samsung devices.</string>
+    <string name="keyUserEmail">email</string>
+    <string name="keyUserID">_id</string>
+    <string name="keyECard">eCard</string>
+    <string name="errServerError">Server error. Try after some time.</string>
 </resources>

@@ -28,8 +28,8 @@ import matrians.instapaysam.R;
 import matrians.instapaysam.ReceiptActivity;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
-import matrians.instapaysam.schemas.MCard;
-import matrians.instapaysam.schemas.Payment;
+import matrians.instapaysam.pojo.MCard;
+import matrians.instapaysam.pojo.Payment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,7 +84,7 @@ public class RVPayNowAdapter extends
                             view.getContext().getString(R.string.prefUserId), null);
                     final String userEmail = PreferenceManager.getDefaultSharedPreferences(
                             view.getContext()).getString(
-                            view.getContext().getString(R.string.prefLoginId), null);
+                            view.getContext().getString(R.string.prefEmail), null);
                     try {
                         generateTokenAndPay(
                                 view.getContext(),

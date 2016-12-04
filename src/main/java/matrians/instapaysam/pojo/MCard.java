@@ -1,12 +1,22 @@
-package matrians.instapaysam.schemas;
+package matrians.instapaysam.pojo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
+
+import com.google.gson.Gson;
+
+import matrians.instapaysam.R;
+import matrians.instapaysam.Secure;
 
 /**
  * Team Matrians
  */
 public class MCard implements Parcelable {
+
+    private String _id;
     private String userEmail;
     public String name;
     public String number;
@@ -14,13 +24,32 @@ public class MCard implements Parcelable {
     public int expYear;
     public String CVC;
 
-    public MCard(String userEmail, String cardName, String cardNumber, int expMonth, int expYear, String CVC) {
-        this.userEmail = userEmail;
+    private EncryptedMCard eMCard;
+
+    public MCard (Context context, String cardName,
+                  String cardNumber, int expMonth, int expYear, String CVC) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this._id = preferences.getString(context.getString(R.string.prefUserId), null);
+        this.userEmail = preferences.getString(context.getString(R.string.prefEmail), null);
         this.name = cardName;
         this.number = cardNumber;
         this.expMonth = expMonth;
         this.expYear = expYear;
         this.CVC = CVC;
+        eMCard = new EncryptedMCard(context);
+    }
+
+    public EncryptedMCard encrypt() {
+        String eCard;
+        byte[] iv = new byte[16];
+
+        try (Secure secure = Secure.getDefault(userEmail, _id, iv)) {
+            eCard = secure != null ? secure.encryptOrNull(new Gson().toJson(this)) : null;
+            eMCard.eCard = eCard;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return eMCard;
     }
 
     @Override
@@ -38,7 +67,7 @@ public class MCard implements Parcelable {
         dest.writeString(this.CVC);
     }
 
-    protected MCard(Parcel in) {
+    private MCard(Parcel in) {
         this.userEmail = in.readString();
         this.name = in.readString();
         this.number = in.readString();
