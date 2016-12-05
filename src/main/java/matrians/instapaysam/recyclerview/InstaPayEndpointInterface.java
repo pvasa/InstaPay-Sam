@@ -23,7 +23,7 @@ public interface InstaPayEndpointInterface {
     @GET("vendors")
     Call<List<Vendor>> getVendors();
 
-    @GET("products/{vid}/{pid}")
+    @GET("vendors/{vid}/products/{pid}")
     Call<Product> getProduct(@Path("vid") String vid, @Path("pid") String pid);
 
     @POST("users")
@@ -32,14 +32,14 @@ public interface InstaPayEndpointInterface {
     @POST("users")
     Call<User> loginUser(@Body User user);
 
-    @POST("cards")
-    Call<List<EncryptedMCard>> getCards(@Body EncryptedMCard eMCard);
+    @GET("users/{uid}/cards")
+    Call<List<EncryptedMCard>> getCards(@Path("uid") String _id);
 
-    @POST("cards")
-    Call<JSONObject> addCard(@Body EncryptedMCard eMCard);
+    @POST("users/{uid}/cards")
+    Call<JSONObject> addCard(@Path("uid") String _id, @Body EncryptedMCard eMCard);
 
-    @POST("cards")
-    Call<JSONObject> deleteCard(@Body EncryptedMCard eMCard);
+    @POST("users/{uid}/cards")
+    Call<JSONObject> deleteCard(@Path("uid") String _id, @Body EncryptedMCard eMCard);
 
     @POST("pay")
     Call<Payment> pay(@Body Payment payment);

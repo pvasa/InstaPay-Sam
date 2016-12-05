@@ -13,7 +13,6 @@ public class Product implements Parcelable {
     public int maxQuantity;
     public int quantity;
     public String err;
-    public boolean success;
 
     @Override
     public int describeContents() {
@@ -28,7 +27,6 @@ public class Product implements Parcelable {
         dest.writeInt(this.maxQuantity);
         dest.writeInt(this.quantity);
         dest.writeString(this.err);
-        dest.writeByte(this.success ? (byte) 1 : (byte) 0);
     }
 
     private Product(Parcel in) {
@@ -38,7 +36,6 @@ public class Product implements Parcelable {
         this.maxQuantity = in.readInt();
         this.quantity = in.readInt();
         this.err = in.readString();
-        this.success = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {

@@ -161,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                                         getDefaultSharedPreferences(getApplicationContext()).edit();
                                 editor.putInt(getString(R.string.prefLoginStatus), STATUS_LOGGED_IN);
                                 editor.putString(getString(R.string.prefEmail), response.body().email);
-                                editor.putString(getString(R.string.prefUserId), response.body()._id);
+                                editor.putString(getString(R.string.prefUserId), response.body().getId());
                                 editor.apply();
                                 setResult(1);
                                 finish();

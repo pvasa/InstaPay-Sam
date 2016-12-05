@@ -33,7 +33,7 @@
     <string name="errInvalidEmail">Invalid email address.</string>
     <string name="errRegisterFail">Registration failed. Try again.</string>
     <string name="errPasswordsMismatch">Passwords do not match.</string>
-    <string name="errInvalidPassword">Invalid password.</string>
+    <string name="errInvalidPassword">Invalid password. 8 chars, 1 alphabet, 1 digit, 1 special.</string>
     <string name="errEmptyField">Field cannot be empty.</string>
     <string name="errInvalidPhone">Invalid phone number.</string>
     <string name="errFieldEmpty">Field cannot be empty.</string>
@@ -110,4 +110,7 @@
     <string name="toastPaymentMethodDeleteSuccess">Payment method deleted successfully.</string>
     <string name="dialogDeletePaymentMethod">Deleting payment method…</string>
     <string name="errDeletingCard">Error deleting card. Try again.</string>
+    <string name="descPaymentMethodLogo">Payment method logo</string>
+    <string name="dialogLoadingVendors">Loading vendors...</string>
+    <string name="btnOkay">Okay</string>
 </resources>

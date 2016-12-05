@@ -23,9 +23,10 @@ public class MCard implements Parcelable {
     public int expMonth;
     public int expYear;
     public String CVC;
+    public String brand;
 
-    public MCard (Context context, String cardName,
-                  String cardNumber, int expMonth, int expYear, String CVC) {
+    public MCard (Context context, String cardName, String cardNumber,
+                  int expMonth, int expYear, String CVC, String brand) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         this._id = preferences.getString(context.getString(R.string.prefUserId), null);
         this.userEmail = preferences.getString(context.getString(R.string.prefEmail), null);
@@ -34,6 +35,7 @@ public class MCard implements Parcelable {
         this.expMonth = expMonth;
         this.expYear = expYear;
         this.CVC = CVC;
+        this.brand = brand;
     }
 
     public EncryptedMCard encrypt (Context context) {
@@ -49,21 +51,25 @@ public class MCard implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this._id);
         dest.writeString(this.userEmail);
         dest.writeString(this.name);
         dest.writeString(this.number);
         dest.writeInt(this.expMonth);
         dest.writeInt(this.expYear);
         dest.writeString(this.CVC);
+        dest.writeString(this.brand);
     }
 
     private MCard(Parcel in) {
+        this._id = in.readString();
         this.userEmail = in.readString();
         this.name = in.readString();
         this.number = in.readString();
         this.expMonth = in.readInt();
         this.expYear = in.readInt();
         this.CVC = in.readString();
+        this.brand = in.readString();
     }
 
     public static final Parcelable.Creator<MCard> CREATOR = new Parcelable.Creator<MCard>() {

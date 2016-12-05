@@ -26,7 +26,7 @@ import javax.crypto.spec.SecretKeySpec;
  * A class to make more easy and simple the encrypt routines, this is the core of Secure library
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class Secure implements AutoCloseable {
+public class Secure {
 
     /**
      * The Builder used to create the Secure instance and that contains the information about
@@ -608,6 +608,4 @@ public class Secure implements AutoCloseable {
             return this;
         }
     }
-    @Override
-    public void close(){}
 }

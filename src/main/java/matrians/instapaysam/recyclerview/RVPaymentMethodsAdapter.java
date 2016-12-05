@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,8 @@ import retrofit2.Response;
 
 /**
  * Team Matrians
+ *
+ * RecyclerView.Adapter to populate available payment methods
  */
 public class RVPaymentMethodsAdapter extends
         RecyclerView.Adapter<RVPaymentMethodsAdapter.ViewHolder> implements Parcelable {
@@ -76,12 +79,13 @@ public class RVPaymentMethodsAdapter extends
         TextView cardName, cardLast4Digits;
         String cardNumber, CVC;
         int expMonth, expYear;
-        ImageView deleteIcon;
+        ImageView logo, deleteIcon;
 
         ViewHolder(View v) {
             super(v);
             cardName = (TextView) v.findViewById(R.id.tvCardName);
             cardLast4Digits = (TextView) v.findViewById(R.id.tvLast4Digits);
+            logo = (ImageView) v.findViewById(R.id.logo);
             deleteIcon = (ImageView) v.findViewById(R.id.deletePM);
 
             if (!editMode) {
@@ -111,6 +115,14 @@ public class RVPaymentMethodsAdapter extends
         }
     }
 
+    /**
+     * Generate stripe token and send to server to process payment
+     * @param context - Parent activity context
+     * @param card - Card used for payment
+     * @param _id - ID of the user logged in
+     * @param userEmail - Email of the user logged in
+     * @throws AuthenticationException
+     */
     private static void generateTokenAndPay (
             final Context context, Card card, final String _id, final String userEmail)
             throws AuthenticationException {
@@ -166,7 +178,8 @@ public class RVPaymentMethodsAdapter extends
                 });
     }
 
-    /** Create new views (invoked by the layout manager)
+    /**
+     * Create new views (invoked by the layout manager)
      * @param parent - Parent ViewGroup
      * @param viewType - int
      * @return custom ViewHolder
@@ -179,7 +192,8 @@ public class RVPaymentMethodsAdapter extends
         return new RVPaymentMethodsAdapter.ViewHolder(v);
     }
 
-    /** Replace the contents of a view (invoked by the layout manager)
+    /**
+     * Replace the contents of a view (invoked by the layout manager)
      * @param holder - CardView
      * @param position - position of current element in dataSet
      */
@@ -192,6 +206,36 @@ public class RVPaymentMethodsAdapter extends
         holder.CVC = mCard.CVC;
         holder.cardName.setText(mCard.name);
         holder.cardLast4Digits.setText(holder.cardNumber.substring(holder.cardNumber.length() - 4));
+
+        switch (dataSet.get(position).brand) {
+            case Card.AMERICAN_EXPRESS:
+                holder.logo.setImageDrawable(
+                        ContextCompat.getDrawable(paymentMethodsActivity, R.drawable.logo_amex));
+                break;
+            case Card.DINERS_CLUB:
+                holder.logo.setImageDrawable(
+                        ContextCompat.getDrawable(paymentMethodsActivity, R.drawable.logo_diners));
+                break;
+            case Card.DISCOVER:
+                holder.logo.setImageDrawable(
+                        ContextCompat.getDrawable(paymentMethodsActivity, R.drawable.logo_discover));
+                break;
+            case Card.MASTERCARD:
+                holder.logo.setImageDrawable(
+                        ContextCompat.getDrawable(paymentMethodsActivity, R.drawable.logo_master));
+                break;
+            case Card.VISA:
+                holder.logo.setImageDrawable(
+                        ContextCompat.getDrawable(paymentMethodsActivity, R.drawable.logo_visa));
+                break;
+            case Card.JCB:
+                holder.logo.setImageDrawable(
+                        ContextCompat.getDrawable(paymentMethodsActivity, R.drawable.logo_jcb));
+                break;
+            default:
+                holder.logo.setImageDrawable(
+                        ContextCompat.getDrawable(paymentMethodsActivity, R.drawable.logo_default_card));
+        }
 
         if (editMode) {
             holder.deleteIcon.setVisibility(View.VISIBLE);
@@ -207,7 +251,8 @@ public class RVPaymentMethodsAdapter extends
         }
     }
 
-    /** Return the size of your dataSet (invoked by the layout manager)
+    /**
+     * Return the size of your dataSet (invoked by the layout manager)
      * @return size of the dataSet
      */
     @Override
@@ -217,6 +262,10 @@ public class RVPaymentMethodsAdapter extends
         return 0;
     }
 
+    /**
+     * Adds payment method to server and refreshes list
+     * @param mCard - Card to be added
+     */
     public void addPaymentMethod (final MCard mCard) {
         if (dataSet == null) {
             dataSet = new ArrayList<>();
@@ -226,7 +275,10 @@ public class RVPaymentMethodsAdapter extends
                 paymentMethodsActivity,
                 paymentMethodsActivity.getString(R.string.dialogSavingCard));
 
-        Call<JSONObject> call = Server.connect().addCard(mCard.encrypt(paymentMethodsActivity));
+        Call<JSONObject> call = Server.connect().addCard(
+                PreferenceManager.getDefaultSharedPreferences(paymentMethodsActivity)
+                        .getString(paymentMethodsActivity.getString(R.string.prefUserId), null),
+                mCard.encrypt(paymentMethodsActivity));
         call.enqueue(new Callback<JSONObject>() {
             @Override
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
@@ -258,10 +310,17 @@ public class RVPaymentMethodsAdapter extends
         });
     }
 
+    /**
+     * Deletes payment method from server and refreshes list
+     * @param mCard - Card to be deleted
+     */
     private void deletePaymentMethod (final MCard mCard) {
         if (dataSet != null) {
             EncryptedMCard encryptedMCard = mCard.encrypt(paymentMethodsActivity).markToDelete();
-            Call<JSONObject> call = Server.connect().deleteCard(encryptedMCard);
+            Call<JSONObject> call = Server.connect().deleteCard(
+                    PreferenceManager.getDefaultSharedPreferences(paymentMethodsActivity)
+                            .getString(paymentMethodsActivity.getString(R.string.prefUserId), null),
+                    encryptedMCard);
             call.enqueue(new Callback<JSONObject>() {
                 @Override
                 public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
@@ -295,6 +354,9 @@ public class RVPaymentMethodsAdapter extends
         }
     }
 
+    /**
+     * Methods to handle parceling
+     */
     @Override
     public int describeContents() {
         return 0;

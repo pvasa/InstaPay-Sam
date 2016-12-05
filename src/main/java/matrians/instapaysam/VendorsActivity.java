@@ -46,6 +46,13 @@ public class VendorsActivity extends AppCompatActivity {
     private boolean backPressedOnce = false;
     private ProgressDialog dialog;
     private final int CODE_PAYMENT_METHODS = 1;
+    private Parcelable adapter;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(getString(R.string.keyAdapter), adapter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +67,18 @@ public class VendorsActivity extends AppCompatActivity {
             ((CollapsingToolbarLayout) view).setTitle(getString(R.string.titleVendors));
         }
 
-        dialog = Utils.showProgress(this, getString(R.string.dialogFetchingCards));
+        if (savedInstanceState != null &&
+                (adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null) {
+            ((RVVendorsAdapter)adapter).notifyDataSetChanged();
+            return;
+        }
 
-        EncryptedMCard encryptedMCard = new EncryptedMCard(this);
+        dialog = Utils.showProgress(this, getString(R.string.dialogLoadingVendors));
 
-        Call<List<EncryptedMCard>> callC = Server.connect().getCards(encryptedMCard);
-        callC.enqueue(new Callback<List<EncryptedMCard>>() {
+        Call<List<EncryptedMCard>> call = Server.connect().getCards(
+                PreferenceManager.getDefaultSharedPreferences(this)
+                        .getString(getString(R.string.prefUserId), null));
+        call.enqueue(new Callback<List<EncryptedMCard>>() {
             @Override
             public void onResponse(Call<List<EncryptedMCard>> call, Response<List<EncryptedMCard>> response) {
                 dialog.dismiss();
@@ -98,11 +111,11 @@ public class VendorsActivity extends AppCompatActivity {
             }
         });
 
-        Call<List<Vendor>> call = Server.connect().getVendors();
-        call.enqueue(new Callback<List<Vendor>>() {
+        Call<List<Vendor>> callV = Server.connect().getVendors();
+        callV.enqueue(new Callback<List<Vendor>>() {
             @Override
             public void onResponse(Call<List<Vendor>> call, Response<List<Vendor>> response) {
-                Parcelable adapter = new RVVendorsAdapter(response.body());
+                adapter = new RVVendorsAdapter(response.body());
                 Fragment fragment = new RVFrag();
                 Bundle args = new Bundle();
                 args.putParcelable(getString(R.string.keyAdapter), adapter);
@@ -219,9 +232,13 @@ public class VendorsActivity extends AppCompatActivity {
 
             dialog = Utils.showProgress(this, getString(R.string.dialogSavingCard));
 
-            MCard mCard = new MCard(this, cardName, cardNumber, expMonth, expYear, cvv);
+            MCard mCard = new MCard(
+                    this, cardName, cardNumber, expMonth, expYear, cvv, card.getBrand());
 
-            Call<JSONObject> call = Server.connect().addCard(mCard.encrypt(this));
+            Call<JSONObject> call = Server.connect().addCard(
+                    PreferenceManager.getDefaultSharedPreferences(this)
+                            .getString(getString(R.string.prefUserId), null),
+                    mCard.encrypt(this));
             call.enqueue(new Callback<JSONObject>() {
                 @Override
                 public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {

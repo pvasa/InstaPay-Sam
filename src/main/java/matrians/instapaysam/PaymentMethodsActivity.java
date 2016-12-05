@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -37,12 +38,18 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     private String TAG = this.getClass().getName();
     private ProgressDialog waitDialog;
-    private RVPaymentMethodsAdapter payNowAdapter;
+    private RVPaymentMethodsAdapter paymentMethodsAdapter;
     private float payable;
     private Parcelable productsAdapter;
     private boolean editMode;
 
     public static final int CODE_ADD_CARD = 1;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(getString(R.string.keyAdapter), paymentMethodsAdapter);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,10 +89,17 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             }
         }
 
-        EncryptedMCard encryptedMCard = new EncryptedMCard(this);
+        Parcelable adapter;
+        if (savedInstanceState != null &&
+                (adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null) {
+            paymentMethodsAdapter = (RVPaymentMethodsAdapter) adapter;
+            return;
+        }
 
         waitDialog = Utils.showProgress(this, getString(R.string.dialogFetchingCards));
-        Call<List<EncryptedMCard>> call = Server.connect().getCards(encryptedMCard);
+        Call<List<EncryptedMCard>> call = Server.connect().getCards(
+                        PreferenceManager.getDefaultSharedPreferences(this)
+                                .getString(getString(R.string.prefUserId), null));
         call.enqueue(new Callback<List<EncryptedMCard>>() {
             @Override
             public void onResponse(
@@ -111,7 +125,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         mCards, editMode, payable, productsAdapter,
                         getIntent().getStringExtra(getString(R.string.keyVendorName)),
                         PaymentMethodsActivity.this);
-                payNowAdapter = (RVPaymentMethodsAdapter) adapter;
+                paymentMethodsAdapter = (RVPaymentMethodsAdapter) adapter;
                 Fragment fragment = new RVFrag();
                 Bundle args = new Bundle();
                 args.putParcelable(getString(R.string.keyAdapter), adapter);
@@ -119,6 +133,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 getFragmentManager().beginTransaction().replace(
                         R.id.content, fragment).commitAllowingStateLoss();
             }
+
             @Override
             public void onFailure(Call<List<EncryptedMCard>> call, Throwable t) {
                 waitDialog.dismiss();
@@ -174,8 +189,9 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 return;
             }
 
-            MCard mCard = new MCard(this, cardName, cardNumber, expMonth, expYear, cvv);
-            payNowAdapter.addPaymentMethod(mCard);
+            MCard mCard = new MCard(
+                    this, cardName, cardNumber, expMonth, expYear, cvv, card.getBrand());
+            paymentMethodsAdapter.addPaymentMethod(mCard);
         }
     }
 }

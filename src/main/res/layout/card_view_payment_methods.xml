@@ -16,29 +16,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:orientation="vertical"
-        android:layout_gravity="start">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvCardName"
+        <ImageView
+            android:id="@+id/logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceMedium"/>
+            android:contentDescription="@string/descPaymentMethodLogo"
+            android:layout_gravity="start|center_vertical"
+            android:layout_margin="6dp"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:orientation="vertical"
+            android:layout_gravity="start|center_vertical">
+
             <TextView
+                android:id="@+id/tvCardName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/txtStars"
                 android:textAppearance="?android:textAppearanceMedium"/>
-            <TextView
-                android:id="@+id/tvLast4Digits"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceMedium"/>
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txtStars"
+                    android:textAppearance="?android:textAppearanceMedium"/>
+                <TextView
+                    android:id="@+id/tvLast4Digits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:textAppearanceMedium"/>
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

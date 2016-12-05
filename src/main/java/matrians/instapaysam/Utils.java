@@ -5,17 +5,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.Script;
 import android.support.v8.renderscript.Type;
+import android.util.Patterns;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.nio.ByteBuffer;
+import java.util.regex.Pattern;
 
 /**
  * Team Matrians
@@ -117,5 +120,32 @@ public class Utils {
         dialog.setMessage(message);
         dialog.show();
         return dialog;
+    }
+
+    /**
+     * Check for empty fields
+     * @param fields - Fields to be checked if empty
+     * @return - If found return that field, else return null
+     */
+    static TextInputEditText checkEmptyFields(TextInputEditText... fields) {
+        for (TextInputEditText editText : fields) {
+            if (editText.getText().toString().length() == 0)
+                return editText;
+        }
+        return null;
+    }
+
+    static boolean validateEmail (String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    static boolean validatePassword (String password) {
+        final String PASSWORD_REGEX =
+                "(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,}";
+        return (Pattern.compile(PASSWORD_REGEX)).matcher(password).matches();
+    }
+
+    static boolean validatePhone (String phone) {
+        return Patterns.PHONE.matcher(phone).matches();
     }
 }

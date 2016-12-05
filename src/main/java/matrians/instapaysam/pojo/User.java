@@ -6,7 +6,7 @@ package matrians.instapaysam.pojo;
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class User {
     private char lor;
-    public String _id;
+    private String _id;
     public String err;
     public String firstName;
     public String lastName;
@@ -22,5 +22,9 @@ public class User {
     public User(boolean login) {
         lor = login ? 'l' : 'r';
         err = "none";
+    }
+
+    public String getId() {
+        return _id;
     }
 }

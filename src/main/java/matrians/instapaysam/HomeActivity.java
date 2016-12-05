@@ -20,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Team Matrians
+ *
+ * Main activity
  */
 public class HomeActivity extends AppCompatActivity {
 
@@ -39,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
                         LoginActivity.STATUS_LOGGED_OUT) {
             setContentView(R.layout.activity_home);
 
+            // Allow only app to run on specific devices only
             if (!android.os.Build.MANUFACTURER.contains(ALLOWED_DEVICE)) {
                 Log.d(TAG, android.os.Build.MANUFACTURER);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -53,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
                 builder.show();
             }
 
+            // Make view full screen
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 Window w = getWindow();
                 w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,

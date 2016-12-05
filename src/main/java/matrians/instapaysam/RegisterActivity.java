@@ -18,8 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.regex.Pattern;
-
 import matrians.instapaysam.pojo.User;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,8 +30,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getName();
 
-    private final String PASSWORD_REGEX =
-            "(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,}";
     private ProgressDialog dialog;
 
     @Override
@@ -68,9 +64,9 @@ public class RegisterActivity extends AppCompatActivity {
             });
         }
 
-        final TextInputEditText first_name = (TextInputEditText) findViewById(R.id.fname);
-        if (first_name != null)
-            first_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final TextInputEditText firstName = (TextInputEditText) findViewById(R.id.fname);
+        if (firstName != null) {
+            firstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     TextInputEditText editText = (TextInputEditText) v;
@@ -89,10 +85,11 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
-        final TextInputEditText last_name = (TextInputEditText) findViewById(R.id.lname);
-        if (last_name != null)
-            last_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final TextInputEditText lastName = (TextInputEditText) findViewById(R.id.lname);
+        if (lastName != null) {
+            lastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     TextInputEditText editText = (TextInputEditText) v;
@@ -111,9 +108,10 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
         final TextInputEditText email = (TextInputEditText) findViewById(R.id.email);
-        if (email != null)
+        if (email != null) {
             email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -139,10 +137,11 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
-        final TextInputEditText user_name = (TextInputEditText) findViewById(R.id.uname);
-        if (user_name != null)
-            user_name.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final TextInputEditText userName = (TextInputEditText) findViewById(R.id.uname);
+        if (userName != null) {
+            userName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     TextInputEditText editText = (TextInputEditText) v;
@@ -161,9 +160,10 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
         final TextInputEditText password = (TextInputEditText) findViewById(R.id.password);
-        if (password != null)
+        if (password != null) {
             password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -174,8 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     R.string.errEmptyField), Toast.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
-                        } else if (!(Pattern.compile(PASSWORD_REGEX)).
-                                matcher(password.getText().toString()).matches()) {
+                        } else if (!Utils.validatePassword(password.getText().toString())) {
                             Toast.makeText(v.getContext(), getResources().getString(
                                     R.string.errInvalidPassword), Toast.LENGTH_SHORT).show();
                             editText.setTextColor(ContextCompat.getColor(
@@ -189,10 +188,11 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
-        final TextInputEditText c_password = (TextInputEditText) findViewById(R.id.cpassword);
-        if (c_password != null)
-            c_password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final TextInputEditText cPassword = (TextInputEditText) findViewById(R.id.cpassword);
+        if (cPassword != null) {
+            cPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     TextInputEditText editText = (TextInputEditText) v;
@@ -219,9 +219,10 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
         final TextInputEditText address = (TextInputEditText) findViewById(R.id.address);
-        if (address != null)
+        if (address != null) {
             address.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -241,10 +242,11 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
-        final TextInputEditText postal_code = (TextInputEditText) findViewById(R.id.pcode);
-        if (postal_code != null)
-            postal_code.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final TextInputEditText postalCode = (TextInputEditText) findViewById(R.id.pcode);
+        if (postalCode != null) {
+            postalCode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     TextInputEditText editText = (TextInputEditText) v;
@@ -263,9 +265,10 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
         final TextInputEditText phone = (TextInputEditText) findViewById(R.id.phone);
-        if (phone != null)
+        if (phone != null) {
             phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
@@ -291,6 +294,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
 
         Button registerButton;
         if ((registerButton = (Button) findViewById(R.id.btn_register)) != null) {
@@ -303,33 +307,19 @@ public class RegisterActivity extends AppCompatActivity {
 
                     boolean valid = true;
 
-                    User user = new User(false);
-                    if ( (user.firstName = first_name.getText().toString()).length() == 0 ) {
+                    TextInputEditText emptyField = Utils.checkEmptyFields(
+                            firstName, lastName, email, userName, password,
+                            cPassword, address, postalCode, phone);
+                    if (null != emptyField) {
                         Toast.makeText(v.getContext(),
                                 R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        first_name.requestFocus();
-                        first_name.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
+                        emptyField.requestFocus();
+                        emptyField.setHintTextColor(ContextCompat.getColor(
+                                v.getContext(), android.R.color.holo_red_dark));
                         valid = false;
                     }
 
-                    if ( (user.lastName = last_name.getText().toString()).length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        last_name.requestFocus();
-                        last_name.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        valid = false;
-                    }
-
-                    if ( (user.email = email.getText().toString()).length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        email.requestFocus();
-                        email.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        valid = false;
-                    } else if (!Patterns.EMAIL_ADDRESS.matcher(user.email).matches()) {
+                    if (!Utils.validateEmail(email.getText().toString())) {
                         Toast.makeText(v.getContext(),
                                 R.string.errInvalidEmail, Toast.LENGTH_SHORT).show();
                         email.requestFocus();
@@ -337,25 +327,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 v.getContext(), android.R.color.holo_red_dark));
                         valid = false;
                     }
-
-                    if ( (user.userName = user_name.getText().toString()).length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        user_name.requestFocus();
-                        user_name.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        valid = false;
-                    }
-
-                    if ( password.getText().length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        password.requestFocus();
-                        password.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        valid = false;
-                    } else if (!(Pattern.compile(PASSWORD_REGEX)).
-                            matcher(password.getText().toString()).matches()) {
+                    if (!Utils.validatePassword(password.getText().toString())) {
                         Toast.makeText(v.getContext(),
                                 R.string.errInvalidPassword, Toast.LENGTH_SHORT).show();
                         password.requestFocus();
@@ -363,50 +335,17 @@ public class RegisterActivity extends AppCompatActivity {
                                 v.getContext(), android.R.color.holo_red_dark));
                         valid = false;
                     }
-                    if ( c_password.getText().length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        c_password.requestFocus();
-                        c_password.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        valid = false;
-                    } else if (!password.getText().toString().equals(c_password.getText().toString())) {
+                    if (!password.getText().toString().equals(cPassword.getText().toString())) {
                         Toast.makeText(v.getContext(),
                                 R.string.errPasswordsMismatch,
                                 Toast.LENGTH_SHORT).show();
                         password.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
-                        c_password.setTextColor(ContextCompat.getColor(
+                        cPassword.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
                         valid = false;
                     }
-
-                    if ( (user.homeAddress = address.getText().toString()).length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        address.requestFocus();
-                        address.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        valid = false;
-                    }
-
-                    if ( (user.postalCode = postal_code.getText().toString()).length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        postal_code.requestFocus();
-                        postal_code.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        valid = false;
-                    }
-
-                    if ( (user.phone = phone.getText().toString()).length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        phone.requestFocus();
-                        phone.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        valid = false;
-                    } else if (!Patterns.PHONE.matcher(phone.getText().toString()).matches()) {
+                    if (!Utils.validatePhone(phone.getText().toString())) {
                         Toast.makeText(v.getContext(),
                                 R.string.errInvalidPhone,
                                 Toast.LENGTH_SHORT).show();
@@ -415,11 +354,19 @@ public class RegisterActivity extends AppCompatActivity {
                         valid = false;
                     }
 
+                    User user = new User(false);
                     if (!valid) {
                         Toast.makeText(v.getContext(), R.string.errRedFields, Toast.LENGTH_LONG).show();
                         return;
                     } else {
+                        user.firstName = firstName.getText().toString();
+                        user.lastName = lastName.getText().toString();
+                        user.userName = userName.getText().toString();
+                        user.email = email.getText().toString();
                         user.password = password.getText().toString();
+                        user.homeAddress = address.getText().toString();
+                        user.postalCode = postalCode.getText().toString();
+                        user.phone = phone.getText().toString();
                     }
 
                     Call<User> call = Server.connect().createUser(user);

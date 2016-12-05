@@ -33,9 +33,8 @@ import matrians.instapaysam.pojo.Product;
  */
 public class ReceiptActivity extends AppCompatActivity {
 
+    @SuppressWarnings("unused")
     private String TAG = this.getClass().getName();
-    private List<Product> products;
-    private String vendorName;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
@@ -46,14 +45,14 @@ public class ReceiptActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        vendorName = getIntent().getStringExtra(getString(R.string.keyVendorName));
+        String vendorName = getIntent().getStringExtra(getString(R.string.keyVendorName));
 
         View view;
         if ((view = findViewById(R.id.toolbar_layout)) != null) {
             ((CollapsingToolbarLayout) view).setTitle(getString(R.string.titleReceipt));
         }
 
-        products = ((RVProductsAdapter)getIntent().getParcelableExtra(
+        List<Product> products = ((RVProductsAdapter) getIntent().getParcelableExtra(
                 getString(R.string.keyProducts))).getProductList();
 
         Parcelable adapter = new RVReceiptAdapter(products);

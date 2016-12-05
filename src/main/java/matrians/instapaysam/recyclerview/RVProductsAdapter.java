@@ -82,7 +82,7 @@ public class RVProductsAdapter
                 new AlertDialog.Builder(view.getContext())
                 .setTitle(R.string.titleQuantity)
                 .setView(picker)
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.btnOkay, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dataSet.get(holder.getAdapterPosition()).quantity = picker.getValue();

@@ -29,7 +29,7 @@ public class EncryptedMCard {
         return this;
     }
 
-    public EncryptedMCard (Context context) {
+    EncryptedMCard(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         this._id = preferences.getString(context.getString(R.string.prefUserId), null);
         this.userEmail = preferences.getString(context.getString(R.string.prefEmail), null);
