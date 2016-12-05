@@ -12,35 +12,36 @@ import matrians.instapaysam.Secure;
 /**
  * Team Matrians
  */
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class EncryptedMCard {
 
-    String _id, userEmail, eCard;
+    private String _id, userEmail;
+    private String eCard;
+    private boolean deleteMe;
 
-    public EncryptedMCard (Context context) {
-        this(context, null);
+    public EncryptedMCard markToDelete() {
+        this.deleteMe = true;
+        return this;
     }
 
-    private EncryptedMCard(Context context, String eCard) {
+    EncryptedMCard setECard(String eCard) {
+        this.eCard = eCard;
+        return this;
+    }
+
+    public EncryptedMCard (Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         this._id = preferences.getString(context.getString(R.string.prefUserId), null);
         this.userEmail = preferences.getString(context.getString(R.string.prefEmail), null);
-        this.eCard = eCard;
+        this.deleteMe = false;
     }
 
     public MCard decrypt(Context context) {
-        String jsonCard;
-        byte[] iv = new byte[16];
-
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String _id = preferences.getString(context.getString(R.string.prefUserId), null);
-        String userEmail = preferences.getString(context.getString(R.string.prefEmail), null);
-
-        try (Secure secure = Secure.getDefault(userEmail, _id, iv)) {
-            jsonCard = secure != null ? secure.decryptOrNull(eCard) : null;
-            return new Gson().fromJson(jsonCard, MCard.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        Secure secure = Secure.getDefault(
+                preferences.getString(context.getString(R.string.prefEmail), null),
+                preferences.getString(context.getString(R.string.prefUserId), null),
+                new byte[16]);
+        return new Gson().fromJson(secure != null ? secure.decryptOrNull(eCard) : null, MCard.class);
     }
 }

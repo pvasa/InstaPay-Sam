@@ -32,9 +32,9 @@ import matrians.instapaysam.pojo.Product;
  */
 public class ScanActivity extends AppCompatActivity {
 
-    int FLASH_OFF = 0;
-    int FLASH_ON = 1;
-    int FLASH_AUTO = 2;
+    //int FLASH_OFF = 0;
+    //int FLASH_ON = 1;
+    //int FLASH_AUTO = 2;
     int currentFlash = 0;
     int[] flashes = new int[] {
             R.drawable.ic_flash_off_black_24dp,

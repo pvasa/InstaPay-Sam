@@ -1,11 +1,14 @@
 package matrians.instapaysam;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -23,7 +26,8 @@ public class HomeActivity extends AppCompatActivity {
     static final int CODE_LOGIN = 1;
     static final int CODE_REGISTER = 2;
     private boolean backPressedOnce = false;
-    private final String TAG = this.getClass().getName();
+    private static final String TAG = HomeActivity.class.getName();
+    private static final String ALLOWED_DEVICE = ""; // Allowed all devices for testing.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +39,7 @@ public class HomeActivity extends AppCompatActivity {
                         LoginActivity.STATUS_LOGGED_OUT) {
             setContentView(R.layout.activity_home);
 
-            // Device check disabled for testing.
-            /*if (!android.os.Build.MANUFACTURER.contains("samsung")) {
+            if (!android.os.Build.MANUFACTURER.contains(ALLOWED_DEVICE)) {
                 Log.d(TAG, android.os.Build.MANUFACTURER);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(R.string.dialogNoSamsung);
@@ -48,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
                 });
                 builder.setCancelable(false);
                 builder.show();
-            }*/
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 Window w = getWindow();

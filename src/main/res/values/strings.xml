@@ -102,8 +102,12 @@
     <string name="btnExit">Exit</string>
     <string name="btnHome">Home</string>
     <string name="dialogNoSamsung">This app works only on Samsung devices.</string>
-    <string name="keyUserEmail">email</string>
-    <string name="keyUserID">_id</string>
-    <string name="keyECard">eCard</string>
     <string name="errServerError">Server error. Try after some time.</string>
+    <string name="keyErr">err</string>
+    <string name="btnAdd">Add</string>
+    <string name="btnNoThanks">No thanks</string>
+    <string name="keyEditMode">editMode</string>
+    <string name="toastPaymentMethodDeleteSuccess">Payment method deleted successfully.</string>
+    <string name="dialogDeletePaymentMethod">Deleting payment method…</string>
+    <string name="errDeletingCard">Error deleting card. Try again.</string>
 </resources>

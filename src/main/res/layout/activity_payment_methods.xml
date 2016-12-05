@@ -24,10 +24,23 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
+            <ImageView
+                android:id="@+id/toolbarBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/home_background"
+                android:scaleType="centerCrop"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="parallax"
+                android:visibility="invisible"
+                android:contentDescription="@string/descHomeBackground"/>
+
             <LinearLayout
+                android:id="@+id/toolbarAmounts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="invisible"
                 android:layout_margin="24dp">
                 <LinearLayout
                     android:layout_width="wrap_content"

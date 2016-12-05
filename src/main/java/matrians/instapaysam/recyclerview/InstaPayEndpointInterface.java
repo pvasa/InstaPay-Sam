@@ -38,6 +38,9 @@ public interface InstaPayEndpointInterface {
     @POST("cards")
     Call<JSONObject> addCard(@Body EncryptedMCard eMCard);
 
+    @POST("cards")
+    Call<JSONObject> deleteCard(@Body EncryptedMCard eMCard);
+
     @POST("pay")
     Call<Payment> pay(@Body Payment payment);
 

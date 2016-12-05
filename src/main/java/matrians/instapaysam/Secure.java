@@ -87,7 +87,10 @@ public class Secure implements AutoCloseable {
      * @throws IllegalStateException              if the cipher instance is not initialized for
      *                                            encryption or decryption
      */
-    public String encrypt(String data) throws UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, InvalidKeySpecException, BadPaddingException, IllegalBlockSizeException {
+    public String encrypt(String data) throws
+            UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException,
+            InvalidAlgorithmParameterException, InvalidKeyException,
+            InvalidKeySpecException, BadPaddingException, IllegalBlockSizeException {
         if (data == null) return null;
         SecretKey secretKey = getSecretKey(hashTheKey(mBuilder.getKey()));
         byte[] dataBytes = data.getBytes(mBuilder.getCharsetName());
@@ -131,7 +134,8 @@ public class Secure implements AutoCloseable {
                 try {
                     String encrypt = encrypt(data);
                     if (encrypt == null) {
-                        callback.onError(new Exception("Encrypt return null, it normally occurs when you send a null data"));
+                        callback.onError(new Exception(
+                                "Encrypt return null, it normally occurs when you send a null data"));
                     }
                     callback.onSuccess(encrypt);
                 } catch (Exception e) {
@@ -173,7 +177,11 @@ public class Secure implements AutoCloseable {
      * @throws IllegalStateException              if the cipher instance is not initialized for
      *                                            encryption or decryption
      */
-    public String decrypt(String data) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public String decrypt(String data) throws
+            UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeySpecException,
+            NoSuchPaddingException, InvalidAlgorithmParameterException,
+            InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+
         if (data == null) return null;
         byte[] dataBytes = Base64.decode(data, mBuilder.getBase64Mode());
         SecretKey secretKey = getSecretKey(hashTheKey(mBuilder.getKey()));
@@ -217,7 +225,8 @@ public class Secure implements AutoCloseable {
                 try {
                     String decrypt = decrypt(data);
                     if (decrypt == null) {
-                        callback.onError(new Exception("Decrypt return null, it normally occurs when you send a null data"));
+                        callback.onError(new Exception(
+                                "Decrypt return null, it normally occurs when you send a null data"));
                     }
                     callback.onSuccess(decrypt);
                 } catch (Exception e) {
@@ -272,11 +281,6 @@ public class Secure implements AutoCloseable {
         messageDigest.update(key.getBytes(mBuilder.getCharsetName()));
         return Base64.encodeToString(messageDigest.digest(),
                 Base64.NO_PADDING).toCharArray();
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 
     /**
@@ -603,7 +607,7 @@ public class Secure implements AutoCloseable {
             mDigestAlgorithm = digestAlgorithm;
             return this;
         }
-
     }
-
+    @Override
+    public void close(){}
 }

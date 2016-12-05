@@ -24,8 +24,6 @@ public class MCard implements Parcelable {
     public int expYear;
     public String CVC;
 
-    private EncryptedMCard eMCard;
-
     public MCard (Context context, String cardName,
                   String cardNumber, int expMonth, int expYear, String CVC) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -36,20 +34,12 @@ public class MCard implements Parcelable {
         this.expMonth = expMonth;
         this.expYear = expYear;
         this.CVC = CVC;
-        eMCard = new EncryptedMCard(context);
     }
 
-    public EncryptedMCard encrypt() {
-        String eCard;
-        byte[] iv = new byte[16];
-
-        try (Secure secure = Secure.getDefault(userEmail, _id, iv)) {
-            eCard = secure != null ? secure.encryptOrNull(new Gson().toJson(this)) : null;
-            eMCard.eCard = eCard;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return eMCard;
+    public EncryptedMCard encrypt (Context context) {
+        Secure secure = Secure.getDefault(userEmail, _id, new byte[16]);
+        return new EncryptedMCard(context)
+                .setECard(secure != null ? secure.encryptOrNull(new Gson().toJson(this)) : null);
     }
 
     @Override

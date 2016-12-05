@@ -73,7 +73,7 @@ public class VendorsActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(VendorsActivity.this);
                     builder.setTitle(R.string.titleNoCards);
                     builder.setMessage(R.string.messageNoCards);
-                    builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(R.string.btnAdd, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             startActivityForResult(
@@ -82,7 +82,7 @@ public class VendorsActivity extends AppCompatActivity {
                             dialogInterface.dismiss();
                         }
                     });
-                    builder.setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.btnNoThanks, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
@@ -132,8 +132,9 @@ public class VendorsActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_payment_methods:
-                startActivityForResult(
-                        new Intent(this, PaymentMethodsActivity.class), CODE_PAYMENT_METHODS);
+                Intent intent = new Intent(this, PaymentMethodsActivity.class);
+                intent.putExtra(getString(R.string.keyEditMode), true);
+                startActivityForResult(intent, CODE_PAYMENT_METHODS);
                 break;
             case R.id.action_settings:
                 break;
@@ -218,12 +219,9 @@ public class VendorsActivity extends AppCompatActivity {
 
             dialog = Utils.showProgress(this, getString(R.string.dialogSavingCard));
 
-            String email = PreferenceManager
-                    .getDefaultSharedPreferences(this)
-                    .getString(getString(R.string.prefEmail), null);
-            final MCard mCard = new MCard(this, cardName, cardNumber, expMonth, expYear, cvv);
+            MCard mCard = new MCard(this, cardName, cardNumber, expMonth, expYear, cvv);
 
-            Call<JSONObject> call = Server.connect().addCard(mCard.encrypt());
+            Call<JSONObject> call = Server.connect().addCard(mCard.encrypt(this));
             call.enqueue(new Callback<JSONObject>() {
                 @Override
                 public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {

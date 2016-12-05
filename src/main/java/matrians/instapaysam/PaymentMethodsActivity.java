@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +18,6 @@ import com.cooltechworks.creditcarddesign.CardEditActivity;
 import com.cooltechworks.creditcarddesign.CreditCardUtils;
 import com.stripe.android.model.Card;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +25,7 @@ import java.util.List;
 import matrians.instapaysam.pojo.EncryptedMCard;
 import matrians.instapaysam.pojo.MCard;
 import matrians.instapaysam.recyclerview.RVFrag;
-import matrians.instapaysam.recyclerview.RVPayNowAdapter;
+import matrians.instapaysam.recyclerview.RVPaymentMethodsAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,11 +37,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     private String TAG = this.getClass().getName();
     private ProgressDialog waitDialog;
-    private RVPayNowAdapter payNowAdapter;
+    private RVPaymentMethodsAdapter payNowAdapter;
     private float payable;
     private Parcelable productsAdapter;
+    private boolean editMode;
 
-    static final int CODE_ADD_CARD = 1;
+    public static final int CODE_ADD_CARD = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,20 +63,26 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             }
         });
 
-        View view;
-        if ((view = findViewById(R.id.toolbar_layout)) != null) {
-            ((CollapsingToolbarLayout) view).setTitle(getString(R.string.titlePaymentMethods));
-            float totalAmount = getIntent().getFloatExtra(getString(R.string.keyTotalAmount), 0f);
-            float hst = new BigDecimal(Float.toString(totalAmount * 0.13f))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-            payable = new BigDecimal(Float.toString(totalAmount + hst))
-                    .setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-            ((TextView) view.findViewById(R.id.tvTotalAmount)).setText(String.valueOf(totalAmount));
-            ((TextView) view.findViewById(R.id.tvHST)).setText(String.valueOf(hst));
-            ((TextView) view.findViewById(R.id.tvPayable)).setText(String.valueOf(payable));
+        CollapsingToolbarLayout toolbarLayout =
+                (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        if (toolbarLayout != null) {
+            toolbarLayout.setTitle(getString(R.string.titlePaymentMethods));
+            if (editMode = getIntent().getBooleanExtra(getString(R.string.keyEditMode), false)) {
+                toolbarLayout.findViewById(R.id.toolbarBackground).setVisibility(View.VISIBLE);
+            } else {
+                toolbarLayout.findViewById(R.id.toolbarAmounts).setVisibility(View.VISIBLE);
+                float totalAmount = getIntent().getFloatExtra(getString(R.string.keyTotalAmount), 0f);
+                float hst = new BigDecimal(Float.toString(totalAmount * 0.13f))
+                        .setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                payable = new BigDecimal(Float.toString(totalAmount + hst))
+                        .setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+                ((TextView) toolbarLayout.findViewById(R.id.tvTotalAmount)).setText(String.valueOf(totalAmount));
+                ((TextView) toolbarLayout.findViewById(R.id.tvHST)).setText(String.valueOf(hst));
+                ((TextView) toolbarLayout.findViewById(R.id.tvPayable)).setText(String.valueOf(payable));
+            }
         }
 
-        final EncryptedMCard encryptedMCard = new EncryptedMCard(this);
+        EncryptedMCard encryptedMCard = new EncryptedMCard(this);
 
         waitDialog = Utils.showProgress(this, getString(R.string.dialogFetchingCards));
         Call<List<EncryptedMCard>> call = Server.connect().getCards(encryptedMCard);
@@ -104,11 +107,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                             Snackbar.LENGTH_LONG).show();
                 }
                 waitDialog.dismiss();
-                Parcelable adapter = new RVPayNowAdapter(
-                        mCards, payable, productsAdapter,
+                Parcelable adapter = new RVPaymentMethodsAdapter(
+                        mCards, editMode, payable, productsAdapter,
                         getIntent().getStringExtra(getString(R.string.keyVendorName)),
                         PaymentMethodsActivity.this);
-                payNowAdapter = (RVPayNowAdapter) adapter;
+                payNowAdapter = (RVPaymentMethodsAdapter) adapter;
                 Fragment fragment = new RVFrag();
                 Bundle args = new Bundle();
                 args.putParcelable(getString(R.string.keyAdapter), adapter);
@@ -157,7 +160,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             }
             Card card = new Card(cardNumber, expMonth, expYear, cvv);
             if (!card.validateCard()) {
-                waitDialog.dismiss();
+                if (waitDialog != null) waitDialog.dismiss();
                 if (!card.validateNumber()) {
                     Toast.makeText(this,
                             R.string.errCardNumber, Toast.LENGTH_LONG).show();
@@ -171,40 +174,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 return;
             }
 
-            waitDialog.setMessage(getString(R.string.dialogSavingCard));
-
-            String email = PreferenceManager
-                    .getDefaultSharedPreferences(this)
-                    .getString(getString(R.string.prefEmail), null);
-
-            final MCard mCard = new MCard(this, cardName, cardNumber, expMonth, expYear, cvv);
-
-            Call<JSONObject> call = Server.connect().addCard(mCard.encrypt());
-            call.enqueue(new Callback<JSONObject>() {
-                @Override
-                public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                    waitDialog.dismiss();
-                    if (200 == response.code()) {
-                        Toast.makeText(PaymentMethodsActivity.this,
-                                R.string.toastCardAddSuccess, Toast.LENGTH_LONG).show();
-                        payNowAdapter.addCard(mCard);
-                    } else {
-                        try {
-                            Toast.makeText(PaymentMethodsActivity.this,
-                                    response.body().getString("err"), Toast.LENGTH_LONG).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                @Override
-                public void onFailure(Call<JSONObject> call, Throwable t) {
-                    waitDialog.dismiss();
-                    Toast.makeText(PaymentMethodsActivity.this,
-                            getString(R.string.snackErrAddCard), Toast.LENGTH_LONG).show();
-                    Log.d(TAG, t.toString());
-                }
-            });
+            MCard mCard = new MCard(this, cardName, cardNumber, expMonth, expYear, cvv);
+            payNowAdapter.addPaymentMethod(mCard);
         }
     }
 }
