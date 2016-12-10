@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
     android.defaultConfig.vectorDrawables.useSupportLibrary true
     defaultConfig {
         applicationId "matrians.instapaysam"
@@ -44,5 +44,6 @@ dependencies {
     compile 'com.stripe:stripe-android:1.1.0'
     compile 'com.github.cooltechworks:CreditCardView:v1.0.2'
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.2.28'
+    testCompile 'com.stripe:stripe-android:1.1.0'
+    testCompile 'com.squareup.retrofit2:converter-gson:2.1.0'
 }

@@ -43,15 +43,4 @@ public interface InstaPayEndpointInterface {
 
     @POST("pay")
     Call<Payment> pay(@Body Payment payment);
-
-    /*
-    @GET("users/{username}")
-    Call<User> getUser(@Path("username") String username);
-
-    @GET("group/{id}/users")
-    Call<List<User>> groupList(@Path("id") int groupId, @Query("sort") String sort);
-
-    @POST("users/new")
-    Call<User> createUser(@Body User user);
-    */
 }
