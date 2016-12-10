@@ -20,8 +20,8 @@ import retrofit2.http.Path;
  */
 public interface InstaPayEndpointInterface {
 
-    @GET("vendors")
-    Call<List<Vendor>> getVendors();
+    @GET("vendors/{uid}")
+    Call<List<Vendor>> getVendors(@Path("uid") String uid);
 
     @GET("vendors/{vid}/products/{pid}")
     Call<Product> getProduct(@Path("vid") String vid, @Path("pid") String pid);

@@ -87,7 +87,7 @@ public class ScanActivity extends AppCompatActivity {
                         ((TextView)findViewById(R.id.tvTotalAmount)).getText().toString());
                 if (0.0 == totalAmount) {
                     Snackbar.make((View) view.getParent(),
-                            R.string.snackNoProducts, Snackbar.LENGTH_LONG).show();
+                            R.string.errNoProductsInCart, Snackbar.LENGTH_LONG).show();
                     return;
                 }
                 Intent intent = new Intent(ScanActivity.this, PaymentMethodsActivity.class);

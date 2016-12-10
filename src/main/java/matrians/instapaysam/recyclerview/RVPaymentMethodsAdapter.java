@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.stripe.android.Stripe;
 import com.stripe.android.TokenCallback;
@@ -93,7 +93,7 @@ public class RVPaymentMethodsAdapter extends
                     @Override
                     public void onClick(View view) {
                         waitDialog = Utils.showProgress(view.getContext(),
-                                view.getContext().getString(R.string.dialogProcessingPayment));
+                                R.string.dialogProcessingPayment);
 
                         String _id = PreferenceManager.getDefaultSharedPreferences(
                                 view.getContext()).getString(
@@ -131,8 +131,8 @@ public class RVPaymentMethodsAdapter extends
                 card, new TokenCallback() {
                     @Override
                     public void onError(Exception error) {
-                        Toast.makeText(context, context.getString(
-                                R.string.errPaymentFailed), Toast.LENGTH_LONG).show();
+                        Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
+                                R.string.errPaymentFailed, Snackbar.LENGTH_SHORT).show();
                         Log.d(TAG, error.getLocalizedMessage());
                     }
                     @Override
@@ -147,9 +147,8 @@ public class RVPaymentMethodsAdapter extends
                                 waitDialog.dismiss();
                                 if (200 == response.code()) {
 
-                                    Toast.makeText(context,
-                                            R.string.txtPaymentSuccess,
-                                            Toast.LENGTH_LONG).show();
+                                    Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
+                                            R.string.txtPaymentSuccess, Snackbar.LENGTH_SHORT).show();
 
                                     Intent intent = new Intent(context, ReceiptActivity.class);
                                     intent.putExtra(context.getString(
@@ -161,16 +160,15 @@ public class RVPaymentMethodsAdapter extends
                                     paymentMethodsActivity.finish();
 
                                 } else {
-                                    Toast.makeText(context,
-                                            R.string.errPaymentFailed,
-                                            Toast.LENGTH_LONG).show();
+                                    Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
+                                            R.string.errPaymentFailed, Snackbar.LENGTH_SHORT).show();
                                 }
                             }
                             @Override
                             public void onFailure(Call<Payment> call, Throwable t) {
                                 waitDialog.dismiss();
-                                Toast.makeText(context,
-                                        R.string.errPaymentFailed, Toast.LENGTH_LONG).show();
+                                Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
+                                        R.string.errPaymentFailed, Snackbar.LENGTH_SHORT).show();
                                 Log.d(TAG, t.toString());
                             }
                         });
@@ -244,7 +242,7 @@ public class RVPaymentMethodsAdapter extends
                 public void onClick(View view) {
                     waitDialog = Utils.showProgress(
                             paymentMethodsActivity,
-                            paymentMethodsActivity.getString(R.string.dialogDeletePaymentMethod));
+                            R.string.dialogDeletePaymentMethod);
                     deletePaymentMethod(mCard);
                 }
             });
@@ -273,7 +271,7 @@ public class RVPaymentMethodsAdapter extends
 
         waitDialog = Utils.showProgress(
                 paymentMethodsActivity,
-                paymentMethodsActivity.getString(R.string.dialogSavingCard));
+                R.string.dialogSavingCard);
 
         Call<JSONObject> call = Server.connect().addCard(
                 PreferenceManager.getDefaultSharedPreferences(paymentMethodsActivity)
@@ -284,16 +282,16 @@ public class RVPaymentMethodsAdapter extends
             public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                 if (waitDialog != null) waitDialog.dismiss();
                 if (200 == response.code()) {
-                    Toast.makeText(paymentMethodsActivity,
-                            R.string.toastCardAddSuccess, Toast.LENGTH_LONG).show();
+                    Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
+                            R.string.msgCardAddSuccess, Snackbar.LENGTH_SHORT).show();
                     dataSet.add(mCard);
                     notifyDataSetChanged();
                 } else {
                     try {
-                        Toast.makeText(paymentMethodsActivity,
+                        Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
                                 response.body().getString(
                                         paymentMethodsActivity.getString(R.string.keyErr)),
-                                Toast.LENGTH_LONG).show();
+                                Snackbar.LENGTH_SHORT).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -302,9 +300,8 @@ public class RVPaymentMethodsAdapter extends
             @Override
             public void onFailure(Call<JSONObject> call, Throwable t) {
                 waitDialog.dismiss();
-                Toast.makeText(paymentMethodsActivity,
-                        R.string.errDeletingCard,
-                        Toast.LENGTH_LONG).show();
+                Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
+                        R.string.errDeletingCard, Snackbar.LENGTH_SHORT).show();
                 Log.d(TAG, t.toString());
             }
         });
@@ -326,17 +323,16 @@ public class RVPaymentMethodsAdapter extends
                 public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                     waitDialog.dismiss();
                     if (200 == response.code()) {
-                        Toast.makeText(paymentMethodsActivity,
-                                R.string.toastPaymentMethodDeleteSuccess,
-                                Toast.LENGTH_LONG).show();
+                        Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
+                                R.string.msgPaymentMethodDeleteSuccess, Snackbar.LENGTH_SHORT).show();
                         dataSet.remove(mCard);
                         notifyDataSetChanged();
                     } else {
                         try {
-                            Toast.makeText(paymentMethodsActivity,
+                            Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
                                     response.body().getString(
                                             paymentMethodsActivity.getString(R.string.keyErr)),
-                                    Toast.LENGTH_LONG).show();
+                                    Snackbar.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -345,9 +341,8 @@ public class RVPaymentMethodsAdapter extends
                 @Override
                 public void onFailure(Call<JSONObject> call, Throwable t) {
                     waitDialog.dismiss();
-                    Toast.makeText(paymentMethodsActivity,
-                            R.string.errDeletingCard,
-                            Toast.LENGTH_LONG).show();
+                    Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
+                            R.string.errDeletingCard, Snackbar.LENGTH_SHORT).show();
                     Log.d(TAG, t.toString());
                 }
             });

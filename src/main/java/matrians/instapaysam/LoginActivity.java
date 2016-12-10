@@ -15,7 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import java.util.HashSet;
 
 import matrians.instapaysam.pojo.User;
 import retrofit2.Call;
@@ -74,8 +75,8 @@ public class LoginActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_LONG).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -96,8 +97,8 @@ public class LoginActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_LONG).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -120,34 +121,24 @@ public class LoginActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            dialog = Utils.showProgress(v.getContext(), "Verifying credentials.");
+                            dialog = Utils.showProgress(v.getContext(),
+                                    R.string.dialogVerifyingCredentials);
                         }
                     });
 
-                    boolean valid = true;
-
                     User user = new User(true);
-                    if ( (user.userName = user.email = loginId.getText().toString()).length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        loginId.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        loginId.requestFocus();
-                        valid = false;
-                    }
-                    if ( password.getText().length() == 0 ) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        loginId.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_light));
-                        loginId.requestFocus();
-                        valid = false;
-                    }
-
-                    if (!valid) {
-                        Toast.makeText(v.getContext(), R.string.errRedFields, Toast.LENGTH_LONG).show();
+                    HashSet<TextInputEditText> emptyEditTexts = Utils.checkEmptyFields(loginId, password);
+                    if ( !emptyEditTexts.isEmpty() ) {
+                        Snackbar.make(findViewById(R.id.rootView),
+                                R.string.errEmptyField, Snackbar.LENGTH_LONG).show();
+                        for (TextInputEditText editText : emptyEditTexts) {
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_light));
+                            editText.requestFocus();
+                        }
                         return;
                     } else {
+                        user.email = user.userName = loginId.getText().toString();
                         user.password = password.getText().toString();
                     }
 
@@ -165,15 +156,15 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.apply();
                                 setResult(1);
                                 finish();
-                            } else Snackbar.make((View) v.getParent(),
+                            } else Snackbar.make(findViewById(R.id.rootView),
                                     response.body().err, Snackbar.LENGTH_LONG).show();
                         }
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
                             dialog.dismiss();
-                            Snackbar.make((View) v.getParent(),
-                                    R.string.snackNetworkError, Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errNetworkError, Snackbar.LENGTH_LONG).show();
                             Log.d(TAG, t.toString());
                         }
                     });

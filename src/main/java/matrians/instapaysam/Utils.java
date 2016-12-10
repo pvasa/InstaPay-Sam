@@ -18,6 +18,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.nio.ByteBuffer;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
 /**
@@ -112,12 +113,12 @@ public class Utils {
         return outBitmap;
     }
 
-    public static ProgressDialog showProgress(Context context, String message) {
+    public static ProgressDialog showProgress(Context context, int stringResId) {
         ProgressDialog dialog = new ProgressDialog(context);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
-        dialog.setMessage(message);
+        dialog.setMessage(context.getString(stringResId));
         dialog.show();
         return dialog;
     }
@@ -127,12 +128,13 @@ public class Utils {
      * @param fields - Fields to be checked if empty
      * @return - If found return that field, else return null
      */
-    static TextInputEditText checkEmptyFields(TextInputEditText... fields) {
+    static HashSet<TextInputEditText> checkEmptyFields(TextInputEditText... fields) {
+        HashSet<TextInputEditText> emptyEditTexts = new HashSet<>();
         for (TextInputEditText editText : fields) {
             if (editText.getText().toString().length() == 0)
-                return editText;
+                emptyEditTexts.add(editText);
         }
-        return null;
+        return emptyEditTexts;
     }
 
     static boolean validateEmail (String email) {

@@ -38,7 +38,6 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -65,8 +64,8 @@ import java.util.concurrent.TimeUnit;
 import matrians.instapaysam.R;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
-import matrians.instapaysam.recyclerview.RVProductsAdapter;
 import matrians.instapaysam.pojo.Product;
+import matrians.instapaysam.recyclerview.RVProductsAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -267,7 +266,7 @@ public class CameraFrag extends Fragment implements
                         if (barCodes.size() <= 0) {
                             View view = getView();
                             if (view != null)
-                                Snackbar.make(view, R.string.snackBarcodeErr,
+                                Snackbar.make(view, R.string.errBarcodeErr,
                                         Snackbar.LENGTH_LONG).show();
                             return;
                         }
@@ -278,12 +277,10 @@ public class CameraFrag extends Fragment implements
 
                             String barcodeValue = barCodes.valueAt(0).rawValue;
 
-                            showToast(barcodeValue);
-
                             String pName;
                             if (!"".equals(pName = productsAdapter.isProductPresent(barcodeValue))) {
                                 Snackbar.make(view,
-                                        pName + getString(R.string.snackProductDuplicate),
+                                        pName + getString(R.string.errProductDuplicate),
                                         Snackbar.LENGTH_LONG).show();
                                 continue;
                             }
@@ -295,7 +292,7 @@ public class CameraFrag extends Fragment implements
                                     if (200 == response.code()) {
                                         productsAdapter.addProduct(response.body());
                                         Snackbar.make(view, response.body().name +
-                                                getString(R.string.snackProductAdded),
+                                                getString(R.string.msgProductAdded),
                                                 Snackbar.LENGTH_LONG).show();
                                     } else Snackbar.make(view,
                                             response.body().err, Snackbar.LENGTH_LONG).show();
@@ -303,7 +300,7 @@ public class CameraFrag extends Fragment implements
                                 @Override
                                 public void onFailure(Call<Product> call, Throwable t) {
                                     Snackbar.make(view,
-                                            R.string.snackNetworkError, Snackbar.LENGTH_LONG).show();
+                                            R.string.errNetworkError, Snackbar.LENGTH_LONG).show();
                                     Log.d(TAG, t.toString());
                                 }
                             });
@@ -417,22 +414,6 @@ public class CameraFrag extends Fragment implements
     };
 
     /**
-     * Shows a {@link Toast} on the UI thread.
-     * @param text The message to show
-     */
-    private void showToast(final String text) {
-        final Activity activity = getActivity();
-        if (activity != null) {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
-
-    /**
      * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
      * is at least as large as the respective texture view size, and that is at most as large as the
      * respective max size, and whose aspect ratio matches with the specified value. If such size
@@ -512,7 +493,7 @@ public class CameraFrag extends Fragment implements
                 .build();
         if (!detector.isOperational()) {
             new AlertDialog.Builder(getActivity())
-                    .setMessage(getString(R.string.snackBarcodeDErr))
+                    .setMessage(getString(R.string.errBarcodeDErr))
                     .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -840,7 +821,8 @@ public class CameraFrag extends Fragment implements
                         @Override
                         public void onConfigureFailed(
                                 @NonNull SCameraCaptureSession cameraCaptureSession) {
-                            showToast("Failed");
+                            Snackbar.make(getActivity().findViewById(R.id.rootView),
+                                    R.string.errCameraFailure, Snackbar.LENGTH_SHORT).show();
                         }
                     }, null
             );

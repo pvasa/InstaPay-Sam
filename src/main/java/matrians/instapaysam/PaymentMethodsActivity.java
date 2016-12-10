@@ -96,7 +96,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             return;
         }
 
-        waitDialog = Utils.showProgress(this, getString(R.string.dialogFetchingCards));
+        waitDialog = Utils.showProgress(this, R.string.dialogFetchingCards);
         Call<List<EncryptedMCard>> call = Server.connect().getCards(
                         PreferenceManager.getDefaultSharedPreferences(this)
                                 .getString(getString(R.string.prefUserId), null));
@@ -113,7 +113,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     }
                 } else if (response.code() == 204) {
                     Snackbar.make(findViewById(R.id.rootView),
-                            R.string.snackNoPaymentMethods,
+                            R.string.errNoPaymentMethods,
                             Snackbar.LENGTH_LONG).show();
                 } else {
                     Snackbar.make(findViewById(R.id.rootView),

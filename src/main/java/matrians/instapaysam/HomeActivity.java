@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,7 +14,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -109,12 +109,14 @@ public class HomeActivity extends AppCompatActivity {
                     finish();
                 }
                 if (resultCode == 2) {
-                    Toast.makeText(this, R.string.toastAccountCreated, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.rootView),
+                            R.string.msgAccountCreated, Snackbar.LENGTH_SHORT).show();
                 }
                 break;
             case CODE_REGISTER:
                 if (resultCode == 1) {
-                    Toast.makeText(this, R.string.toastAccountCreated, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.rootView),
+                            R.string.msgAccountCreated, Snackbar.LENGTH_SHORT).show();
                 }
                 else if (resultCode == 2) {
                     startActivity(new Intent(this, VendorsActivity.class));
@@ -131,7 +133,8 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
         backPressedOnce = true;
-        Toast.makeText(this, R.string.tostBackPressed, Toast.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.rootView),
+                R.string.msgBackPressed, Snackbar.LENGTH_SHORT).show();
         new ScheduledThreadPoolExecutor(1).schedule(new Runnable() {
             @Override
             public void run() {

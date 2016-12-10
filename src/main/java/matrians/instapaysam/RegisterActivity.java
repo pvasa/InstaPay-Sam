@@ -16,7 +16,8 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import java.util.HashSet;
 
 import matrians.instapaysam.pojo.User;
 import retrofit2.Call;
@@ -72,8 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -95,8 +96,8 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -118,14 +119,14 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         } else if (!Patterns.EMAIL_ADDRESS.matcher(
                                 editText.getText().toString()).matches()) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errInvalidEmail), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errInvalidEmail, Snackbar.LENGTH_SHORT).show();
                             editText.setTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_dark));
                         }
@@ -147,8 +148,8 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -170,13 +171,13 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         } else if (!Utils.validatePassword(password.getText().toString())) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errInvalidPassword), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errInvalidPassword, Snackbar.LENGTH_SHORT).show();
                             editText.setTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_dark));
                         }
@@ -198,14 +199,14 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         } else if (password != null && !password.getText().toString().
                                 equals(editText.getText().toString())) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errPasswordsMismatch), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errPasswordsMismatch, Snackbar.LENGTH_SHORT).show();
                             password.setTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_dark));
                             editText.setTextColor(ContextCompat.getColor(
@@ -229,8 +230,8 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -252,8 +253,8 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -275,14 +276,14 @@ public class RegisterActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errEmptyField), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         } else if (!Patterns.PHONE.matcher(
                                 editText.getText().toString()).matches()) {
-                            Toast.makeText(v.getContext(), getResources().getString(
-                                    R.string.errInvalidPhone), Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.rootView),
+                                    R.string.errInvalidPhone, Snackbar.LENGTH_SHORT).show();
                             editText.setTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_dark));
                         }
@@ -303,42 +304,43 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onClick(final View v) {
 
-                    dialog = Utils.showProgress(v.getContext(), getString(R.string.processRegistering));
+                    dialog = Utils.showProgress(v.getContext(), R.string.dialogRegistering);
 
                     boolean valid = true;
 
-                    TextInputEditText emptyField = Utils.checkEmptyFields(
+                    HashSet<TextInputEditText> emptyFields = Utils.checkEmptyFields(
                             firstName, lastName, email, userName, password,
                             cPassword, address, postalCode, phone);
-                    if (null != emptyField) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errFieldEmpty, Toast.LENGTH_SHORT).show();
-                        emptyField.requestFocus();
-                        emptyField.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), android.R.color.holo_red_dark));
+                    if (!emptyFields.isEmpty()) {
                         valid = false;
+                        Snackbar.make(findViewById(R.id.rootView),
+                                R.string.errEmptyField, Snackbar.LENGTH_SHORT).show();
+                        for (TextInputEditText editText : emptyFields) {
+                            editText.requestFocus();
+                            editText.setHintTextColor(ContextCompat.getColor(
+                                    v.getContext(), android.R.color.holo_red_dark));
+                        }
                     }
 
                     if (!Utils.validateEmail(email.getText().toString())) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errInvalidEmail, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.rootView),
+                                R.string.errInvalidEmail, Snackbar.LENGTH_SHORT).show();
                         email.requestFocus();
                         email.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
                         valid = false;
                     }
                     if (!Utils.validatePassword(password.getText().toString())) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errInvalidPassword, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.rootView),
+                                R.string.errInvalidPassword, Snackbar.LENGTH_SHORT).show();
                         password.requestFocus();
                         password.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
                         valid = false;
                     }
                     if (!password.getText().toString().equals(cPassword.getText().toString())) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errPasswordsMismatch,
-                                Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.rootView),
+                                R.string.errPasswordsMismatch, Snackbar.LENGTH_SHORT).show();
                         password.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
                         cPassword.setTextColor(ContextCompat.getColor(
@@ -346,9 +348,8 @@ public class RegisterActivity extends AppCompatActivity {
                         valid = false;
                     }
                     if (!Utils.validatePhone(phone.getText().toString())) {
-                        Toast.makeText(v.getContext(),
-                                R.string.errInvalidPhone,
-                                Toast.LENGTH_SHORT).show();
+                        Snackbar.make(findViewById(R.id.rootView),
+                                R.string.errInvalidPhone, Snackbar.LENGTH_SHORT).show();
                         phone.setTextColor(ContextCompat.getColor(
                                 v.getContext(), android.R.color.holo_red_dark));
                         valid = false;
@@ -356,7 +357,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                     User user = new User(false);
                     if (!valid) {
-                        Toast.makeText(v.getContext(), R.string.errRedFields, Toast.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.rootView),
+                                R.string.errRedFields, Snackbar.LENGTH_SHORT).show();
                         return;
                     } else {
                         user.firstName = firstName.getText().toString();
