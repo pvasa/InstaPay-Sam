@@ -52,8 +52,6 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if ((adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null)
-            ((RVProductsAdapter)adapter).notifyDataSetChanged();
     }
 
     void init() {
@@ -119,7 +117,10 @@ public class ScanActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
                 savedInstanceState == null) init();
 
-        if (adapter != null)
+        if (savedInstanceState != null) {
+            adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter));
+        }
+        if (adapter != null) {
             ((RVProductsAdapter)adapter).registerAdapterDataObserver(
                     new RecyclerView.AdapterDataObserver() {
                         @Override
@@ -132,6 +133,8 @@ public class ScanActivity extends AppCompatActivity {
                                     .setText(String.valueOf(totalAmount));
                         }
                     });
+            ((RVProductsAdapter) adapter).notifyDataSetChanged();
+        }
     }
 
     @Override
