@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -51,8 +50,16 @@ public class VendorsActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.keyAdapter), adapter);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if ((adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null) {
+            ((RVVendorsAdapter)adapter).notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -68,11 +75,7 @@ public class VendorsActivity extends AppCompatActivity {
             ((CollapsingToolbarLayout) view).setTitle(getString(R.string.titleVendors));
         }
 
-        if (savedInstanceState != null &&
-                (adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null) {
-            ((RVVendorsAdapter)adapter).notifyDataSetChanged();
-            return;
-        }
+        if (savedInstanceState != null) return;
 
         dialog = Utils.showProgress(this, R.string.dialogLoadingVendors);
 
@@ -127,13 +130,9 @@ public class VendorsActivity extends AppCompatActivity {
                     getFragmentManager().beginTransaction().replace(
                             R.id.content, fragment).commitAllowingStateLoss();
                 } else if (204 == response.code()) {
-                    Snackbar.make(findViewById(R.id.rootView),
-                            R.string.msgNoVendors,
-                            Snackbar.LENGTH_LONG).show();
+                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoVendors);
                 } else {
-                    Snackbar.make(findViewById(R.id.rootView),
-                            R.string.errNetworkError,
-                            Snackbar.LENGTH_LONG).show();
+                    Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);
                 }
             }
             @Override
@@ -184,8 +183,7 @@ public class VendorsActivity extends AppCompatActivity {
             return;
         }
         backPressedOnce = true;
-        Snackbar.make(findViewById(R.id.rootView),
-                R.string.msgBackPressed, Snackbar.LENGTH_SHORT).show();
+        Utils.snackUp(findViewById(R.id.rootView), R.string.msgBackPressed);
         new ScheduledThreadPoolExecutor(1).schedule(new Runnable() {
             @Override
             public void run() {
@@ -248,30 +246,31 @@ public class VendorsActivity extends AppCompatActivity {
 
             MCard mCard = new MCard(
                     this, cardName, cardNumber, expMonth, expYear, cvv, card.getBrand());
-
-            Call<JSONObject> call = Server.connect().addCard(
-                    PreferenceManager.getDefaultSharedPreferences(this)
-                            .getString(getString(R.string.prefUserId), null),
-                    mCard.encrypt(this));
-            call.enqueue(new Callback<JSONObject>() {
+            mCard.encrypt(this, new MCard.Callback() {
                 @Override
-                public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                    Log.d(TAG, response.body().toString());
-                    dialog.dismiss();
-                    if (200 == response.code()) {
-                        Snackbar.make(findViewById(R.id.rootView),
-                                R.string.msgCardAddSuccess, Snackbar.LENGTH_SHORT).show();
-                    } else {
-                        Snackbar.make(findViewById(R.id.rootView),
-                                R.string.errErrAddCard, Snackbar.LENGTH_SHORT).show();
-                    }
-                }
-                @Override
-                public void onFailure(Call<JSONObject> call, Throwable t) {
-                    dialog.dismiss();
-                    Snackbar.make(findViewById(R.id.rootView),
-                            R.string.errErrAddCard, Snackbar.LENGTH_SHORT).show();
-                    Log.d(TAG, t.toString());
+                public void encryptedOrNull(EncryptedMCard eMCard) {
+                    Call<JSONObject> call = Server.connect().addCard(
+                            PreferenceManager.getDefaultSharedPreferences(VendorsActivity.this)
+                                    .getString(getString(R.string.prefUserId), null),
+                            eMCard);
+                    call.enqueue(new Callback<JSONObject>() {
+                        @Override
+                        public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                            Log.d(TAG, response.body().toString());
+                            dialog.dismiss();
+                            if (200 == response.code()) {
+                                Utils.snackUp(findViewById(R.id.rootView), R.string.msgCardAddSuccess);
+                            } else {
+                                Utils.snackUp(findViewById(R.id.rootView), R.string.errErrAddCard);
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<JSONObject> call, Throwable t) {
+                            dialog.dismiss();
+                            Utils.snackUp(findViewById(R.id.rootView), R.string.errErrAddCard);
+                            Log.d(TAG, t.toString());
+                        }
+                    });
                 }
             });
         }

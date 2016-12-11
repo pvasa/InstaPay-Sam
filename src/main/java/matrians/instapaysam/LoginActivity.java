@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -16,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 import matrians.instapaysam.pojo.User;
@@ -75,8 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Snackbar.make(findViewById(R.id.rootView),
-                                    R.string.errEmptyField, Snackbar.LENGTH_LONG).show();
+                            Utils.snackUp(findViewById(R.id.rootView), R.string.errEmptyField);
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -97,8 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                     TextInputEditText editText = (TextInputEditText) v;
                     if (!hasFocus) {
                         if (editText.getText().length() == 0) {
-                            Snackbar.make(findViewById(R.id.rootView),
-                                    R.string.errEmptyField, Snackbar.LENGTH_LONG).show();
+                            Utils.snackUp(findViewById(R.id.rootView), R.string.errEmptyField);
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
                         }
@@ -118,19 +116,10 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onClick(final View v) {
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog = Utils.showProgress(v.getContext(),
-                                    R.string.dialogVerifyingCredentials);
-                        }
-                    });
-
                     User user = new User(true);
                     HashSet<TextInputEditText> emptyEditTexts = Utils.checkEmptyFields(loginId, password);
                     if ( !emptyEditTexts.isEmpty() ) {
-                        Snackbar.make(findViewById(R.id.rootView),
-                                R.string.errEmptyField, Snackbar.LENGTH_LONG).show();
+                        Utils.snackUp(findViewById(R.id.rootView), R.string.errEmptyField);
                         for (TextInputEditText editText : emptyEditTexts) {
                             editText.setHintTextColor(ContextCompat.getColor(
                                     v.getContext(), android.R.color.holo_red_light));
@@ -142,6 +131,8 @@ public class LoginActivity extends AppCompatActivity {
                         user.password = password.getText().toString();
                     }
 
+                    dialog = Utils.showProgress(LoginActivity.this,
+                            R.string.dialogVerifyingCredentials);
                     Call<User> call = Server.connect().loginUser(user);
                     call.enqueue(new Callback<User>() {
                         @Override
@@ -156,15 +147,19 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.apply();
                                 setResult(1);
                                 finish();
-                            } else Snackbar.make(findViewById(R.id.rootView),
-                                    response.body().err, Snackbar.LENGTH_LONG).show();
+                            } else {
+                                try {
+                                    Utils.snackUp(findViewById(R.id.rootView),
+                                            response.errorBody().string(), R.string.keyError);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
                             dialog.dismiss();
-                            Snackbar.make(findViewById(R.id.rootView),
-                                    R.string.errNetworkError, Snackbar.LENGTH_LONG).show();
+                            Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);
                             Log.d(TAG, t.toString());
                         }
                     });

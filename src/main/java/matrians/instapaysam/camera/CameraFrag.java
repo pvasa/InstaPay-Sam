@@ -27,7 +27,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseArray;
@@ -37,7 +36,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -53,6 +51,7 @@ import com.samsung.android.sdk.camera.SCaptureRequest;
 import com.samsung.android.sdk.camera.SCaptureResult;
 import com.samsung.android.sdk.camera.STotalCaptureResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -237,12 +236,6 @@ public class CameraFrag extends Fragment implements
 
     private String VID;
 
-    private TextView totalAmount;
-
-    private void updateTotalAmount(float totalAmount) {
-        this.totalAmount.setText(String.valueOf(totalAmount));
-    }
-
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -264,24 +257,19 @@ public class CameraFrag extends Fragment implements
                         final SparseArray<Barcode> barCodes = detector.detect(frame);
 
                         if (barCodes.size() <= 0) {
-                            View view = getView();
-                            if (view != null)
-                                Snackbar.make(view, R.string.errBarcodeErr,
-                                        Snackbar.LENGTH_LONG).show();
+                            Utils.snackUp(getActivity().findViewById(R.id.rootView),
+                                    R.string.errBarcodeErr);
                             return;
                         }
 
-                        final View view = getView();
-                        assert view != null;
                         for (int i = 0; i < barCodes.size(); i++) {
 
                             String barcodeValue = barCodes.valueAt(0).rawValue;
 
                             String pName;
                             if (!"".equals(pName = productsAdapter.isProductPresent(barcodeValue))) {
-                                Snackbar.make(view,
-                                        pName + getString(R.string.errProductDuplicate),
-                                        Snackbar.LENGTH_LONG).show();
+                                Utils.snackUp(getActivity().findViewById(R.id.rootView),
+                                        pName + getActivity().getString(R.string.errProductDuplicate));
                                 continue;
                             }
 
@@ -291,15 +279,19 @@ public class CameraFrag extends Fragment implements
                                 public void onResponse(Call<Product> call, Response<Product> response) {
                                     if (200 == response.code()) {
                                         productsAdapter.addProduct(response.body());
-                                        Snackbar.make(view, response.body().name +
-                                                getString(R.string.msgProductAdded),
-                                                Snackbar.LENGTH_LONG).show();
-                                    } else Snackbar.make(view,
-                                            response.body().err, Snackbar.LENGTH_LONG).show();
+                                        Utils.snackUp(getActivity().findViewById(R.id.rootView),
+                                                response.body().name +
+                                                        getActivity().getString(R.string.msgProductAdded));
+                                    } else try {
+                                        Utils.snackUp(getActivity().findViewById(R.id.rootView),
+                                                response.errorBody().string(), R.string.keyError);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                                 @Override
                                 public void onFailure(Call<Product> call, Throwable t) {
-                                    Snackbar.make(view,
+                                    Snackbar.make(getActivity().findViewById(R.id.rootView),
                                             R.string.errNetworkError, Snackbar.LENGTH_LONG).show();
                                     Log.d(TAG, t.toString());
                                 }
@@ -471,19 +463,6 @@ public class CameraFrag extends Fragment implements
                              Bundle savedInstanceState) {
         VID = getArguments().getString(getString(R.string.keyVendorID));
         productsAdapter = getArguments().getParcelable(getString(R.string.keyAdapter));
-        if (productsAdapter != null)
-            productsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                @Override
-                public void onChanged() {
-                    super.onChanged();
-                    float totalAmount = 0;
-                    for (Product product : productsAdapter.getProductList()) {
-                        totalAmount += (product.price * product.quantity);
-                    }
-                    updateTotalAmount(totalAmount);
-                }
-            });
-
         return inflater.inflate(R.layout.frag_camera, container, false);
     }
 
@@ -513,7 +492,6 @@ public class CameraFrag extends Fragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-        totalAmount = (TextView) getActivity().findViewById(R.id.tvTotalAmount);
 
         getActivity().findViewById(R.id.fabCamera).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -821,8 +799,8 @@ public class CameraFrag extends Fragment implements
                         @Override
                         public void onConfigureFailed(
                                 @NonNull SCameraCaptureSession cameraCaptureSession) {
-                            Snackbar.make(getActivity().findViewById(R.id.rootView),
-                                    R.string.errCameraFailure, Snackbar.LENGTH_SHORT).show();
+                            Utils.snackUp(getActivity().findViewById(R.id.rootView),
+                                    R.string.errCameraFailure);
                         }
                     }, null
             );

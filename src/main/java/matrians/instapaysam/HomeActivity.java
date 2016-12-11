@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -109,14 +108,12 @@ public class HomeActivity extends AppCompatActivity {
                     finish();
                 }
                 if (resultCode == 2) {
-                    Snackbar.make(findViewById(R.id.rootView),
-                            R.string.msgAccountCreated, Snackbar.LENGTH_SHORT).show();
+                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgAccountCreated);
                 }
                 break;
             case CODE_REGISTER:
                 if (resultCode == 1) {
-                    Snackbar.make(findViewById(R.id.rootView),
-                            R.string.msgAccountCreated, Snackbar.LENGTH_SHORT).show();
+                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgAccountCreated);
                 }
                 else if (resultCode == 2) {
                     startActivity(new Intent(this, VendorsActivity.class));
@@ -133,8 +130,7 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
         backPressedOnce = true;
-        Snackbar.make(findViewById(R.id.rootView),
-                R.string.msgBackPressed, Snackbar.LENGTH_SHORT).show();
+        Utils.snackUp(findViewById(R.id.rootView), R.string.msgBackPressed);
         new ScheduledThreadPoolExecutor(1).schedule(new Runnable() {
             @Override
             public void run() {

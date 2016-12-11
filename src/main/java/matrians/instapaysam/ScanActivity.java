@@ -8,11 +8,11 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import matrians.instapaysam.camera.CameraFrag;
+import matrians.instapaysam.pojo.Product;
 import matrians.instapaysam.recyclerview.RVFrag;
 import matrians.instapaysam.recyclerview.RVProductsAdapter;
-import matrians.instapaysam.pojo.Product;
 
 /**
  * Team Matrians
@@ -42,6 +42,19 @@ public class ScanActivity extends AppCompatActivity {
             R.drawable.ic_flash_auto_black_24dp
     };
     private Parcelable adapter;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(getString(R.string.keyAdapter), adapter);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if ((adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null)
+            ((RVProductsAdapter)adapter).notifyDataSetChanged();
+    }
 
     void init() {
         adapter = new RVProductsAdapter(new ArrayList<Product>());
@@ -86,8 +99,7 @@ public class ScanActivity extends AppCompatActivity {
                 float totalAmount = Float.parseFloat(
                         ((TextView)findViewById(R.id.tvTotalAmount)).getText().toString());
                 if (0.0 == totalAmount) {
-                    Snackbar.make((View) view.getParent(),
-                            R.string.errNoProductsInCart, Snackbar.LENGTH_LONG).show();
+                    Utils.snackUp(findViewById(R.id.rootView), R.string.errNoProductsInCart);
                     return;
                 }
                 Intent intent = new Intent(ScanActivity.this, PaymentMethodsActivity.class);
@@ -100,13 +112,26 @@ public class ScanActivity extends AppCompatActivity {
             }
         });
 
-        if (savedInstanceState == null) {
-            ensurePermissions(
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.INTERNET,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        } else init();
+        if (ensurePermissions(
+                Manifest.permission.CAMERA,
+                Manifest.permission.INTERNET,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
+                savedInstanceState == null) init();
+
+        if (adapter != null)
+            ((RVProductsAdapter)adapter).registerAdapterDataObserver(
+                    new RecyclerView.AdapterDataObserver() {
+                        @Override
+                        public void onChanged() {
+                            float totalAmount = 0f;
+                            for (Product product : ((RVProductsAdapter)adapter).getProductList()) {
+                                totalAmount += (product.price * product.quantity);
+                            }
+                            ((TextView)findViewById(R.id.tvTotalAmount))
+                                    .setText(String.valueOf(totalAmount));
+                        }
+                    });
     }
 
     @Override
@@ -125,7 +150,7 @@ public class ScanActivity extends AppCompatActivity {
      * Check for permissions and showDialog if not granted.
      * @param permissions - permissions to be checked
      */
-    private void ensurePermissions(String... permissions) {
+    private boolean ensurePermissions(String... permissions) {
         HashSet<String> deniedPermissionList = new HashSet<>();
 
         for (String permission : permissions) {
@@ -137,7 +162,9 @@ public class ScanActivity extends AppCompatActivity {
         if (!deniedPermissionList.isEmpty()) {
             ActivityCompat.requestPermissions(
                     this, deniedPermissionList.toArray(new String[0]), 0);
-        } else init();
+            return false;
+        }
+        return true;
     }
 
     /**

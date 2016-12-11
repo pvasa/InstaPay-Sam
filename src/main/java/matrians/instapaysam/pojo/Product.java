@@ -12,7 +12,6 @@ public class Product implements Parcelable {
     public float price;
     public int maxQuantity;
     public int quantity;
-    public String err;
 
     @Override
     public int describeContents() {
@@ -26,7 +25,6 @@ public class Product implements Parcelable {
         dest.writeFloat(this.price);
         dest.writeInt(this.maxQuantity);
         dest.writeInt(this.quantity);
-        dest.writeString(this.err);
     }
 
     private Product(Parcel in) {
@@ -35,7 +33,6 @@ public class Product implements Parcelable {
         this.price = in.readFloat();
         this.maxQuantity = in.readInt();
         this.quantity = in.readInt();
-        this.err = in.readString();
     }
 
     public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {

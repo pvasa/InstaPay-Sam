@@ -36,7 +36,7 @@
     <string name="dialogDeletePaymentMethod">Deleting payment method…</string>
     <string name="dialogNoSamsung">This app works only on Samsung devices.</string>
     <string name="dialogVerifyingCredentials">Verifying credentials…</string>
-    <string name="dialogRegistering">Creating user. Just a moment.</string>
+    <string name="dialogRegistering">Creating user…</string>
     <string name="dialogNoCards">You have not saved any cards yet.
         Please add one to make shopping experience better and faster.</string>
 
@@ -92,6 +92,7 @@
     <string name="msgNoVendors">No vendors registered yet. Come back later.</string>
     <string name="msgPaymentMethodDeleteSuccess">Payment method deleted successfully.</string>
     <string name="msgBackPressed">Press again to exit.</string>
+    <string name="msgPaymentSuccess">Payment successful.</string>
 
     <string name="prefLoginStatus">LoginStatus</string>
     <string name="prefEmail">Email</string>
@@ -116,7 +117,8 @@
     <string name="txtStars">****-****-****-</string>
     <string name="txtPayable">Payable: $</string>
     <string name="txtHST">13% HST: $</string>
-    <string name="txtPaymentSuccess">Payment successful.</string>
     <string name="txtHSTReceipt">13% HST:</string>
+    <string name="keyError">error</string>
+    <string name="keyTvTotalAmount">keyTvTotalAmount</string>
 
 </resources>

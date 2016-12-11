@@ -38,10 +38,24 @@ public class MCard implements Parcelable {
         this.brand = brand;
     }
 
-    public EncryptedMCard encrypt (Context context) {
+    public interface Callback {
+        void encryptedOrNull(EncryptedMCard eMCard);
+    }
+
+    public void encrypt(final Context context, final Callback callback) {
         Secure secure = Secure.getDefault(userEmail, _id, new byte[16]);
-        return new EncryptedMCard(context)
-                .setECard(secure != null ? secure.encryptOrNull(new Gson().toJson(this)) : null);
+        if (secure != null) {
+            secure.encryptAsync(new Gson().toJson(this), new Secure.Callback() {
+                @Override
+                public void onSuccess(String result) {
+                    callback.encryptedOrNull(new EncryptedMCard(context).setECard(result));
+                }
+                @Override
+                public void onError(Exception exception) {
+                    callback.encryptedOrNull(null);
+                }
+            });
+        } else callback.encryptedOrNull(null);
     }
 
     @Override

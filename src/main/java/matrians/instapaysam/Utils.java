@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v8.renderscript.Allocation;
@@ -13,9 +14,13 @@ import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.Script;
 import android.support.v8.renderscript.Type;
 import android.util.Patterns;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
 import java.util.HashSet;
@@ -149,5 +154,22 @@ public class Utils {
 
     static boolean validatePhone (String phone) {
         return Patterns.PHONE.matcher(phone).matches();
+    }
+
+    public static void snackUp(View view, int stringRs) {
+        snackUp(view, view.getContext().getString(stringRs));
+    }
+    public static void snackUp(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
+    }
+    public static void snackUp(View view, String jsonString, int jsonKeyResource) {
+        String message = jsonString;
+        try {
+            message = new JSONObject(jsonString).
+                    getString(view.getContext().getString(jsonKeyResource));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG).show();
     }
 }

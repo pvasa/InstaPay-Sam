@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +19,7 @@ import com.cooltechworks.creditcarddesign.CardEditActivity;
 import com.cooltechworks.creditcarddesign.CreditCardUtils;
 import com.stripe.android.model.Card;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +48,17 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putParcelable(getString(R.string.keyAdapter), paymentMethodsAdapter);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if ((paymentMethodsAdapter =
+                savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null) {
+             paymentMethodsAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -75,6 +85,10 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         if (toolbarLayout != null) {
             toolbarLayout.setTitle(getString(R.string.titlePaymentMethods));
             if (editMode = getIntent().getBooleanExtra(getString(R.string.keyEditMode), false)) {
+                ActionBar actionBar = getSupportActionBar();
+                if (actionBar != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
                 toolbarLayout.findViewById(R.id.toolbarBackground).setVisibility(View.VISIBLE);
             } else {
                 toolbarLayout.findViewById(R.id.toolbarAmounts).setVisibility(View.VISIBLE);
@@ -89,12 +103,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             }
         }
 
-        Parcelable adapter;
-        if (savedInstanceState != null &&
-                (adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null) {
-            paymentMethodsAdapter = (RVPaymentMethodsAdapter) adapter;
-            return;
-        }
+        if (savedInstanceState != null) return;
 
         waitDialog = Utils.showProgress(this, R.string.dialogFetchingCards);
         Call<List<EncryptedMCard>> call = Server.connect().getCards(
@@ -112,13 +121,12 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                         mCards.add(eMCard.decrypt(PaymentMethodsActivity.this));
                     }
                 } else if (response.code() == 204) {
-                    Snackbar.make(findViewById(R.id.rootView),
-                            R.string.errNoPaymentMethods,
-                            Snackbar.LENGTH_LONG).show();
-                } else {
-                    Snackbar.make(findViewById(R.id.rootView),
-                            R.string.errServerError,
-                            Snackbar.LENGTH_LONG).show();
+                    Utils.snackUp(findViewById(R.id.rootView), R.string.errNoPaymentMethods);
+                } else try {
+                    Utils.snackUp(findViewById(R.id.rootView),
+                            response.errorBody().string(), R.string.keyError);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 waitDialog.dismiss();
                 Parcelable adapter = new RVPaymentMethodsAdapter(

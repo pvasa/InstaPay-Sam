@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,9 +21,9 @@ import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 import com.stripe.exception.AuthenticationException;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,67 +112,6 @@ public class RVPaymentMethodsAdapter extends
                 });
             }
         }
-    }
-
-    /**
-     * Generate stripe token and send to server to process payment
-     * @param context - Parent activity context
-     * @param card - Card used for payment
-     * @param _id - ID of the user logged in
-     * @param userEmail - Email of the user logged in
-     * @throws AuthenticationException
-     */
-    private static void generateTokenAndPay (
-            final Context context, Card card, final String _id, final String userEmail)
-            throws AuthenticationException {
-
-        new Stripe(context.getString(R.string.stripeTestPublishableKey)).createToken(
-                card, new TokenCallback() {
-                    @Override
-                    public void onError(Exception error) {
-                        Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                                R.string.errPaymentFailed, Snackbar.LENGTH_SHORT).show();
-                        Log.d(TAG, error.getLocalizedMessage());
-                    }
-                    @Override
-                    public void onSuccess(Token token) {
-                        Payment payment =
-                                new Payment(_id, userEmail,
-                                        token.getId(), amount);
-                        Call<Payment> call = Server.connect().pay(payment);
-                        call.enqueue(new Callback<Payment>() {
-                            @Override
-                            public void onResponse(Call<Payment> call, Response<Payment> response) {
-                                waitDialog.dismiss();
-                                if (200 == response.code()) {
-
-                                    Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                                            R.string.txtPaymentSuccess, Snackbar.LENGTH_SHORT).show();
-
-                                    Intent intent = new Intent(context, ReceiptActivity.class);
-                                    intent.putExtra(context.getString(
-                                            R.string.keyProducts), productsAdapter);
-                                    intent.putExtra(
-                                            context.getString(R.string.keyVendorName), vendorName);
-                                    context.startActivity(intent);
-                                    paymentMethodsActivity.setResult(1);
-                                    paymentMethodsActivity.finish();
-
-                                } else {
-                                    Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                                            R.string.errPaymentFailed, Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-                            @Override
-                            public void onFailure(Call<Payment> call, Throwable t) {
-                                waitDialog.dismiss();
-                                Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                                        R.string.errPaymentFailed, Snackbar.LENGTH_SHORT).show();
-                                Log.d(TAG, t.toString());
-                            }
-                        });
-                    }
-                });
     }
 
     /**
@@ -273,36 +211,38 @@ public class RVPaymentMethodsAdapter extends
                 paymentMethodsActivity,
                 R.string.dialogSavingCard);
 
-        Call<JSONObject> call = Server.connect().addCard(
-                PreferenceManager.getDefaultSharedPreferences(paymentMethodsActivity)
-                        .getString(paymentMethodsActivity.getString(R.string.prefUserId), null),
-                mCard.encrypt(paymentMethodsActivity));
-        call.enqueue(new Callback<JSONObject>() {
+        mCard.encrypt(paymentMethodsActivity, new MCard.Callback() {
             @Override
-            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                if (waitDialog != null) waitDialog.dismiss();
-                if (200 == response.code()) {
-                    Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                            R.string.msgCardAddSuccess, Snackbar.LENGTH_SHORT).show();
-                    dataSet.add(mCard);
-                    notifyDataSetChanged();
-                } else {
-                    try {
-                        Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                                response.body().getString(
-                                        paymentMethodsActivity.getString(R.string.keyErr)),
-                                Snackbar.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+            public void encryptedOrNull(EncryptedMCard eMCard) {
+                Call<JSONObject> call = Server.connect().addCard(
+                        PreferenceManager.getDefaultSharedPreferences(paymentMethodsActivity)
+                                .getString(paymentMethodsActivity.getString(R.string.prefUserId), null), eMCard);
+                call.enqueue(new Callback<JSONObject>() {
+                    @Override
+                    public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                        if (waitDialog != null) waitDialog.dismiss();
+                        if (200 == response.code()) {
+                            Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                    R.string.msgCardAddSuccess);
+                            dataSet.add(mCard);
+                            notifyDataSetChanged();
+                        } else {
+                            try {
+                                Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                        response.errorBody().string(), R.string.keyError);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                }
-            }
-            @Override
-            public void onFailure(Call<JSONObject> call, Throwable t) {
-                waitDialog.dismiss();
-                Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                        R.string.errDeletingCard, Snackbar.LENGTH_SHORT).show();
-                Log.d(TAG, t.toString());
+                    @Override
+                    public void onFailure(Call<JSONObject> call, Throwable t) {
+                        waitDialog.dismiss();
+                        Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                R.string.errDeletingCard);
+                        Log.d(TAG, t.toString());
+                    }
+                });
             }
         });
     }
@@ -313,40 +253,104 @@ public class RVPaymentMethodsAdapter extends
      */
     private void deletePaymentMethod (final MCard mCard) {
         if (dataSet != null) {
-            EncryptedMCard encryptedMCard = mCard.encrypt(paymentMethodsActivity).markToDelete();
-            Call<JSONObject> call = Server.connect().deleteCard(
-                    PreferenceManager.getDefaultSharedPreferences(paymentMethodsActivity)
-                            .getString(paymentMethodsActivity.getString(R.string.prefUserId), null),
-                    encryptedMCard);
-            call.enqueue(new Callback<JSONObject>() {
+            mCard.encrypt(paymentMethodsActivity, new MCard.Callback() {
                 @Override
-                public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                    waitDialog.dismiss();
-                    if (200 == response.code()) {
-                        Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                                R.string.msgPaymentMethodDeleteSuccess, Snackbar.LENGTH_SHORT).show();
-                        dataSet.remove(mCard);
-                        notifyDataSetChanged();
-                    } else {
-                        try {
-                            Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                                    response.body().getString(
-                                            paymentMethodsActivity.getString(R.string.keyErr)),
-                                    Snackbar.LENGTH_LONG).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                public void encryptedOrNull(EncryptedMCard eMCard) {
+                    Call<JSONObject> call = Server.connect().deleteCard(
+                            PreferenceManager.getDefaultSharedPreferences(paymentMethodsActivity)
+                                    .getString(paymentMethodsActivity.getString(R.string.prefUserId), null),
+                            eMCard.markToDelete());
+                    call.enqueue(new Callback<JSONObject>() {
+                        @Override
+                        public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                            waitDialog.dismiss();
+                            if (200 == response.code()) {
+                                Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                        R.string.msgPaymentMethodDeleteSuccess);
+                                dataSet.remove(mCard);
+                                notifyDataSetChanged();
+                            } else {
+                                try {
+                                    Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                            response.errorBody().string(), R.string.keyError);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-                    }
-                }
-                @Override
-                public void onFailure(Call<JSONObject> call, Throwable t) {
-                    waitDialog.dismiss();
-                    Snackbar.make(paymentMethodsActivity.findViewById(R.id.rootView),
-                            R.string.errDeletingCard, Snackbar.LENGTH_SHORT).show();
-                    Log.d(TAG, t.toString());
+                        @Override
+                        public void onFailure(Call<JSONObject> call, Throwable t) {
+                            waitDialog.dismiss();
+                            Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                    R.string.errNetworkError);
+                            Log.d(TAG, t.toString());
+                        }
+                    });
                 }
             });
+
         }
+    }
+
+    /**
+     * Generate stripe token and send to server to process payment
+     * @param context - Parent activity context
+     * @param card - Card used for payment
+     * @param _id - ID of the user logged in
+     * @param userEmail - Email of the user logged in
+     * @throws AuthenticationException
+     */
+    private static void generateTokenAndPay (
+            final Context context, Card card, final String _id, final String userEmail)
+            throws AuthenticationException {
+
+        new Stripe(context.getString(R.string.stripeTestPublishableKey)).createToken(
+                card, new TokenCallback() {
+                    @Override
+                    public void onError(Exception error) {
+                        Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                R.string.errPaymentFailed);
+                        Log.d(TAG, error.getLocalizedMessage());
+                    }
+                    @Override
+                    public void onSuccess(Token token) {
+                        Payment payment =
+                                new Payment(_id, userEmail,
+                                        token.getId(), amount);
+                        Call<Payment> call = Server.connect().pay(payment);
+                        call.enqueue(new Callback<Payment>() {
+                            @Override
+                            public void onResponse(Call<Payment> call, Response<Payment> response) {
+                                waitDialog.dismiss();
+                                if (200 == response.code()) {
+
+                                    Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                            R.string.msgPaymentSuccess);
+
+                                    Intent intent = new Intent(context, ReceiptActivity.class);
+                                    intent.putExtra(context.getString(
+                                            R.string.keyProducts), productsAdapter);
+                                    intent.putExtra(
+                                            context.getString(R.string.keyVendorName), vendorName);
+                                    context.startActivity(intent);
+                                    paymentMethodsActivity.setResult(1);
+                                    paymentMethodsActivity.finish();
+
+                                } else {
+                                    Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                            R.string.errPaymentFailed);
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<Payment> call, Throwable t) {
+                                waitDialog.dismiss();
+                                Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
+                                        R.string.errPaymentFailed);
+                                Log.d(TAG, t.toString());
+                            }
+                        });
+                    }
+                });
     }
 
     /**

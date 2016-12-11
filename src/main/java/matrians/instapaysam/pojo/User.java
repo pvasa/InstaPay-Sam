@@ -7,7 +7,6 @@ package matrians.instapaysam.pojo;
 public class User {
     private char lor;
     private String _id;
-    public String err;
     public String firstName;
     public String lastName;
     public String email;
@@ -21,7 +20,6 @@ public class User {
 
     public User(boolean login) {
         lor = login ? 'l' : 'r';
-        err = "none";
     }
 
     public String getId() {

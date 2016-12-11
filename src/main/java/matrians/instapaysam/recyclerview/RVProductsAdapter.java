@@ -95,8 +95,7 @@ public class RVProductsAdapter
         holder.close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dataSet.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
+                removeProduct(holder.getAdapterPosition());
             }
         });
     }
@@ -111,6 +110,11 @@ public class RVProductsAdapter
 
     public void addProduct (Product product) {
         dataSet.add(product);
+        notifyDataSetChanged();
+    }
+
+    private void removeProduct(int position) {
+        dataSet.remove(position);
         notifyDataSetChanged();
     }
 
