@@ -106,6 +106,8 @@ public class ScanActivity extends AppCompatActivity {
                 intent.putExtra(getString(R.string.keyProducts), adapter);
                 intent.putExtra(getString(R.string.keyVendorName),
                         getIntent().getStringExtra(getString(R.string.keyVendorName)));
+                intent.putExtra(getString(R.string.keyVendorID),
+                        getIntent().getStringExtra(getString(R.string.keyVendorID)));
                 startActivity(intent);
             }
         });

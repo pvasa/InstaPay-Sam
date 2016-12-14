@@ -1,32 +1,25 @@
 package matrians.instapaysam;
 
-import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Parcelable;
-import android.print.PrintAttributes;
-import android.print.pdf.PrintedPdfDocument;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
-import matrians.instapaysam.recyclerview.RVFrag;
-import matrians.instapaysam.recyclerview.RVProductsAdapter;
-import matrians.instapaysam.recyclerview.RVReceiptAdapter;
+import matrians.instapaysam.pojo.Payment;
 import matrians.instapaysam.pojo.Product;
+import matrians.instapaysam.recyclerview.RVFrag;
+import matrians.instapaysam.recyclerview.RVReceiptAdapter;
 
 /**
  * Team Matrians
@@ -35,8 +28,8 @@ public class ReceiptActivity extends AppCompatActivity {
 
     @SuppressWarnings("unused")
     private String TAG = this.getClass().getName();
+    private Payment payment;
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +37,21 @@ public class ReceiptActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
+        payment = getIntent().getParcelableExtra(getString(R.string.keyPayment));
         String vendorName = getIntent().getStringExtra(getString(R.string.keyVendorName));
 
         View view;
         if ((view = findViewById(R.id.toolbar_layout)) != null) {
-            ((CollapsingToolbarLayout) view).setTitle(getString(R.string.titleReceipt));
+            ((CollapsingToolbarLayout) view).setTitle(
+                    getString(R.string.titleReceipt) + " - " + vendorName);
         }
 
-        List<Product> products = ((RVProductsAdapter) getIntent().getParcelableExtra(
-                getString(R.string.keyProducts))).getProductList();
+        List<Product> products = payment.getProductList();
 
         Parcelable adapter = new RVReceiptAdapter(products);
         Fragment fragment = new RVFrag();
@@ -61,21 +59,6 @@ public class ReceiptActivity extends AppCompatActivity {
         args.putParcelable(getString(R.string.keyAdapter), adapter);
         fragment.setArguments(args);
         getFragmentManager().beginTransaction().replace(R.id.content, fragment).commitAllowingStateLoss();
-
-        findViewById(R.id.btnExit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ReceiptActivity.this.finishAffinity();
-            }
-        });
-
-        findViewById(R.id.btnHome).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ReceiptActivity.this.finishAffinity();
-                startActivity(new Intent(ReceiptActivity.this, VendorsActivity.class));
-            }
-        });
 
         float totalAmount = 0f;
         float HST;
@@ -92,8 +75,14 @@ public class ReceiptActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tvHST)).setText(String.valueOf(HST));
         ((TextView) findViewById(R.id.tvPayable)).setText(String.valueOf(payable));
 
+        findViewById(R.id.fabDownloadReceipt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        PrintAttributes.Builder builder = new PrintAttributes.Builder();
+            }
+        });
+
+        /*PrintAttributes.Builder builder = new PrintAttributes.Builder();
         builder.setColorMode(PrintAttributes.COLOR_MODE_MONOCHROME);
         builder.setMediaSize(PrintAttributes.MediaSize.NA_LETTER);
         builder.setMinMargins(PrintAttributes.Margins.NO_MARGINS);
@@ -142,12 +131,25 @@ public class ReceiptActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             document.close();
-        }
+        }*/
     }
 
     @Override
     public void onBackPressed() {
-        this.finishAffinity();
-        startActivity(new Intent(this, VendorsActivity.class));
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.titleShopMore)
+                .setPositiveButton(R.string.btnHome, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ReceiptActivity.this.finishAffinity();
+                        startActivity(new Intent(ReceiptActivity.this, VendorsActivity.class));
+                    }
+                })
+                .setNegativeButton(R.string.btnExit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ReceiptActivity.this.finishAffinity();
+                    }
+                }).show();
     }
 }

@@ -53,7 +53,7 @@ public class RVPaymentMethodsAdapter extends
     private static ProgressDialog waitDialog;
     private static float amount;
     private static Parcelable productsAdapter;
-    private static String vendorName;
+    private static String vendorName, vendorID, userID, userEmail;
     private static PaymentMethodsActivity paymentMethodsActivity;
 
     /**
@@ -62,13 +62,18 @@ public class RVPaymentMethodsAdapter extends
      */
     public RVPaymentMethodsAdapter(List<MCard> dataSet, boolean editMode,
                                    float payable, Parcelable productsAdapter,
-                                   String vendorName, Context context) {
+                                   String vendorName, String vendorID, Context context) {
         RVPaymentMethodsAdapter.dataSet = dataSet;
         RVPaymentMethodsAdapter.editMode = editMode;
         amount = payable;
         RVPaymentMethodsAdapter.productsAdapter = productsAdapter;
         RVPaymentMethodsAdapter.vendorName = vendorName;
+        RVPaymentMethodsAdapter.vendorID = vendorID;
         paymentMethodsActivity = (PaymentMethodsActivity) context;
+        userID = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(context.getString(R.string.prefUserId), null);
+        userEmail = PreferenceManager.getDefaultSharedPreferences(context)
+                .getString(context.getString(R.string.prefEmail), null);
     }
 
     /**
@@ -93,18 +98,11 @@ public class RVPaymentMethodsAdapter extends
                     public void onClick(View view) {
                         waitDialog = Utils.showProgress(view.getContext(),
                                 R.string.dialogProcessingPayment);
-
-                        String _id = PreferenceManager.getDefaultSharedPreferences(
-                                view.getContext()).getString(
-                                view.getContext().getString(R.string.prefUserId), null);
-                        String userEmail = PreferenceManager.getDefaultSharedPreferences(
-                                view.getContext()).getString(
-                                view.getContext().getString(R.string.prefEmail), null);
                         try {
                             generateTokenAndPay(
                                     view.getContext(),
-                                    new Card(cardNumber, expMonth, expYear, CVC),
-                                    _id, userEmail);
+                                    new Card(cardNumber, expMonth, expYear, CVC)
+                            );
                         } catch (AuthenticationException e) {
                             e.printStackTrace();
                         }
@@ -296,12 +294,9 @@ public class RVPaymentMethodsAdapter extends
      * Generate stripe token and send to server to process payment
      * @param context - Parent activity context
      * @param card - Card used for payment
-     * @param _id - ID of the user logged in
-     * @param userEmail - Email of the user logged in
      * @throws AuthenticationException
      */
-    private static void generateTokenAndPay (
-            final Context context, Card card, final String _id, final String userEmail)
+    private static void generateTokenAndPay(final Context context, Card card)
             throws AuthenticationException {
 
         new Stripe(context.getString(R.string.stripeTestPublishableKey)).createToken(
@@ -314,31 +309,82 @@ public class RVPaymentMethodsAdapter extends
                     }
                     @Override
                     public void onSuccess(Token token) {
-                        Payment payment =
-                                new Payment(_id, userEmail,
-                                        token.getId(), amount);
+
+                        final Payment payment = new Payment(
+                                vendorID, vendorName, userID, userEmail, token.getId(), amount,
+                                ((RVProductsAdapter)productsAdapter).getProductList());
+
                         Call<Payment> call = Server.connect().pay(payment);
                         call.enqueue(new Callback<Payment>() {
                             @Override
                             public void onResponse(Call<Payment> call, Response<Payment> response) {
                                 waitDialog.dismiss();
                                 if (200 == response.code()) {
-
                                     Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
                                             R.string.msgPaymentSuccess);
 
                                     Intent intent = new Intent(context, ReceiptActivity.class);
-                                    intent.putExtra(context.getString(
-                                            R.string.keyProducts), productsAdapter);
+                                    intent.putExtra(
+                                            context.getString(R.string.keyPayment), payment);
                                     intent.putExtra(
                                             context.getString(R.string.keyVendorName), vendorName);
                                     context.startActivity(intent);
+
+                                    /*try {
+                                        ResponseBody body = response.raw().body();
+                                        File invoice = new File(context.getExternalFilesDir(null)
+                                                + File.separator + "invoice.pdf");
+
+                                        InputStream inputStream = null;
+                                        OutputStream outputStream = null;
+
+                                        try {
+                                            byte[] fileReader = new byte[4096];
+
+                                            long fileSize = body.contentLength();
+                                            long fileSizeDownloaded = 0;
+
+                                            inputStream = body.byteStream();
+                                            outputStream = new FileOutputStream(invoice);
+
+                                            while (true) {
+                                                int read = inputStream.read(fileReader);
+
+                                                if (read == -1) {
+                                                    break;
+                                                }
+
+                                                outputStream.write(fileReader, 0, read);
+
+                                                fileSizeDownloaded += read;
+
+                                                Log.d(TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                                            }
+
+                                            outputStream.flush();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        } finally {
+                                            if (inputStream != null) {
+                                                inputStream.close();
+                                            }
+
+                                            if (outputStream != null) {
+                                                outputStream.close();
+                                            }
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }*/
+
                                     paymentMethodsActivity.setResult(1);
                                     paymentMethodsActivity.finish();
 
-                                } else {
+                                } else try {
                                     Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
-                                            R.string.errPaymentFailed);
+                                            response.errorBody().string(), R.string.keyError);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
                             }
                             @Override

@@ -55,7 +55,8 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".ReceiptActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="matrians.instapaysam.VendorsActivity"/>
 
     </application>
 

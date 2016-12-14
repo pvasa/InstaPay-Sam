@@ -41,6 +41,6 @@ public interface InstaPayEndpointInterface {
     @POST("users/{uid}/cards")
     Call<JSONObject> deleteCard(@Path("uid") String _id, @Body EncryptedMCard eMCard);
 
-    @POST("pay")
+    @POST("payments")
     Call<Payment> pay(@Body Payment payment);
 }

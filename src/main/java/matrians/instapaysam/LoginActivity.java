@@ -1,18 +1,21 @@
 package matrians.instapaysam;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import java.io.IOException;
@@ -69,44 +72,32 @@ public class LoginActivity extends AppCompatActivity {
 
         final TextInputEditText loginId = (TextInputEditText) findViewById(R.id.login_id);
         if (loginId != null)
-            loginId.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            loginId.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    TextInputEditText editText = (TextInputEditText) v;
-                    if (!hasFocus) {
-                        if (editText.getText().length() == 0) {
-                            Utils.snackUp(findViewById(R.id.rootView), R.string.errEmptyField);
-                            editText.setHintTextColor(ContextCompat.getColor(
-                                    v.getContext(), android.R.color.holo_red_light));
-                        }
-                    } else {
-                        editText.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), R.color.colorSecondaryText));
-                        editText.setTextColor(ContextCompat.getColor(
-                                v.getContext(), R.color.colorPrimaryText));
-                    }
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (0 == charSequence.length())
+                        loginId.setError(getString(R.string.errEmptyField));
+                    else loginId.setError(null);
                 }
+                @Override
+                public void afterTextChanged(Editable editable) {}
             });
 
         final TextInputEditText password = (TextInputEditText) findViewById(R.id.password);
         if (password != null)
-            password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            password.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    TextInputEditText editText = (TextInputEditText) v;
-                    if (!hasFocus) {
-                        if (editText.getText().length() == 0) {
-                            Utils.snackUp(findViewById(R.id.rootView), R.string.errEmptyField);
-                            editText.setHintTextColor(ContextCompat.getColor(
-                                    v.getContext(), android.R.color.holo_red_light));
-                        }
-                    } else {
-                        editText.setHintTextColor(ContextCompat.getColor(
-                                v.getContext(), R.color.colorSecondaryText));
-                        editText.setTextColor(ContextCompat.getColor(
-                                v.getContext(), R.color.colorPrimaryText));
-                    }
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (0 == charSequence.length())
+                        password.setError(getString(R.string.errEmptyField));
+                    else password.setError(null);
                 }
+                @Override
+                public void afterTextChanged(Editable editable) {}
             });
 
         Button loginButton;
@@ -115,21 +106,22 @@ public class LoginActivity extends AppCompatActivity {
                 @SuppressWarnings("ConstantConditions")
                 @Override
                 public void onClick(final View v) {
-
+                    try {
+                        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+                                .hideSoftInputFromWindow(
+                                        v.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                    } catch (Exception e) {e.printStackTrace();}
                     User user = new User(true);
                     HashSet<TextInputEditText> emptyEditTexts = Utils.checkEmptyFields(loginId, password);
                     if ( !emptyEditTexts.isEmpty() ) {
-                        Utils.snackUp(findViewById(R.id.rootView), R.string.errEmptyField);
                         for (TextInputEditText editText : emptyEditTexts) {
-                            editText.setHintTextColor(ContextCompat.getColor(
-                                    v.getContext(), android.R.color.holo_red_light));
+                            editText.setError(getString(R.string.errEmptyField));
                             editText.requestFocus();
                         }
                         return;
-                    } else {
-                        user.email = user.userName = loginId.getText().toString();
-                        user.password = password.getText().toString();
                     }
+                    user.email = user.userName = loginId.getText().toString();
+                    user.password = password.getText().toString();
 
                     dialog = Utils.showProgress(LoginActivity.this,
                             R.string.dialogVerifyingCredentials);

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -130,7 +131,7 @@ public class HomeActivity extends AppCompatActivity {
             return;
         }
         backPressedOnce = true;
-        Utils.snackUp(findViewById(R.id.rootView), R.string.msgBackPressed);
+        Toast.makeText(this, R.string.msgBackPressed, Toast.LENGTH_LONG).show();
         new ScheduledThreadPoolExecutor(1).schedule(new Runnable() {
             @Override
             public void run() {

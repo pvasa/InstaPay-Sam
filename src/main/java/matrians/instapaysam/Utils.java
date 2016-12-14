@@ -13,7 +13,6 @@ import android.support.v8.renderscript.Element;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.Script;
 import android.support.v8.renderscript.Type;
-import android.util.Patterns;
 import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -142,18 +141,10 @@ public class Utils {
         return emptyEditTexts;
     }
 
-    static boolean validateEmail (String email) {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
     static boolean validatePassword (String password) {
         final String PASSWORD_REGEX =
                 "(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,}";
         return (Pattern.compile(PASSWORD_REGEX)).matcher(password).matches();
-    }
-
-    static boolean validatePhone (String phone) {
-        return Patterns.PHONE.matcher(phone).matches();
     }
 
     public static void snackUp(View view, int stringRs) {

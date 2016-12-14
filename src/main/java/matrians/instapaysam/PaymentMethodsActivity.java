@@ -132,6 +132,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                 Parcelable adapter = new RVPaymentMethodsAdapter(
                         mCards, editMode, payable, productsAdapter,
                         getIntent().getStringExtra(getString(R.string.keyVendorName)),
+                        getIntent().getStringExtra(getString(R.string.keyVendorID)),
                         PaymentMethodsActivity.this);
                 paymentMethodsAdapter = (RVPaymentMethodsAdapter) adapter;
                 Fragment fragment = new RVFrag();
