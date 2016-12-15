@@ -56,7 +56,6 @@
     <string name="errInvalidPassword">Invalid password. 8 chars, 1 alphabet, 1 digit, 1 special.</string>
     <string name="errEmptyField">Field cannot be empty.</string>
     <string name="errInvalidPhone">Invalid phone number.</string>
-    <string name="errRedFields">Correct the red fields.</string>
     <string name="errPreviewSize">Couldn\'t find any suitable preview size</string>
     <string name="errCamera2Support">Camera2API not supported</string>
     <string name="errRotation">"Display rotation is invalid: "</string>
@@ -72,7 +71,6 @@
     <string name="errExpDate">Invalid exp date.</string>
     <string name="errCVC">Invalid cvc.</string>
     <string name="errPaymentFailed">Payment failed. Try again.</string>
-    <string name="errServerError">Server error. Try after some time.</string>
     <string name="errDeletingCard">Error deleting card. Try again.</string>
     <string name="errCameraFailure">Camera failure. Try again.</string>
 
@@ -83,8 +81,6 @@
     <string name="keyProducts">products</string>
     <string name="keyEditMode">editMode</string>
     <string name="keyError">error</string>
-    <string name="keyTvTotalAmount">keyTvTotalAmount</string>
-    <string name="keyReceiptNo">receiptNo</string>
     <string name="keyPayment">payment</string>
 
     <string name="linkForgotPassword">Forgot password?</string>
@@ -96,6 +92,7 @@
     <string name="msgPaymentMethodDeleteSuccess">Payment method deleted successfully.</string>
     <string name="msgBackPressed">Press again to exit.</string>
     <string name="msgPaymentSuccess">Payment successful.</string>
+    <string name="msgComingSoon">Coming soon</string>
 
     <string name="prefLoginStatus">LoginStatus</string>
     <string name="prefEmail">Email</string>
@@ -122,6 +119,5 @@
     <string name="txtPayable">Payable: $</string>
     <string name="txtHST">13% HST: $</string>
     <string name="txtHSTReceipt">13% HST:</string>
-    <string name="msgComingSoon">Coming soon</string>
 
 </resources>
