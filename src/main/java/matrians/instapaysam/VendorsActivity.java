@@ -143,35 +143,33 @@ public class VendorsActivity extends AppCompatActivity {
         });
 
         final SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
-        swipeRefresh.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Call<List<Vendor>> callV = Server.connect().getVendors(
+                        PreferenceManager.getDefaultSharedPreferences(
+                                VendorsActivity.this).getString(getString(R.string.prefUserId), null));
+                callV.enqueue(new Callback<List<Vendor>>() {
                     @Override
-                    public void onRefresh() {
-                        Call<List<Vendor>> callV = Server.connect().getVendors(
-                                PreferenceManager.getDefaultSharedPreferences(
-                                        VendorsActivity.this).getString(getString(R.string.prefUserId), null));
-                        callV.enqueue(new Callback<List<Vendor>>() {
-                            @Override
-                            public void onResponse(Call<List<Vendor>> call, Response<List<Vendor>> response) {
-                                if (200 == response.code()) {
-                                    if (adapter != null)
-                                        ((RVVendorsAdapter)adapter).addDataSet(response.body());
-                                } else if (204 == response.code()) {
-                                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoVendors);
-                                } else {
-                                    Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);
-                                }
-                                if (swipeRefresh.isRefreshing()) swipeRefresh.setRefreshing(false);
-                            }
-                            @Override
-                            public void onFailure(Call<List<Vendor>> call, Throwable t) {
-                                Log.d(TAG, t.toString());
-                                if (swipeRefresh.isRefreshing()) swipeRefresh.setRefreshing(false);
-                            }
-                        });
+                    public void onResponse(Call<List<Vendor>> call, Response<List<Vendor>> response) {
+                        if (200 == response.code()) {
+                            if (adapter != null)
+                                ((RVVendorsAdapter)adapter).addDataSet(response.body());
+                        } else if (204 == response.code()) {
+                            Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoVendors);
+                        } else {
+                            Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);
+                        }
+                        if (swipeRefresh.isRefreshing()) swipeRefresh.setRefreshing(false);
                     }
-                }
-        );
+                    @Override
+                    public void onFailure(Call<List<Vendor>> call, Throwable t) {
+                        Log.d(TAG, t.toString());
+                        if (swipeRefresh.isRefreshing()) swipeRefresh.setRefreshing(false);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -187,11 +185,15 @@ public class VendorsActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_payment_methods:
-                Intent intent = new Intent(this, PaymentMethodsActivity.class);
+                intent = new Intent(this, PaymentMethodsActivity.class);
                 intent.putExtra(getString(R.string.keyEditMode), true);
                 startActivityForResult(intent, CODE_PAYMENT_METHODS);
+                break;
+            case R.id.action_order_history:
+                startActivity(new Intent(this, OrdersActivity.class));
                 break;
             case R.id.action_settings:
                 Utils.snackUp(findViewById(R.id.rootView), R.string.msgComingSoon);

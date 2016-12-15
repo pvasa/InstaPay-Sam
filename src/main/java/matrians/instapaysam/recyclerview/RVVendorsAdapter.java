@@ -19,7 +19,9 @@ import matrians.instapaysam.pojo.Vendor;
 /**
  * Team Matrians
  */
-public class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder> implements Parcelable {
+public class RVVendorsAdapter
+        extends RecyclerView.Adapter<RVVendorsAdapter.ViewHolder>
+        implements Parcelable {
 
     private List<Vendor> dataSet;
 

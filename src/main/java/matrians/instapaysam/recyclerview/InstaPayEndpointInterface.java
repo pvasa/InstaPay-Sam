@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 import matrians.instapaysam.pojo.EncryptedMCard;
-import matrians.instapaysam.pojo.Payment;
+import matrians.instapaysam.pojo.Order;
 import matrians.instapaysam.pojo.Product;
 import matrians.instapaysam.pojo.User;
 import matrians.instapaysam.pojo.Vendor;
@@ -42,5 +42,8 @@ public interface InstaPayEndpointInterface {
     Call<JSONObject> deleteCard(@Path("uid") String _id, @Body EncryptedMCard eMCard);
 
     @POST("payments")
-    Call<Payment> pay(@Body Payment payment);
+    Call<Order> pay(@Body Order order);
+
+    @GET("users/{uid}/orders")
+    Call<List<Order>> getOrders(@Path("uid") String uid);
 }

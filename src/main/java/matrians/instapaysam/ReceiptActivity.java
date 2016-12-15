@@ -16,7 +16,7 @@ import android.widget.TextView;
 import java.math.BigDecimal;
 import java.util.List;
 
-import matrians.instapaysam.pojo.Payment;
+import matrians.instapaysam.pojo.Order;
 import matrians.instapaysam.pojo.Product;
 import matrians.instapaysam.recyclerview.RVFrag;
 import matrians.instapaysam.recyclerview.RVReceiptAdapter;
@@ -28,7 +28,7 @@ public class ReceiptActivity extends AppCompatActivity {
 
     @SuppressWarnings("unused")
     private String TAG = this.getClass().getName();
-    private Payment payment;
+    private Order order;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class ReceiptActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        payment = getIntent().getParcelableExtra(getString(R.string.keyPayment));
+        order = getIntent().getParcelableExtra(getString(R.string.keyPayment));
         String vendorName = getIntent().getStringExtra(getString(R.string.keyVendorName));
 
         View view;
@@ -51,7 +51,7 @@ public class ReceiptActivity extends AppCompatActivity {
                     getString(R.string.titleReceipt) + " - " + vendorName);
         }
 
-        List<Product> products = payment.getProductList();
+        List<Product> products = order.getProductList();
 
         Parcelable adapter = new RVReceiptAdapter(products);
         Fragment fragment = new RVFrag();

@@ -9,6 +9,11 @@
         android:title="@string/actionPaymentMethods"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_order_history"
+        android:orderInCategory="100"
+        android:title="@string/titleOrders"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="101"
         android:title="@string/actionSettings"

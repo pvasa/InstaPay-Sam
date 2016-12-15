@@ -29,11 +29,12 @@
     <string name="descFlashSwitch">Flash switch</string>
     <string name="descPaymentMethodLogo">Payment method logo</string>
 
-    <string name="dialogProcessingPayment">Processing secure payment…</string>
+    <string name="dialogProcessingPayment">Processing secure order…</string>
     <string name="dialogFetchingCards">Fetching and decrypting cards…</string>
     <string name="dialogSavingCard">Encrypting and saving card…</string>
     <string name="dialogLoadingVendors">Loading vendors…</string>
-    <string name="dialogDeletePaymentMethod">Deleting payment method…</string>
+    <string name="dialogLoadingOrders">Loading orders…</string>
+    <string name="dialogDeletePaymentMethod">Deleting order method…</string>
     <string name="dialogNoSamsung">This app works only on Samsung devices.</string>
     <string name="dialogVerifyingCredentials">Verifying credentials…</string>
     <string name="dialogRegistering">Creating user…</string>
@@ -63,7 +64,7 @@
     <string name="errBarcodeDErr">Couldn\'t start barcode detector. Try again.</string>
     <string name="errBarcodeErr">Could not detect barcode. Try again.</string>
     <string name="errProductDuplicate">" already there in list. Try to increase quantity."</string>
-    <string name="errNoPaymentMethods">No payment methods found. Please add one.</string>
+    <string name="errNoPaymentMethods">No order methods found. Please add one.</string>
     <string name="errNoProductsInCart">Cannot checkout with empty cart.</string>
     <string name="errErrAddCard">Error adding card. Try again.</string>
     <string name="errCardName">Card name cannot be empty.</string>
@@ -81,7 +82,7 @@
     <string name="keyProducts">products</string>
     <string name="keyEditMode">editMode</string>
     <string name="keyError">error</string>
-    <string name="keyPayment">payment</string>
+    <string name="keyPayment">order</string>
 
     <string name="linkForgotPassword">Forgot password?</string>
 
@@ -89,6 +90,7 @@
     <string name="msgCardAddSuccess">Card added successfully.</string>
     <string name="msgAccountCreated">Account created. Proceed to login.</string>
     <string name="msgNoVendors">No vendors registered yet. Come back later.</string>
+    <string name="msgNoOrders">No orders found.</string>
     <string name="msgPaymentMethodDeleteSuccess">Payment method deleted successfully.</string>
     <string name="msgBackPressed">Press again to exit.</string>
     <string name="msgPaymentSuccess">Payment successful.</string>
@@ -104,6 +106,7 @@
     <string name="titleCreateAccount">Create account</string>
     <string name="titleLogin">Login now</string>
     <string name="titleVendors">Vendors</string>
+    <string name="titleOrders">Order history</string>
     <string name="titleQuantity">Quantity</string>
     <string name="titlePaymentMethods">Payment methods</string>
     <string name="titleNoCards">No cards</string>

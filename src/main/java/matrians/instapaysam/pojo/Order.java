@@ -9,19 +9,20 @@ import java.util.List;
  * Team Matrians
  */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public class Payment implements Parcelable {
+public class Order implements Parcelable {
 
     private String vendorID;
-    private String vendorName;
+    public String vendorName;
     private String userID;
     private String userEmail;
     private String stripeToken;
-    private float amount;
+    public float amount;
     private List<Product> products;
     private String receiptNumber;
+    public String timeStamp;
 
-    public Payment(String vendorID, String vendorName, String userID, String userEmail,
-                   String stripeToken, float amount, List<Product> products) {
+    public Order(String vendorID, String vendorName, String userID, String userEmail,
+                 String stripeToken, float amount, List<Product> products) {
         this.vendorID = vendorID;
         this.vendorName = vendorName;
         this.userID = userID;
@@ -54,9 +55,10 @@ public class Payment implements Parcelable {
         dest.writeFloat(this.amount);
         dest.writeTypedList(this.products);
         dest.writeString(this.receiptNumber);
+        dest.writeString(this.timeStamp);
     }
 
-    private Payment(Parcel in) {
+    private Order(Parcel in) {
         this.vendorID = in.readString();
         this.vendorName = in.readString();
         this.userID = in.readString();
@@ -65,17 +67,18 @@ public class Payment implements Parcelable {
         this.amount = in.readFloat();
         this.products = in.createTypedArrayList(Product.CREATOR);
         this.receiptNumber = in.readString();
+        this.timeStamp = in.readString();
     }
 
-    public static final Parcelable.Creator<Payment> CREATOR = new Parcelable.Creator<Payment>() {
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
         @Override
-        public Payment createFromParcel(Parcel source) {
-            return new Payment(source);
+        public Order createFromParcel(Parcel source) {
+            return new Order(source);
         }
 
         @Override
-        public Payment[] newArray(int size) {
-            return new Payment[size];
+        public Order[] newArray(int size) {
+            return new Order[size];
         }
     };
 }

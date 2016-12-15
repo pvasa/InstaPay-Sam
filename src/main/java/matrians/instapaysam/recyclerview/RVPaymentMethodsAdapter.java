@@ -34,7 +34,7 @@ import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
 import matrians.instapaysam.pojo.EncryptedMCard;
 import matrians.instapaysam.pojo.MCard;
-import matrians.instapaysam.pojo.Payment;
+import matrians.instapaysam.pojo.Order;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -310,14 +310,14 @@ public class RVPaymentMethodsAdapter extends
                     @Override
                     public void onSuccess(Token token) {
 
-                        final Payment payment = new Payment(
+                        final Order order = new Order(
                                 vendorID, vendorName, userID, userEmail, token.getId(), amount,
                                 ((RVProductsAdapter)productsAdapter).getProductList());
 
-                        Call<Payment> call = Server.connect().pay(payment);
-                        call.enqueue(new Callback<Payment>() {
+                        Call<Order> call = Server.connect().pay(order);
+                        call.enqueue(new Callback<Order>() {
                             @Override
-                            public void onResponse(Call<Payment> call, Response<Payment> response) {
+                            public void onResponse(Call<Order> call, Response<Order> response) {
                                 waitDialog.dismiss();
                                 if (200 == response.code()) {
                                     Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
@@ -325,7 +325,7 @@ public class RVPaymentMethodsAdapter extends
 
                                     Intent intent = new Intent(context, ReceiptActivity.class);
                                     intent.putExtra(
-                                            context.getString(R.string.keyPayment), payment);
+                                            context.getString(R.string.keyPayment), order);
                                     intent.putExtra(
                                             context.getString(R.string.keyVendorName), vendorName);
                                     context.startActivity(intent);
@@ -388,7 +388,7 @@ public class RVPaymentMethodsAdapter extends
                                 }
                             }
                             @Override
-                            public void onFailure(Call<Payment> call, Throwable t) {
+                            public void onFailure(Call<Order> call, Throwable t) {
                                 waitDialog.dismiss();
                                 Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
                                         R.string.errPaymentFailed);

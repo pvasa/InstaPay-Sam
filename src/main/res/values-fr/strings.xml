@@ -33,6 +33,7 @@
     <string name="dialogFetchingCards">Récupération et déchiffrement des cartes…</string>
     <string name="dialogSavingCard">Cryptage et enregistrement de la carte…</string>
     <string name="dialogLoadingVendors">Chargement des fournisseurs…</string>
+    <string name="dialogLoadingOrders">Chargement des commandes…</string>
     <string name="dialogDeletePaymentMethod">Suppression de la méthode de paiement…</string>
     <string name="dialogNoSamsung">Cette application ne fonctionne que sur les appareils Samsung.</string>
     <string name="dialogVerifyingCredentials">Vérification des informations d\'identification…</string>
@@ -80,7 +81,7 @@
     <string name="keyProducts">products</string>
     <string name="keyEditMode">editMode</string>
     <string name="keyError">error</string>
-    <string name="keyPayment">payment</string>
+    <string name="keyPayment">order</string>
 
     <string name="linkForgotPassword">Mot de passe oublié?</string>
 
@@ -88,6 +89,7 @@
     <string name="msgCardAddSuccess">Carte ajoutée avec succès.</string>
     <string name="msgAccountCreated">Compte créé. Procédez à la connexion.</string>
     <string name="msgNoVendors">Aucun fournisseur n\'est encore inscrit. Revenez plus tard.</string>
+    <string name="msgNoOrders">Aucune commande trouvée.</string>
     <string name="msgPaymentMethodDeleteSuccess">Mode de paiement supprimé avec succès.</string>
     <string name="msgBackPressed">Appuyez à nouveau pour quitter.</string>
     <string name="msgPaymentSuccess">Paiement réussi.</string>
@@ -103,6 +105,7 @@
     <string name="titleCreateAccount">Créer un compte</string>
     <string name="titleLogin">Connecte-toi maintenant</string>
     <string name="titleVendors">Vendeurs</string>
+    <string name="titleOrders">Historique des commandes</string>
     <string name="titleQuantity">Quantité</string>
     <string name="titlePaymentMethods">Moyens de paiement</string>
     <string name="titleNoCards">Pas de cartes</string>
