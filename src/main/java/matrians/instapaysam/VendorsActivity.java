@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -140,6 +141,37 @@ public class VendorsActivity extends AppCompatActivity {
                 Log.d(TAG, t.toString());
             }
         });
+
+        final SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        swipeRefresh.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Call<List<Vendor>> callV = Server.connect().getVendors(
+                                PreferenceManager.getDefaultSharedPreferences(
+                                        VendorsActivity.this).getString(getString(R.string.prefUserId), null));
+                        callV.enqueue(new Callback<List<Vendor>>() {
+                            @Override
+                            public void onResponse(Call<List<Vendor>> call, Response<List<Vendor>> response) {
+                                if (200 == response.code()) {
+                                    if (adapter != null)
+                                        ((RVVendorsAdapter)adapter).addDataSet(response.body());
+                                } else if (204 == response.code()) {
+                                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoVendors);
+                                } else {
+                                    Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);
+                                }
+                                if (swipeRefresh.isRefreshing()) swipeRefresh.setRefreshing(false);
+                            }
+                            @Override
+                            public void onFailure(Call<List<Vendor>> call, Throwable t) {
+                                Log.d(TAG, t.toString());
+                                if (swipeRefresh.isRefreshing()) swipeRefresh.setRefreshing(false);
+                            }
+                        });
+                    }
+                }
+        );
     }
 
     @Override
@@ -162,6 +194,7 @@ public class VendorsActivity extends AppCompatActivity {
                 startActivityForResult(intent, CODE_PAYMENT_METHODS);
                 break;
             case R.id.action_settings:
+                Utils.snackUp(findViewById(R.id.rootView), R.string.msgComingSoon);
                 break;
             case R.id.action_logout:
                 SharedPreferences.Editor editor =

@@ -1,22 +1,14 @@
 apply plugin: 'com.android.application'
 android {
-    signingConfigs {
-        Ryan {
-            keyAlias 'Instapay'
-            keyPassword 'Pv-In5tapay-K3y'
-            storeFile file('/home/ryan/keystore.jks')
-            storePassword 'Pv-K3ystore'
-        }
-    }
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
     android.defaultConfig.vectorDrawables.useSupportLibrary true
     defaultConfig {
         applicationId "matrians.instapaysam"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 4
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 21
         renderscriptSupportModeEnabled true

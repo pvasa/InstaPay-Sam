@@ -122,5 +122,6 @@
     <string name="txtPayable">Payable: $</string>
     <string name="txtHST">13% HST: $</string>
     <string name="txtHSTReceipt">13% HST:</string>
+    <string name="msgComingSoon">Coming soon</string>
 
 </resources>

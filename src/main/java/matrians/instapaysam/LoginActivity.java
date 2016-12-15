@@ -163,6 +163,7 @@ public class LoginActivity extends AppCompatActivity {
             linkForgotPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgComingSoon);
                     //startActivity(new Intent(v.getContext(), RegisterActivity.class));
                     //finish();
                 }

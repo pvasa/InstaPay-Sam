@@ -31,6 +31,11 @@ public class RVVendorsAdapter extends RecyclerView.Adapter<RVVendorsAdapter.View
         this.dataSet = dataSet;
     }
 
+    public void addDataSet(List<Vendor> dataSet) {
+        this.dataSet = dataSet;
+        notifyDataSetChanged();
+    }
+
     /**
      * Provide a reference to the views for each data item
      */

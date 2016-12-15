@@ -127,6 +127,17 @@ public class ScanActivity extends AppCompatActivity {
                     new RecyclerView.AdapterDataObserver() {
                         @Override
                         public void onChanged() {
+                            super.onChanged();
+                            float totalAmount = 0f;
+                            for (Product product : ((RVProductsAdapter)adapter).getProductList()) {
+                                totalAmount += (product.price * product.quantity);
+                            }
+                            ((TextView)findViewById(R.id.tvTotalAmount))
+                                    .setText(String.valueOf(totalAmount));
+                        }
+                        @Override
+                        public void onItemRangeRemoved(int positionStart, int itemCount) {
+                            super.onItemRangeRemoved(positionStart, itemCount);
                             float totalAmount = 0f;
                             for (Product product : ((RVProductsAdapter)adapter).getProductList()) {
                                 totalAmount += (product.price * product.quantity);

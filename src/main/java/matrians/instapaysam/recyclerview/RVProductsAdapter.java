@@ -115,7 +115,7 @@ public class RVProductsAdapter
 
     private void removeProduct(int position) {
         dataSet.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
     }
 
     public List<Product> getProductList() {

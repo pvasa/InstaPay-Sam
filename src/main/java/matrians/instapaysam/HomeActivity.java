@@ -109,12 +109,12 @@ public class HomeActivity extends AppCompatActivity {
                     finish();
                 }
                 if (resultCode == 2) {
-                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgAccountCreated);
+                    Toast.makeText(this, R.string.msgAccountCreated, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case CODE_REGISTER:
                 if (resultCode == 1) {
-                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgAccountCreated);
+                    Toast.makeText(this, R.string.msgAccountCreated, Toast.LENGTH_SHORT).show();
                 }
                 else if (resultCode == 2) {
                     startActivity(new Intent(this, VendorsActivity.class));
