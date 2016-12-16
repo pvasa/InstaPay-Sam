@@ -24,24 +24,25 @@ import retrofit2.Response;
 
 /**
  * Team Matrians
+ * Load recycler view showing Order history
  */
 public class OrdersActivity extends AppCompatActivity {
 
     private String TAG = this.getClass().getName();
     private ProgressDialog dialog;
-    private Parcelable adapter;
+    private Parcelable ordersAdapter;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(getString(R.string.keyAdapter), adapter);
+        outState.putParcelable(getString(R.string.keyAdapter), ordersAdapter);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if ((adapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null) {
-            ((RVOrdersAdapter) adapter).notifyDataSetChanged();
+        if ((ordersAdapter = savedInstanceState.getParcelable(getString(R.string.keyAdapter))) != null) {
+            ((RVOrdersAdapter) ordersAdapter).notifyDataSetChanged();
         }
     }
 
@@ -50,6 +51,7 @@ public class OrdersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders);
 
+        // Load toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -66,6 +68,7 @@ public class OrdersActivity extends AppCompatActivity {
 
         dialog = Utils.showProgress(this, R.string.dialogLoadingOrders);
 
+        // Fetch orders list from server
         Call<List<Order>> callV = Server.connect().getOrders(
                 PreferenceManager.getDefaultSharedPreferences(
                         OrdersActivity.this).getString(getString(R.string.prefUserId), null));
@@ -74,10 +77,10 @@ public class OrdersActivity extends AppCompatActivity {
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 dialog.dismiss();
                 if (200 == response.code()) {
-                    adapter = new RVOrdersAdapter(response.body());
+                    ordersAdapter = new RVOrdersAdapter(response.body());
                     Fragment fragment = new RVFrag();
                     Bundle args = new Bundle();
-                    args.putParcelable(getString(R.string.keyAdapter), adapter);
+                    args.putParcelable(getString(R.string.keyAdapter), ordersAdapter);
                     fragment.setArguments(args);
                     getFragmentManager().beginTransaction().replace(
                             R.id.content, fragment).commitAllowingStateLoss();
@@ -94,6 +97,7 @@ public class OrdersActivity extends AppCompatActivity {
             }
         });
 
+        // Define pull down to refresh functionality
         final SwipeRefreshLayout swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -105,8 +109,8 @@ public class OrdersActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                         if (200 == response.code()) {
-                            if (adapter != null)
-                                ((RVOrdersAdapter)adapter).addDataSet(response.body());
+                            if (ordersAdapter != null)
+                                ((RVOrdersAdapter) ordersAdapter).addDataSet(response.body());
                         } else if (204 == response.code()) {
                             Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoOrders);
                         } else {

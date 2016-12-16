@@ -15,11 +15,12 @@ import matrians.instapaysam.pojo.Order;
 
 /**
  * Team Matrians
+ * Fetches and renders list of previous orders from server
  */
 public class RVOrdersAdapter
         extends RecyclerView.Adapter<RVOrdersAdapter.ViewHolder> implements Parcelable {
 
-    private List<Order> dataSet;
+    private List<Order> dataSet; // The list of orders
 
     /**
      * Constructor to initialize the dataSet.

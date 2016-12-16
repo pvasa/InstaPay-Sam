@@ -6,6 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Team Matrians
+ * Connect to server
  */
 public class Server {
 

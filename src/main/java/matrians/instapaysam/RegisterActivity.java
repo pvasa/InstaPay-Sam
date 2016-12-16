@@ -29,12 +29,13 @@ import retrofit2.Response;
 
 /**
  * Team Matrians
+ * Show registration page
  */
 public class RegisterActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getName();
 
-    private ProgressDialog dialog;
+    private ProgressDialog dialog; // Waiting dialog
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -51,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // Load toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -58,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Load FAB
         FloatingActionButton fab;
         if ((fab = (FloatingActionButton) findViewById(R.id.fab)) != null) {
             fab.setOnClickListener(new View.OnClickListener() {

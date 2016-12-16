@@ -27,9 +27,11 @@ import java.util.regex.Pattern;
 
 /**
  * Team Matrians
+ * Utility class with static methods providing small helper functionality
  */
 public class Utils {
 
+    // Check for play services
     static boolean checkPlayServices(AppCompatActivity activity) {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
@@ -45,6 +47,7 @@ public class Utils {
         return true;
     }
 
+    // Convert YUV from Camera to RGB
     public static Bitmap YUV_420_888_toRGB (Image image, Context context) {
 
         int width = image.getWidth();
@@ -117,6 +120,7 @@ public class Utils {
         return outBitmap;
     }
 
+    // Show progress dialog
     public static ProgressDialog showProgress(Context context, int stringResId) {
         ProgressDialog dialog = new ProgressDialog(context);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -147,6 +151,7 @@ public class Utils {
         return (Pattern.compile(PASSWORD_REGEX)).matcher(password).matches();
     }
 
+    // Show snack bar
     public static void snackUp(View view, int stringRs) {
         snackUp(view, view.getContext().getString(stringRs));
     }

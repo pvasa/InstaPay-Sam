@@ -20,21 +20,26 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Team Matrians
- *
- * Main activity
+ * First activity that is loaded
  */
 public class HomeActivity extends AppCompatActivity {
 
+    // Request codes
     static final int CODE_LOGIN = 1;
     static final int CODE_REGISTER = 2;
+
+    // Boolean to track if back button is pressed
     private boolean backPressedOnce = false;
+
     private static final String TAG = HomeActivity.class.getName();
+
     private static final String ALLOWED_DEVICE = ""; // Allowed all devices for testing.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Check if already logged in
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (!preferences.contains(getString(R.string.prefEmail)) ||
                 preferences.getInt(getString(R.string.prefLoginStatus), LoginActivity.STATUS_LOGGED_OUT) ==
@@ -88,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Utils.checkPlayServices(this);
+        Utils.checkPlayServices(this); // Check if play service version is correct
     }
 
     @Override
@@ -99,6 +104,7 @@ public class HomeActivity extends AppCompatActivity {
         return true;
     }
 
+    // Listen for activities returning result
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

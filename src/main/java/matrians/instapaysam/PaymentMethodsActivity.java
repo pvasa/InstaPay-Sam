@@ -34,6 +34,7 @@ import retrofit2.Response;
 
 /**
  * Team Matrians
+ * Load recycler view showing list of credit cards
  */
 public class PaymentMethodsActivity extends AppCompatActivity {
 
@@ -46,12 +47,14 @@ public class PaymentMethodsActivity extends AppCompatActivity {
 
     public static final int CODE_ADD_CARD = 1;
 
+    // Save data on config (orientation) change
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(getString(R.string.keyAdapter), paymentMethodsAdapter);
         super.onSaveInstanceState(outState);
     }
 
+    // Restore data after config (orientation) change
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -80,6 +83,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
             }
         });
 
+        // Load data in toolbar
         CollapsingToolbarLayout toolbarLayout =
                 (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         if (toolbarLayout != null) {
@@ -106,6 +110,8 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         if (savedInstanceState != null) return;
 
         waitDialog = Utils.showProgress(this, R.string.dialogFetchingCards);
+
+        // Fetch and decrypt payment methods from server
         Call<List<EncryptedMCard>> call = Server.connect().getCards(
                         PreferenceManager.getDefaultSharedPreferences(this)
                                 .getString(getString(R.string.prefUserId), null));
@@ -151,6 +157,7 @@ public class PaymentMethodsActivity extends AppCompatActivity {
         });
     }
 
+    // Send new payment method details to server
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

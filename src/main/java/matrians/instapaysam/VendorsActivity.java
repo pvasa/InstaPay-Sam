@@ -40,6 +40,7 @@ import retrofit2.Response;
 
 /**
  * Team Matrians
+ * Load list of Vendors from server and start RecyclerView with that data
  */
 public class VendorsActivity extends AppCompatActivity {
 

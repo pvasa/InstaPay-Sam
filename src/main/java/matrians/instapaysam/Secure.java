@@ -23,6 +23,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
+ * Team Matrians
  * A class to make more easy and simple the encrypt routines, this is the core of Secure library
  */
 @SuppressWarnings({"WeakerAccess", "unused"})

@@ -130,12 +130,12 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fabDownloadReceipt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_file_download_white_48px" />
+        app:srcCompat="@drawable/ic_file_download_white_48px" />-->
 
 </android.support.design.widget.CoordinatorLayout>

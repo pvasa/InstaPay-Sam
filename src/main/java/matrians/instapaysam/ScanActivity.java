@@ -29,6 +29,7 @@ import matrians.instapaysam.recyclerview.RVProductsAdapter;
 
 /**
  * Team Matrians
+ * Show barcode scan page
  */
 public class ScanActivity extends AppCompatActivity {
 
@@ -54,8 +55,23 @@ public class ScanActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    // Initiate product list adapter and camera view
     void init() {
         adapter = new RVProductsAdapter(new ArrayList<Product>());
+        ((RVProductsAdapter)adapter).registerAdapterDataObserver(
+                // Observe product list change and up date total amount
+                new RecyclerView.AdapterDataObserver() {
+                    @Override
+                    public void onChanged() {
+                        super.onChanged();
+                        updateAmount();
+                    }
+                    @Override
+                    public void onItemRangeRemoved(int positionStart, int itemCount) {
+                        super.onItemRangeRemoved(positionStart, itemCount);
+                        updateAmount();
+                    }
+                });
         Bundle rvArgs = new Bundle();
         rvArgs.putParcelable(getString(R.string.keyAdapter), adapter);
         Fragment rvFrag = new RVFrag();
@@ -112,6 +128,7 @@ public class ScanActivity extends AppCompatActivity {
             }
         });
 
+        // Check if camera, internet, and storage permissions are granted
         if (ensurePermissions(
                 Manifest.permission.CAMERA,
                 Manifest.permission.INTERNET,
@@ -124,30 +141,29 @@ public class ScanActivity extends AppCompatActivity {
         }
         if (adapter != null) {
             ((RVProductsAdapter)adapter).registerAdapterDataObserver(
+                    // Observe product list change and up date total amount
                     new RecyclerView.AdapterDataObserver() {
                         @Override
                         public void onChanged() {
                             super.onChanged();
-                            float totalAmount = 0f;
-                            for (Product product : ((RVProductsAdapter)adapter).getProductList()) {
-                                totalAmount += (product.price * product.quantity);
-                            }
-                            ((TextView)findViewById(R.id.tvTotalAmount))
-                                    .setText(String.valueOf(totalAmount));
+                            updateAmount();
                         }
                         @Override
                         public void onItemRangeRemoved(int positionStart, int itemCount) {
                             super.onItemRangeRemoved(positionStart, itemCount);
-                            float totalAmount = 0f;
-                            for (Product product : ((RVProductsAdapter)adapter).getProductList()) {
-                                totalAmount += (product.price * product.quantity);
-                            }
-                            ((TextView)findViewById(R.id.tvTotalAmount))
-                                    .setText(String.valueOf(totalAmount));
+                            updateAmount();
                         }
                     });
             ((RVProductsAdapter) adapter).notifyDataSetChanged();
         }
+    }
+
+    private void updateAmount() {
+        float totalAmount = 0f;
+        for (Product product : ((RVProductsAdapter)adapter).getProductList()) {
+            totalAmount += (product.price * product.quantity);
+        }
+        ((TextView)findViewById(R.id.tvTotalAmount)).setText(String.valueOf(totalAmount));
     }
 
     @Override

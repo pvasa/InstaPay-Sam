@@ -28,6 +28,7 @@ import retrofit2.Response;
 
 /**
  * Team Matrians
+ * User login page
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Load toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Load FAB
         FloatingActionButton fab;
         if ((fab = (FloatingActionButton) findViewById(R.id.fab)) != null) {
             fab.setOnClickListener(new View.OnClickListener() {
@@ -158,16 +161,15 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-        View linkForgotPassword;
+        /*View linkForgotPassword;
         if ((linkForgotPassword = findViewById(R.id.link_forgot_password)) != null) {
             linkForgotPassword.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Utils.snackUp(findViewById(R.id.rootView), R.string.msgComingSoon);
-                    //startActivity(new Intent(v.getContext(), RegisterActivity.class));
-                    //finish();
+                    startActivity(new Intent(v.getContext(), PasswordReset.class));
+                    finish();
                 }
             });
-        }
+        }*/
     }
 }
