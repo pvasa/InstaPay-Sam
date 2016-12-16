@@ -12,14 +12,14 @@ import java.util.List;
 public class Order implements Parcelable {
 
     private String vendorID;
-    public String vendorName;
+    private String vendorName;
     private String userID;
     private String userEmail;
     private String stripeToken;
-    public float amount;
+    private float amount;
     private List<Product> products;
     private String receiptNumber;
-    public String timeStamp;
+    private String timeStamp;
 
     public Order(String vendorID, String vendorName, String userID, String userEmail,
                  String stripeToken, float amount, List<Product> products) {
@@ -30,6 +30,30 @@ public class Order implements Parcelable {
         this.stripeToken = stripeToken;
         this.amount = amount;
         this.products = products;
+    }
+
+    public String getVendorID() {
+        return vendorID;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
     }
 
     public List<Product> getProductList() {

@@ -55,6 +55,12 @@ public class ScanActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.checkPlayServices(this);
+    }
+
     // Initiate product list adapter and camera view
     void init() {
         adapter = new RVProductsAdapter(new ArrayList<Product>());

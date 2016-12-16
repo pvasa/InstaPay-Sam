@@ -467,25 +467,29 @@ public class CameraFrag extends Fragment implements
     }
 
     private void createBarcodeDetector() {
-        detector = new BarcodeDetector.Builder(getActivity())
-                .setBarcodeFormats(Barcode.ALL_FORMATS)
-                .build();
-        if (!detector.isOperational()) {
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(getString(R.string.errBarcodeDErr))
-                    .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            createBarcodeDetector();
-                        }
-                    })
-                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                            getActivity().finish();
-                        }
-                    }).show();
+        try {
+            detector = new BarcodeDetector.Builder(getActivity())
+                    .setBarcodeFormats(Barcode.ALL_FORMATS)
+                    .build();
+            if (!detector.isOperational()) {
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(getString(R.string.errBarcodeDErr))
+                        .setPositiveButton(R.string.btnTryAgain, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                createBarcodeDetector();
+                            }
+                        })
+                        .setNegativeButton(R.string.btnExit, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                getActivity().finish();
+                            }
+                        }).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -692,11 +696,17 @@ public class CameraFrag extends Fragment implements
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
-            manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
+            if (mCameraId != null)
+                manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
+            else throw new NullPointerException();
         } catch (CameraAccessException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera opening.", e);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            Snackbar.make(getActivity().findViewById(R.id.rootView),
+                    R.string.errCameraFailure, Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 

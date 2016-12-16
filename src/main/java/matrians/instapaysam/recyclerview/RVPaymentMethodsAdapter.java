@@ -325,7 +325,7 @@ public class RVPaymentMethodsAdapter extends
 
                                     Intent intent = new Intent(context, ReceiptActivity.class);
                                     intent.putExtra(
-                                            context.getString(R.string.keyPayment), order);
+                                            context.getString(R.string.keyOrder), order);
                                     intent.putExtra(
                                             context.getString(R.string.keyVendorName), vendorName);
                                     context.startActivity(intent);

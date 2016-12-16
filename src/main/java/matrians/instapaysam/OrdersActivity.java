@@ -77,7 +77,7 @@ public class OrdersActivity extends AppCompatActivity {
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 dialog.dismiss();
                 if (200 == response.code()) {
-                    ordersAdapter = new RVOrdersAdapter(response.body());
+                    ordersAdapter = new RVOrdersAdapter(response.body(), OrdersActivity.this);
                     Fragment fragment = new RVFrag();
                     Bundle args = new Bundle();
                     args.putParcelable(getString(R.string.keyAdapter), ordersAdapter);
@@ -126,6 +126,12 @@ public class OrdersActivity extends AppCompatActivity {
                 });
             }
         });
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else super.onBackPressed();
     }
 }

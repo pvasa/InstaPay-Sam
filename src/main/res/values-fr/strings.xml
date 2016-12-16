@@ -81,7 +81,7 @@
     <string name="keyProducts">products</string>
     <string name="keyEditMode">editMode</string>
     <string name="keyError">error</string>
-    <string name="keyPayment">order</string>
+    <string name="keyOrder">order</string>
 
     <string name="linkForgotPassword">Mot de passe oublié?</string>
 
@@ -121,5 +121,6 @@
     <string name="txtPayable">Payable: $</string>
     <string name="txtHST">13% HST: $</string>
     <string name="txtHSTReceipt">13% HST:</string>
+    <string name="btnTryAgain">Try again</string>
 
 </resources>

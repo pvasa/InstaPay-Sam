@@ -23,7 +23,7 @@ import matrians.instapaysam.recyclerview.RVReceiptAdapter;
 
 /**
  * Team Matrians
- * Show Receipt page after order success
+ * Show Receipt page after keyOrder success
  */
 public class ReceiptActivity extends AppCompatActivity {
 
@@ -43,7 +43,7 @@ public class ReceiptActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        order = getIntent().getParcelableExtra(getString(R.string.keyPayment));
+        order = getIntent().getParcelableExtra(getString(R.string.keyOrder));
         String vendorName = getIntent().getStringExtra(getString(R.string.keyVendorName));
 
         View view;

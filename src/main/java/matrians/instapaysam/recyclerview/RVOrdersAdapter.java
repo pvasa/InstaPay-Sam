@@ -1,8 +1,14 @@
 package matrians.instapaysam.recyclerview;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
+import android.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +16,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import matrians.instapaysam.OrdersActivity;
 import matrians.instapaysam.R;
 import matrians.instapaysam.pojo.Order;
+import matrians.instapaysam.pojo.Product;
 
 /**
  * Team Matrians
@@ -21,13 +29,15 @@ public class RVOrdersAdapter
         extends RecyclerView.Adapter<RVOrdersAdapter.ViewHolder> implements Parcelable {
 
     private List<Order> dataSet; // The list of orders
+    private Context context;
 
     /**
      * Constructor to initialize the dataSet.
      * @param dataSet - set of the data to show in RecyclerView
      */
-    public RVOrdersAdapter(List<Order> dataSet) {
+    public RVOrdersAdapter(List<Order> dataSet, Context context) {
         this.dataSet = dataSet;
+        this.context = context;
     }
 
     public void addDataSet(List<Order> dataSet) {
@@ -43,17 +53,13 @@ public class RVOrdersAdapter
         TextView tvVendorName,
                 tvTimeStamp,
                 tvTotalAmount;
+        CardView cardView;
         ViewHolder(View v) {
             super(v);
             tvVendorName = (TextView) v.findViewById(R.id.tvVendorName);
             tvTimeStamp = (TextView) v.findViewById(R.id.tvTimeStamp);
             tvTotalAmount = (TextView) v.findViewById(R.id.tvTotalAmount);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
+            cardView = (CardView) v.findViewById(R.id.cardView);
         }
     }
 
@@ -75,10 +81,28 @@ public class RVOrdersAdapter
      * @param position - position of current element in dataSet
      */
     @Override
-    public void onBindViewHolder(RVOrdersAdapter.ViewHolder holder, int position) {
-        holder.tvVendorName.setText(dataSet.get(position).vendorName);
-        holder.tvTotalAmount.setText(String.valueOf(dataSet.get(position).amount));
-        holder.tvTimeStamp.setText(dataSet.get(position).timeStamp);
+    public void onBindViewHolder(final RVOrdersAdapter.ViewHolder holder, int position) {
+        holder.tvVendorName.setText(dataSet.get(position).getVendorName());
+        holder.tvTotalAmount.setText(String.valueOf(dataSet.get(position).getAmount()));
+        holder.tvTimeStamp.setText(dataSet.get(position).getTimeStamp());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new OrderDetailsFrag();
+                Bundle args = new Bundle();
+                args.putParcelable(
+                        context.getString(R.string.keyOrder),
+                        dataSet.get(holder.getAdapterPosition()));
+                fragment.setArguments(args);
+                if (context.getResources().getBoolean(R.bool.isTablet))
+                    ((OrdersActivity)context).getFragmentManager().beginTransaction().replace(
+                            R.id.orderDetailsFrag, fragment)
+                            .addToBackStack("OrderDetails").commitAllowingStateLoss();
+                else ((OrdersActivity)context).getFragmentManager().beginTransaction().replace(
+                        R.id.content, fragment)
+                        .addToBackStack("OrderDetails").commitAllowingStateLoss();
+            }
+        });
     }
 
     /** Return the size of your dataSet (invoked by the layout manager)
@@ -116,4 +140,36 @@ public class RVOrdersAdapter
             return new RVOrdersAdapter[size];
         }
     };
+
+    @SuppressWarnings("WeakerAccess")
+    public static class OrderDetailsFrag extends Fragment {
+
+        private static final String TAG = OrderDetailsFrag.class.getName();
+
+        Order order;
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            order = getArguments().getParcelable(getString(R.string.keyOrder));
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater,
+                                 @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.frag_order_details, container, false);
+            ((TextView) view.findViewById(R.id.tvReceiptNumber)).setText(order.getReceiptNumber());
+            ((TextView) view.findViewById(R.id.tvVendorName)).setText(order.getVendorName());
+            ((TextView) view.findViewById(R.id.tvVendorId)).setText(order.getVendorID());
+            ((TextView) view.findViewById(R.id.tvUserEmail)).setText(order.getUserEmail());
+            ((TextView) view.findViewById(R.id.tvUserId)).setText(order.getUserID());
+            ((TextView) view.findViewById(R.id.tvTotalAmount)).setText(String.valueOf(order.getAmount()));
+            ((TextView) view.findViewById(R.id.tvTimeStamp)).setText(order.getTimeStamp());
+            for (Product product : order.getProductList()) {
+                Log.d(TAG, product.name);
+                Log.d(TAG, String.valueOf(product.quantity));
+            }
+            return view;
+        }
+    }
 }

@@ -93,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Utils.checkPlayServices(this); // Check if play service version is correct
+        //Utils.checkPlayServices(this); // Check if play service version is correct
     }
 
     @Override
