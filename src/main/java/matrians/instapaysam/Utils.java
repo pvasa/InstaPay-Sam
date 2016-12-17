@@ -151,6 +151,11 @@ public class Utils {
         return (Pattern.compile(PASSWORD_REGEX)).matcher(password).matches();
     }
 
+    static boolean validateEmail (String email) {
+        final String EMAIL_REGEX = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        return (Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE)).matcher(email).matches();
+    }
+
     // Show snack bar
     public static void snackUp(View view, int stringRs) {
         snackUp(view, view.getContext().getString(stringRs));
