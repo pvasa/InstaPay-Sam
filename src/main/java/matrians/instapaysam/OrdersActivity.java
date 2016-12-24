@@ -15,6 +15,8 @@ import android.view.View;
 
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import matrians.instapaysam.pojo.Order;
 import matrians.instapaysam.recyclerview.RVFrag;
 import matrians.instapaysam.recyclerview.RVOrdersAdapter;
@@ -76,7 +78,7 @@ public class OrdersActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 dialog.dismiss();
-                if (200 == response.code()) {
+                if (HttpsURLConnection.HTTP_OK == response.code()) {
                     ordersAdapter = new RVOrdersAdapter(response.body(), OrdersActivity.this);
                     Fragment fragment = new RVFrag();
                     Bundle args = new Bundle();
@@ -84,7 +86,7 @@ public class OrdersActivity extends AppCompatActivity {
                     fragment.setArguments(args);
                     getFragmentManager().beginTransaction().replace(
                             R.id.content, fragment).commitAllowingStateLoss();
-                } else if (204 == response.code()) {
+                } else if (HttpsURLConnection.HTTP_NO_CONTENT == response.code()) {
                     Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoOrders);
                 } else {
                     Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);
@@ -108,10 +110,10 @@ public class OrdersActivity extends AppCompatActivity {
                 callV.enqueue(new Callback<List<Order>>() {
                     @Override
                     public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                        if (200 == response.code()) {
+                        if (HttpsURLConnection.HTTP_OK == response.code()) {
                             if (ordersAdapter != null)
                                 ((RVOrdersAdapter) ordersAdapter).addDataSet(response.body());
-                        } else if (204 == response.code()) {
+                        } else if (HttpsURLConnection.HTTP_NO_CONTENT == response.code()) {
                             Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoOrders);
                         } else {
                             Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);

@@ -121,6 +121,14 @@
     <string name="txtPayable">Payable: $</string>
     <string name="txtHST">13% HST: $</string>
     <string name="txtHSTReceipt">13% HST:</string>
-    <string name="btnTryAgain">Try again</string>
+
+    <string name="txtReceiptNumber">Réception non:</string>
+    <string name="txtVendorName">Nom du fournisseur:</string>
+    <string name="txtVendorId">Fournisseur id:</string>
+    <string name="txtUserEmail">Courriel de l\'utilisateur:</string>
+    <string name="txtUserId">Identifiant d\'utilisateur:</string>
+    <string name="txtTimeStamp">Horodatage:</string>
+    <string name="txtAmountPaid">Le montant payé: $</string>
+    <string name="btnTryAgain">Réessayer</string>
 
 </resources>

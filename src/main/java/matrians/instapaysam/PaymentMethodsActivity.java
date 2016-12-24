@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import matrians.instapaysam.pojo.EncryptedMCard;
 import matrians.instapaysam.pojo.MCard;
 import matrians.instapaysam.recyclerview.RVFrag;
@@ -122,11 +124,11 @@ public class PaymentMethodsActivity extends AppCompatActivity {
                     Response<List<EncryptedMCard>> response) {
 
                 List<MCard> mCards = new ArrayList<>();
-                if (200 == response.code()) {
+                if (HttpsURLConnection.HTTP_OK == response.code()) {
                     for (EncryptedMCard eMCard : response.body()) {
                         mCards.add(eMCard.decrypt(PaymentMethodsActivity.this));
                     }
-                } else if (response.code() == 204) {
+                } else if (HttpsURLConnection.HTTP_NO_CONTENT == response.code()) {
                     Utils.snackUp(findViewById(R.id.rootView), R.string.errNoPaymentMethods);
                 } else try {
                     Utils.snackUp(findViewById(R.id.rootView),

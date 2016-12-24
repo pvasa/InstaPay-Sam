@@ -21,6 +21,8 @@ import android.widget.Button;
 import java.io.IOException;
 import java.util.HashSet;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import matrians.instapaysam.pojo.User;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -133,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             dialog.dismiss();
-                            if (200 == response.code()) {
+                            if (HttpsURLConnection.HTTP_OK == response.code()) {
                                 SharedPreferences.Editor editor = PreferenceManager.
                                         getDefaultSharedPreferences(getApplicationContext()).edit();
                                 editor.putInt(getString(R.string.prefLoginStatus), STATUS_LOGGED_IN);

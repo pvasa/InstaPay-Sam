@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import matrians.instapaysam.PaymentMethodsActivity;
 import matrians.instapaysam.R;
 import matrians.instapaysam.ReceiptActivity;
@@ -219,7 +221,7 @@ public class RVPaymentMethodsAdapter extends
                     @Override
                     public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                         if (waitDialog != null) waitDialog.dismiss();
-                        if (200 == response.code()) {
+                        if (HttpsURLConnection.HTTP_OK == response.code()) {
                             Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
                                     R.string.msgCardAddSuccess);
                             dataSet.add(mCard);
@@ -262,7 +264,7 @@ public class RVPaymentMethodsAdapter extends
                         @Override
                         public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                             waitDialog.dismiss();
-                            if (200 == response.code()) {
+                            if (HttpsURLConnection.HTTP_OK == response.code()) {
                                 Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
                                         R.string.msgPaymentMethodDeleteSuccess);
                                 dataSet.remove(mCard);
@@ -319,7 +321,7 @@ public class RVPaymentMethodsAdapter extends
                             @Override
                             public void onResponse(Call<Order> call, Response<Order> response) {
                                 waitDialog.dismiss();
-                                if (200 == response.code()) {
+                                if (HttpsURLConnection.HTTP_OK == response.code()) {
                                     Utils.snackUp(paymentMethodsActivity.findViewById(R.id.rootView),
                                             R.string.msgPaymentSuccess);
 

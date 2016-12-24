@@ -60,6 +60,8 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import matrians.instapaysam.R;
 import matrians.instapaysam.Server;
 import matrians.instapaysam.Utils;
@@ -277,7 +279,7 @@ public class CameraFrag extends Fragment implements
                             call.enqueue(new Callback<Product>() {
                                 @Override
                                 public void onResponse(Call<Product> call, Response<Product> response) {
-                                    if (200 == response.code()) {
+                                    if (HttpsURLConnection.HTTP_OK == response.code()) {
                                         productsAdapter.addProduct(response.body());
                                         Utils.snackUp(getActivity().findViewById(R.id.rootView),
                                                 response.body().name +

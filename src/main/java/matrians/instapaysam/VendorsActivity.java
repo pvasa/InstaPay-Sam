@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import matrians.instapaysam.pojo.EncryptedMCard;
 import matrians.instapaysam.pojo.MCard;
 import matrians.instapaysam.pojo.Vendor;
@@ -88,7 +90,7 @@ public class VendorsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<EncryptedMCard>> call, Response<List<EncryptedMCard>> response) {
                 dialog.dismiss();
-                if (204 == response.code()) {
+                if (HttpsURLConnection.HTTP_NO_CONTENT == response.code()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(VendorsActivity.this);
                     builder.setTitle(R.string.titleNoCards);
                     builder.setMessage(R.string.dialogNoCards);
@@ -123,7 +125,7 @@ public class VendorsActivity extends AppCompatActivity {
         callV.enqueue(new Callback<List<Vendor>>() {
             @Override
             public void onResponse(Call<List<Vendor>> call, Response<List<Vendor>> response) {
-                if (200 == response.code()) {
+                if (HttpsURLConnection.HTTP_OK == response.code()) {
                     adapter = new RVVendorsAdapter(response.body());
                     Fragment fragment = new RVFrag();
                     Bundle args = new Bundle();
@@ -131,7 +133,7 @@ public class VendorsActivity extends AppCompatActivity {
                     fragment.setArguments(args);
                     getFragmentManager().beginTransaction().replace(
                             R.id.content, fragment).commitAllowingStateLoss();
-                } else if (204 == response.code()) {
+                } else if (HttpsURLConnection.HTTP_NO_CONTENT == response.code()) {
                     Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoVendors);
                 } else {
                     Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);
@@ -153,10 +155,19 @@ public class VendorsActivity extends AppCompatActivity {
                 callV.enqueue(new Callback<List<Vendor>>() {
                     @Override
                     public void onResponse(Call<List<Vendor>> call, Response<List<Vendor>> response) {
-                        if (200 == response.code()) {
+                        if (HttpsURLConnection.HTTP_OK == response.code()) {
                             if (adapter != null)
                                 ((RVVendorsAdapter)adapter).addDataSet(response.body());
-                        } else if (204 == response.code()) {
+                            else {
+                                adapter = new RVVendorsAdapter(response.body());
+                                Fragment fragment = new RVFrag();
+                                Bundle args = new Bundle();
+                                args.putParcelable(getString(R.string.keyAdapter), adapter);
+                                fragment.setArguments(args);
+                                getFragmentManager().beginTransaction().replace(
+                                        R.id.content, fragment).commitAllowingStateLoss();
+                            }
+                        } else if (HttpsURLConnection.HTTP_NO_CONTENT == response.code()) {
                             Utils.snackUp(findViewById(R.id.rootView), R.string.msgNoVendors);
                         } else {
                             Utils.snackUp(findViewById(R.id.rootView), R.string.errNetworkError);
@@ -292,9 +303,8 @@ public class VendorsActivity extends AppCompatActivity {
                     call.enqueue(new Callback<JSONObject>() {
                         @Override
                         public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
-                            Log.d(TAG, response.body().toString());
                             dialog.dismiss();
-                            if (200 == response.code()) {
+                            if (HttpsURLConnection.HTTP_OK == response.code()) {
                                 Utils.snackUp(findViewById(R.id.rootView), R.string.msgCardAddSuccess);
                             } else {
                                 Utils.snackUp(findViewById(R.id.rootView), R.string.errErrAddCard);
