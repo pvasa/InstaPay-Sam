@@ -12,7 +12,8 @@ public class Server {
 
     private static final String BASE_URL =
             //"http://192.168.0.12:8080/"; // Local
-            "https://instapay-matrians.rhcloud.com/"; // OpenShift V2
+            "https://instapay.matrians.com"; // GoDaddy domain
+            //"https://instapay-matrians.rhcloud.com/"; // OpenShift V2
             //"https://nodejs-instapay.44fs.preview.openshiftapps.com/"; // OpenShift V3
 
     private Server(){}
